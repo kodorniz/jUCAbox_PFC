@@ -1,0 +1,99 @@
+
+<div class="container top-30 ">
+<simple-notifications [options]="options"></simple-notifications>
+  <div class="row">
+    <div class="col-md-9">
+
+
+    <h1> Lugares <small> jUCAbox </small></h1>
+    </div>
+    <div class="col-md-3">
+      <label for="termino"> Buscador de lugares </label>
+      <input [(ngModel)]="termino"
+      (keyup)="getLugaresNombre()"
+      type="text" name="termino"
+      class = "form-control"
+      placeholder="Buscar por nombre...">
+
+      <button class = "btn btn-primary btn-sm btn-block top-15" name="busquedaAvanzada" (click)="busquedaAvanzada=!busquedaAvanzada">Búsqueda avanzada</button>
+    </div>
+
+  </div>
+
+  <div [ngClass]="{'row':true,'fadeIn': busquedaAvanzada,'fadeOut': !busquedaAvanzada, 'fast':true}"  [@shrinkOut]="menuState"  *ngIf="busquedaAvanzada">
+    <div class="col-md-6">
+      <label for="provincia"> Buscador por provincia </label>
+      <input [(ngModel)]="provincia"
+      (keyup)="getLugaresNombre()"
+      type="text" name="termino"
+      class = "form-control"
+      placeholder="Buscar por nombre...">
+    </div>
+    <div class="col-md-6">
+      <label for="ciudad"> Buscador por ciudad </label>
+      <input [(ngModel)]="ciudad"
+      (keyup)="getLugaresNombre()"
+      type="text" name="termino"
+      class = "form-control"
+      placeholder="Buscar por nombre...">
+    </div>
+  </div>
+
+  <hr style="margin-bottom: -10px;">
+  <div class = "row" *ngIf="lugares.length == 0">
+    <div class="col-sm-12">
+      <div class = "alert alert-danger" role="alert">
+          No existen resultados con el termino: {{termino}}
+      </div>
+    </div>
+
+  </div>
+  <div  *ngIf="lugares.length != 0">
+    <div class="col-sm-12 main-container">
+      <div class="card card-inverse-gray2 animated fadeIn fast bottom-30" *ngFor="let lugar of lugares;let i = index">
+
+  <h3 class="card-header card-inverse-gray">{{lugar.nombre}}</h3>
+        <div class="row">
+          <div class="col-md-3 crop">
+          <img class="card-img-top img-fluid img-thumbnail img-min-lugares" [src]="lugar.img[0]" [alt]="lugar.nombre">
+        </div>
+        <div class="col-md-9 left-20">
+
+          <div class="card-block">
+            <div >
+
+              <p class="card-text">{{lugar.descripcion}}</p>
+              <h5 class="card-title">{{lugar.provincia}} - {{lugar.ciudad}} </h5>
+            <div style="margin-top: 30px;">
+            <div  style="display: inline-block;margin-top:20px;">
+              <div class="button-bottom20 button-top20 " >
+              <a href="#" [routerLink]="['/lugar',lugar.id]" class="btn btn-secondary " ><i class="fa fa-eye " aria-hidden="true"><span class = "hide">  Ver Lugar...</span></i></a>
+              <button (click)="addFav(lugar.id,lugar.nombre)" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?" class="btn btn-primary" ><i class="fa fa-heart" aria-hidden="true"><span class = "hide">  Añadir a favoritos...</span></i></button>
+              <a href="#" class="btn btn-success " ><i class="fa fa-share" aria-hidden="true"><span class = "hide">  Enviar Cancion...</span></i></a>
+            </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <!-- <div class = "card-columns">
+    <div class="card animated fadeIn fast" *ngFor="let lugar of lugares;let i = index">
+        <img class="card-img-top img-fluid" [src]="lugar.img" [alt]="lugar.nombre">
+        <div class="card-block">
+          <h4 class="card-title">{{ lugar.nombre }}</h4>
+          <p class="card-text">{{ lugar.descripcion }}</p>
+          <p class="card-text"><small class="text-muted">{{lugar.provincia}}</small></p>
+
+          <button
+          type ="button" class="btn btn-outline-primary btn-block">Ver más...</button>
+
+        </div>
+      </div>
+  </div> -->
+</div>

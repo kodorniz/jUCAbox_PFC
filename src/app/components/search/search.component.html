@@ -1,0 +1,138 @@
+<div class="container top-30">
+  <div class = "row">
+    <div class="col-md-8">
+
+    </div>
+    <div class ="col-md-4">
+        <label for="termino"> Buscador </label>
+        <input [(ngModel)]="termino"
+        (keyup)="buscarArtista()"
+        type="text" name="termino"
+        class = "form-control"
+        placeholder="Buscar por artista, canción...">
+
+    </div>
+
+  </div>
+    <hr>
+    <div class = "row" *ngIf="_jucaboxService.artistas.length == 0 && termino.length > 0 && _jucaboxService.canciones.length == 0">
+      <div class="col-sm-12">
+        <div class = "alert alert-danger" role="alert">
+            No existen resultados con el termino: {{termino}}
+        </div>
+      </div>
+    </div>
+
+<!-- ARTISTAS -->
+    <div [ngClass]="{'row':true,'bottom-30': !mostrarArtistas}">
+      <div class="col-md-3">
+        <h3 *ngIf="_jucaboxService.artistas.length > 0 "> Artistas </h3>
+      </div>
+      <div class="col-md-7">
+
+      </div>
+      <div class="col-md-2">
+        <button (click) = "mostrarArtistas = !mostrarArtistas" class = "btn btn-default btn-outline-secondary btn-block" *ngIf="_jucaboxService.artistas.length > 0 "><i [ngClass]="{'fa':true,'fa-minus':mostrarArtistas,'fa-plus': !mostrarArtistas}"></i></button>
+      </div>
+    </div>
+  <div class="row " *ngIf="mostrarArtistas" class="fadeIn fast">
+    <div class="col-sm-12 ">
+        <div class= "row main-container" *ngIf="_jucaboxService.artistas.length > 0 ">
+          <div class="col-sm-3 text-center puntero "
+          [routerLink]="['/artista',artista.id]"
+           *ngFor="let artista of _jucaboxService.artistas">
+                <img [src]="artista.images | sinfoto" class="img-fluid img-thumbnail" alt="">
+                <p>{{artista.name}}</p>
+                <hr>
+          </div>
+        </div>
+    </div>
+  </div>
+<!-- CANCIONES -->
+<div [ngClass]="{'row':true,'bottom-30': !mostrarCanciones}" >
+  <div class="col-md-3">
+    <h3 *ngIf="_jucaboxService.canciones.length > 0 "> Canciones </h3>
+  </div>
+  <div class="col-md-7">
+
+  </div>
+  <div class="col-md-2">
+    <button (click) = "mostrarCanciones = !mostrarCanciones" class = "btn btn-default btn-outline-secondary btn-block" *ngIf="_jucaboxService.canciones.length > 0 "><i [ngClass]="{'fa':true,'fa-minus':mostrarCanciones,'fa-plus': !mostrarCanciones}"></i></button>
+  </div>
+</div>
+
+
+  <div class="row " *ngIf="mostrarCanciones" class="fadeIn fast">
+    <div class="col-sm-12 ">
+        <div class= "row main-container" *ngIf="_jucaboxService.canciones.length > 0 ">
+          <div class="col-sm-3 text-center "
+
+           *ngFor="let cancion of _jucaboxService.canciones">
+                 <!-- <img [src]="cancion.album | keys:'images':'0' | sinfoto" class="img-fluid img-thumbnail" alt=""> -->
+                   <div><iframe [src]="cancion.uri | domseguro:'https://embed.spotify.com/?uri='" width="100%" height="80" frameborder="2"  allowtransparency="true"></iframe>
+                     <a href="#" class="btn btn-success btn-sm" ><i class="fa fa-share" aria-hidden="true">  {{cancion.name | truncate :'20'}}</i></a>
+                <p></p>
+
+                <hr>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+  <!-- ALBUMES -->
+
+       <div [ngClass]="{'row':true,'bottom-30': !mostrarAlbumes}">
+        <div class="col-md-3">
+          <h3 *ngIf="_jucaboxService.albumes.length > 0 "> Álbumes </h3>
+        </div>
+        <div class="col-md-7">
+
+        </div>
+        <div class="col-md-2">
+          <button (click) = "mostrarAlbumes = !mostrarAlbumes" class = "btn btn-default btn-outline-secondary btn-block" *ngIf="_jucaboxService.albumes.length > 0 "><i [ngClass]="{'fa':true,'fa-minus':mostrarAlbumes,'fa-plus': !mostrarAlbumes}"></i></button>
+        </div>
+      </div>
+
+    <div class="row " *ngIf="mostrarAlbumes" class="fadeIn fast">
+      <div class="col-sm-12 ">
+          <div class= "row main-container" *ngIf="_jucaboxService.albumes.length > 0 ">
+<!-- hacer la ruta del album con canciones -->
+            <div class="col-sm-3 text-center puntero "
+
+            [routerLink]="['/album',album.id]"
+             *ngFor="let album of _jucaboxService.albumes">
+                  <img [src]="album.images | sinfoto" class="img-fluid img-thumbnail" alt="">
+                  <p>{{album.name}}</p>
+                  <hr>
+            </div>
+          </div>
+      </div>
+    </div>
+    <!-- Playlists -->
+        <div [ngClass]="{'row':true,'bottom-30': !mostrarPlaylists}">
+          <div class="col-md-3">
+            <h3 *ngIf="_jucaboxService.playlists.length > 0 "> Playlists </h3>
+          </div>
+          <div class="col-md-7">
+
+          </div>
+          <div class="col-md-2">
+            <button (click) = "mostrarPlaylists = !mostrarPlaylists" class = "btn btn-default btn-outline-secondary btn-block" *ngIf="_jucaboxService.playlists.length > 0 "><i [ngClass]="{'fa':true,'fa-minus':mostrarPlaylists,'fa-plus': !mostrarPlaylists}"></i></button>
+          </div>
+        </div>
+      <div class="row " *ngIf="mostrarPlaylists" class="fadeIn fast">
+        <div class="col-sm-12 ">
+            <div class= "row main-container" *ngIf="_jucaboxService.playlists.length > 0 ">
+  <!-- hacer la ruta de la playlist con canciones -->
+              <div class="col-sm-3 text-center puntero "
+
+              [routerLink]="['/playlist',playlist.id]"
+               *ngFor="let playlist of _jucaboxService.playlists">
+              <img [src]="playlist.images | sinfoto:'0' " class="img-fluid img-thumbnail" alt="">
+                    <p>{{playlist.name | truncate:'30'}}</p>
+                    <hr>
+              </div>
+            </div>
+        </div>
+      </div>
+</div>
