@@ -11,6 +11,8 @@ export class ArtistaComponent implements OnInit {
   artista:any[]=[];
   cancionesTop:any[]=[];
   textoBusqueda:string;
+  cancion:any;
+  visiblePlay:boolean = false;
 
   constructor( private activatedRoute:ActivatedRoute,
                private _jucaboxService:JucaboxService
@@ -35,5 +37,20 @@ export class ArtistaComponent implements OnInit {
     })
 
   }
+sendCancion(cancion){
+  this.cancion = cancion;
+  this.visiblePlay=true;
+}
+  getActualuri(){
+    return this.cancion.uri;
+  }
+
+  getActualPrev(){
+        console.log(this.cancion.preview_url);
+    return this.cancion.preview_url;
+
+  }
+
+
 
 }

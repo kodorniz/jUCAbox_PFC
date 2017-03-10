@@ -68,11 +68,25 @@
               <!-- <audio controls>
                 <source [src]="cancion.preview_url">
               </audio> -->
-              <iframe [src]="cancion.uri | domseguro:'https://embed.spotify.com/?uri='" width="100%" height="80" frameborder="2"  allowtransparency="true"></iframe>
+              <button class="btn btn-primary" (click)="sendCancion(cancion)">Play</button>
           </td>
         </tr>
 
       </tbody>
     </table>
 </div>
+  </div>
+
+  <!-- Main Footer -->
+  <div class="main-footer" *ngIf="visiblePlay">
+  	<!-- To the right -->
+  	<!-- <div class="pull-right hidden-xs">jUCAbox Proyecto fin de carrera</div> -->
+  	<!-- Default to the left -->
+  	<!-- <strong>Copyright &copy; 2017 <a href="#" routerLink="/"> UCA PFC</a>.
+  	</strong> -->
+
+    <!-- <iframe [src]="getActualuri() | domseguro:'https://embed.spotify.com/?uri='" width="100%" height="80" frameborder="2"  allowtransparency="true"></iframe> -->
+    <audio controls style="width: 100%" autoplay>
+            <source [src]="getActualPrev()">
+    </audio>
   </div>
