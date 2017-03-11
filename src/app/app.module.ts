@@ -38,6 +38,9 @@ import { LugarComponent } from './components/lugar/lugar.component';
 import { LugaresComponent } from './components/lugares/lugares.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { UsuarioComponent } from './components/usuario/usuario.component';
+import { ModalModule } from 'angular2-modal';
+import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
+import { AdditionalWindow } from './components/artista/enviarCancion.component';
 
 export function createTranslateLoader( http: Http ) {
     return new TranslateStaticLoader( http, '../public/assets/i18n', '.json' );
@@ -67,6 +70,7 @@ import { NotificationBoxComponent } from './widgets/notification-box';
 import { TasksBoxComponent } from './widgets/tasks-box';
 import { UserBoxComponent } from './widgets/user-box';
 import { BreadcrumbComponent } from './widgets/breadcrumb';
+
 
 
 
@@ -115,6 +119,7 @@ let services = [
     LugaresComponent,
     TruncatePipe,
     UsuarioComponent,
+        AdditionalWindow,
     ...widgets,
     ...pages
   ],
@@ -124,6 +129,8 @@ let services = [
     HttpModule,
     APP_ROUTING,
     SimpleNotificationsModule.forRoot(),
+    ModalModule.forRoot(),
+    BootstrapModalModule,
     ...modules
   ],
   providers:
@@ -132,6 +139,7 @@ let services = [
     Auth,
     AuthGuardService,
     ...services ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ AdditionalWindow ]
 })
 export class AppModule { }

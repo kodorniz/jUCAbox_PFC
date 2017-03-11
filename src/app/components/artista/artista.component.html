@@ -1,5 +1,5 @@
 
-<div class="container animated fadeIn fast" *ngIf="artista">
+<div class="animated fadeIn fast" *ngIf="artista">
 <div class = "row top-30 bottom-30">
   <div class="col-md-3 text-center">
     <img [src]="artista.images | sinfoto" class="img-fluid img-thumbnail img-circle" alt="">
@@ -34,7 +34,7 @@
 <div class ="col-md-3">
     <label for="termino"> Buscador de canciones </label>
     <input [(ngModel)]="termino"
-    (keyup)="buscarArtista()"
+    (keyup)="buscarCanciones()"
     type="text" name="termino"
     class = "form-control bottom-30"
     placeholder="Buscar canciones...">
@@ -43,15 +43,16 @@
 </div>
 <div class="table-responsive">
 
-    <table class=" table table-condensed" width="100%">
+    <table class=" table" width="100%">
     <thead class="thead-inverse">
     <tr>
         <th>#</th>
         <!-- <th>Foto</th> -->
         <th>Canción</th>
         <th>Album</th>
-        <th>Popularidad</th>
+
         <th>Preview</th>
+        <th>Enviar</th>
     </tr>
     </thead>
       <tbody>
@@ -59,16 +60,17 @@
           <td>{{i+1}}</td>
           <!-- <td style = "padding-top: 10px;padding-bottom: 10px;padding-right: 4px;padding-left: 0px"><img [src]="cancion.album | keys:'images':'0' | sinfoto " class="img-fluid roundrect img-100" alt=""></td> -->
           <td>{{cancion.name}}</td>
-          <td>{{cancion.album | keys:"name"}}</td>
-          <td>
-                {{cancion.popularity}}%
-
-            </td>
+          <td>{{cancion.album | keys:"name" }}</td>
           <td>
               <!-- <audio controls>
                 <source [src]="cancion.preview_url">
               </audio> -->
-              <button class="btn btn-primary" (click)="sendCancion(cancion)">Play</button>
+              <button class="btn btn-primary"  *ngIf="getActualCancion() != cancion" (click)="sendCancion(cancion)"><i class="fa fa-play"><span class = "hide"> Play</span></i></button>
+              <button class="btn btn-danger" *ngIf="getActualCancion() == cancion" (click)="stopCancion()"><i class="fa fa-stop"><span class = "hide"> Stop</span></i></button>
+          </td>
+
+          <td>
+            <button class="btn btn-danger" (click)="enviarCancion(cancion)"><i class="fa fa-send" ><span class = "hide"> Enviar</span></i></button>
           </td>
         </tr>
 
@@ -78,7 +80,7 @@
   </div>
 
   <!-- Main Footer -->
-  <div class="main-footer" *ngIf="visiblePlay">
+  <!-- <div class="main-footer" *ngIf="visiblePlay"> -->
   	<!-- To the right -->
   	<!-- <div class="pull-right hidden-xs">jUCAbox Proyecto fin de carrera</div> -->
   	<!-- Default to the left -->
@@ -86,7 +88,8 @@
   	</strong> -->
 
     <!-- <iframe [src]="getActualuri() | domseguro:'https://embed.spotify.com/?uri='" width="100%" height="80" frameborder="2"  allowtransparency="true"></iframe> -->
-    <audio controls style="width: 100%" autoplay>
+     <!-- <audio controls style="width: 100%">
             <source [src]="getActualPrev()">
-    </audio>
-  </div>
+    </audio> -->
+
+  <!-- </div> -->

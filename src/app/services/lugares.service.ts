@@ -4,7 +4,17 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class LugaresService {
 
-  private lugaresFav:Lugar[]=[];
+  private lugaresFav:Lugar[]=[{
+    id: "1",
+    nombre: "Niño Perdio",
+    descripcion: "Discoteca 1: El poder más reconocido de Aquaman es la capacidad telepática para comunicarse con la vida marina, la cual puede convocar a grandes distancias.",
+    img: ["assets/img/disco1.jpg",
+     "assets/img/disco1.jpg",
+    "assets/img/disco1.jpg"],
+    provincia: "Madrid",
+    ciudad:"Boadilla del Monte",
+    direccion:"Calle Severo Ochoa"
+  }];
   private lugares:Lugar[] = [
       {
         id: "1",
@@ -36,9 +46,37 @@ export class LugaresService {
    }
 
   getLugares(){
+
     return this.lugares;
+
   }
 
+  getLugaresFav(){
+    return this.lugaresFav;
+  }
+  getLugaresNombreT(termino:string){
+
+    let lugaresArr:Lugar[] =[];
+    if(termino){
+              termino = termino.toLowerCase();
+
+            for( let lugar of this.lugares){
+
+              let nombre = lugar.nombre.toLowerCase();
+
+
+
+              if( nombre.indexOf(termino)>=0){
+                 lugaresArr.push(lugar);
+              }
+
+            }
+
+  return lugaresArr;
+  }else{
+    return this.lugares;
+  }
+  }
 
   getLugaresNombre(termino:string,provincia:string,ciudad:string){
 

@@ -35,6 +35,31 @@ export class JucaboxService {
 
   }
 
+  getCanciones(nombre:string,artista:string){
+    let query = "?q=" + nombre + "&type=track";
+    let url = this.urlBusqueda + query;
+    this.canciones = [];
+    return this.http.get(url)
+            .map( res =>{
+              //  console.log(res.json().artists.items);
+                //this.canciones = res.json().tracks.items;
+                  for(let cancion of res.json().tracks.items ){
+                    for(let artistas of cancion.artists){
+                      if(artistas['name'] == artista ){
+                        this.canciones.push(cancion);
+                      }
+                    }
+                  }
+              //  return res.json().artists.items;
+              console.log(res.json());
+              console.log(nombre,artista);
+              console.log(this.canciones);
+              return this.canciones;
+            })
+
+
+  }
+
   getArtista(id:any){
     let query =  id;
     let url = this.urlBusquedaArtista + query;
