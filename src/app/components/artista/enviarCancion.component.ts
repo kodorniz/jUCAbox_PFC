@@ -15,11 +15,6 @@ export class enviarCancion extends BSModalContext {
   noFavorito:boolean;
 
 
-  EnvioToken:Object = {
-
-  }
-  public options: any;
-
   constructor(public Cancion:any,public _lugaresService:LugaresService) {
       super();
 
@@ -88,7 +83,7 @@ export class enviarCancion extends BSModalContext {
                   <select class="form-control" id="lugar"
                   required
                   name="lugar"
-                  (change)="token = getCookie('jucabox token ' + lugar_)"
+                  (change)="token_ = getCookie('jucabox token ' + lugar_)"
                   [(ngModel)]="lugar_"
                   #lugar="ngModel"
                   >
@@ -96,16 +91,16 @@ export class enviarCancion extends BSModalContext {
                   </select>
                   </div>
                 </div>
-                <div class="form-group " [ngClass]="{'has-error': token.errors?.required  && token.touched && token.errors?.pattern}" *ngIf="!this.noFavorito">
-                  <label for="lugar" class="col-sm-12 control-label" style="text-align:left;">Token <span *ngIf="token.errors?.required  && token.touched"> - El Token es necesario</span><span *ngIf="token.errors?.pattern  && token.touched"> - El Token es incorrecto</span></label>
+                <div class="form-group " [ngClass]="{'has-error':  !getTokenValido()}" *ngIf="!this.noFavorito">
+                  <label for="lugar" class="col-sm-12 control-label" style="text-align:left;">Token <span *ngIf=" !getTokenValido()"> - El Token es incorrecto</span></label>
                   <div class="col-sm-12">
                   <input type="text" class="col-sm-12 form-control"
                   [(ngModel)]="token_"
                   id="token"
                   type="text" name="token"
                   #token="ngModel"
-                  placeholder="Introduce el token de validación del lugar..."
                   required
+                  placeholder="Introduce el token de validación del lugar..."
                   [pattern]="getToken(lugar_)"
                   >
                   </div>
@@ -125,9 +120,9 @@ export class enviarCancion extends BSModalContext {
                 <div class="col-sm-12">
                 <select class="form-control" id="lugar2"
                 required
-                name="lugar2"
+                name="lugar"
                 [(ngModel)]="lugar_"
-(               change)="token = getCookie('jucabox token ' + lugar_)"
+                (change)="token_ = getCookie('jucabox token ' + lugar_)"
                 #lugar2="ngModel"
                 >
                   <option value="0" *ngIf="context._lugaresService.getLugaresNombreT(termino).length==0">Sin resultados...</option>
@@ -135,14 +130,14 @@ export class enviarCancion extends BSModalContext {
                 </select>
                 </div>
                 </div>
-                <div class="form-group " [ngClass]="{'has-error': token2.errors?.required  && token2.touched && token2.pattern }" *ngIf="this.noFavorito">
-                  <label for="token" class="col-sm-12 control-label" style="text-align:left;">Token <span *ngIf="token2.errors?.required  && token2.touched"> - El Token es necesario</span><span *ngIf="token2.errors?.pattern  && token2.touched"> - El Token es incorrecto</span></label>
+                <div class="form-group " *ngIf="this.noFavorito">
+                  <label for="token" class="col-sm-12 control-label" style="text-align:left;">Token </label>
                   <div class="col-sm-12">
                   <input type="text" class="col-sm-12 form-control"
-                  type="text" name="token2"
+                  type="text" name="token"
                   placeholder="Introduce el token de validación del lugar..."
-                  required
                   [pattern]="getToken(lugar_)"
+                  required
                   [(ngModel)]="token_"
                   #token2="ngModel"
                   >
@@ -152,7 +147,7 @@ export class enviarCancion extends BSModalContext {
               <!-- /.box-body -->
               <div class="box-footer">
                 <button type="submit" class="btn btn-default" (click)="this.dialog.close();">Cancel</button>
-                <button type="submit" class="btn btn-success pull-right" (click)="enviarCancionOK(lugar_,token_);">Enviar</button>
+                <button type="submit" class="btn btn-success pull-right" (click)="enviarCancionOK(lugar_,token_,forma);">Enviar</button>
               </div>
               <!-- /.box-footer -->
             </form>
@@ -163,6 +158,9 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
   context: enviarCancion;
 
   public wrongAnswer: boolean;
+  tokenRelleno:boolean=true;
+  tokenValido: boolean=true;
+  lugarRelleno:boolean=true;
 
   constructor(public dialog: DialogRef<enviarCancion>) {
 
@@ -171,6 +169,15 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
     this.wrongAnswer = true;
 
   }
+  getTokenRelleno(){
+    return this.tokenRelleno;
+  }
+  getTokenValido(){
+    return this.tokenValido;
+  }
+   getLugarRelleno(){
+      return this.lugarRelleno;
+    }
   getToken(id:string){
     return this.context._lugaresService.getToken(id);
   }
@@ -192,20 +199,35 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
       console.log("Valor forma",forma.value);
   }
 
-  enviarCancionOK(lugar_:string,token_:string){
-    //console.log(this.getCookie("token " + lugar_));
+  enviarCancionOK(lugar_:string,token_:string,forma:NgForm){
+    this.lugarRelleno=true;
+    this.tokenValido=true;
+    console.log("formulario",forma)
+    if(forma.valid){
     this.setCookie("jucabox token " + lugar_,token_,6);
     this.dialog.close();
+  }else{
+    if (forma.controls['lugar']['errors']) {
 
-    // let object = {value: token_, timestamp: new Date().getTime()+ (6*60*60*1000)}
-    // localStorage.setItem('token_' + lugar_, JSON.stringify(object));
+              this.lugarRelleno=false;
+
+    }
+    if (forma.controls['token']['errors'] || token_ =="" || token_ === null || token_ === undefined) {
+
+              this.tokenValido=false;
+      }
+    }
   }
 
 
 
+
+
   public getCookie(name: string) {
+    console.log(name);
   var value = "; " + document.cookie;
   var parts = value.split("; " + name + "=");
+
   if (parts.length == 2) return parts.pop().split(";").shift();
   }
 
