@@ -1,9 +1,10 @@
+
 import { Component}  from '@angular/core';
 import { NgForm } from '@angular/forms'
 import { DialogRef, ModalComponent } from 'angular2-modal';
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { LugaresService } from '../../services/lugares.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 
 export class enviarCancion extends BSModalContext {
   termino:string="";
@@ -12,7 +13,7 @@ export class enviarCancion extends BSModalContext {
   lugar_:string="-1";
   token_:string="";
   noFavorito:boolean;
-  forma: FormGroup;
+
 
   EnvioToken:Object = {
 
@@ -21,11 +22,7 @@ export class enviarCancion extends BSModalContext {
 
   constructor(public Cancion:any,public _lugaresService:LugaresService) {
       super();
-      this.forma = new FormGroup({
-      'lugar': new FormControl('',[Validators.required]),
-      'token': new FormControl('',[Validators.required,Validators.pattern("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$")])
-      //'Cancion': new FormControl('',[Validators.required, Validators.pattern("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$")]),
-    });
+
 
   }
 
@@ -43,12 +40,8 @@ export class enviarCancion extends BSModalContext {
   selector: 'modal-content',
 
   styles: [`.custom-modal-container {
-
-
         }
-
         .custom-modal-header {
-
             background-color: #828282;
             color: #fff;
             -webkit-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.75);
@@ -61,13 +54,9 @@ export class enviarCancion extends BSModalContext {
   //TODO: [ngClass] here on purpose, no real use, just to show how to workaround ng2 issue #4330.
   // Remove when solved.
   /* tslint:disable */ template: `
-
   <div class="box box-info">
-
             <div class="box-header with-border">
-
               <h3 class="box-title bottom-30">Enviar <strong>{{context.Cancion.name}}</strong> a...</h3>
-
               <div class="row">
               <div class="col-xs-12 top-15">
                 <div class="btn-group" role="group" aria-label="...">
@@ -81,17 +70,14 @@ export class enviarCancion extends BSModalContext {
             <!-- form start -->
             <form class="form-horizontal" (ngSubmit)="guardar(forma)" #forma="ngForm" novalidate="novalidate">
               <div class="box-body">
-
                 <!--<div class="form-group">
                   <label for="inputEmail3" class="col-sm-2 control-label">Lugar</label>
-
                   <div class="col-sm-10">
                     <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
-
                   <div class="col-sm-10">
                     <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
                   </div>
@@ -102,20 +88,17 @@ export class enviarCancion extends BSModalContext {
                   <select class="form-control" id="lugar"
                   required
                   name="lugar"
-                  (change)="forma.token = getCookie('jucabox token ' + lugar_)"
+                  (change)="token = getCookie('jucabox token ' + lugar_)"
                   [(ngModel)]="lugar_"
                   #lugar="ngModel"
                   >
-
                     <option  *ngFor="let lugar of context._lugaresService.getLugaresFav()" [value]="lugar.id"><strong>{{lugar.nombre}}</strong> - {{lugar.ciudad}} - {{lugar.provincia}}</option>
-
                   </select>
                   </div>
                 </div>
                 <div class="form-group " [ngClass]="{'has-error': token.errors?.required  && token.touched && token.errors?.pattern}" *ngIf="!this.noFavorito">
                   <label for="lugar" class="col-sm-12 control-label" style="text-align:left;">Token <span *ngIf="token.errors?.required  && token.touched"> - El Token es necesario</span><span *ngIf="token.errors?.pattern  && token.touched"> - El Token es incorrecto</span></label>
                   <div class="col-sm-12">
-
                   <input type="text" class="col-sm-12 form-control"
                   [(ngModel)]="token_"
                   id="token"
@@ -125,12 +108,7 @@ export class enviarCancion extends BSModalContext {
                   required
                   [pattern]="getToken(lugar_)"
                   >
-
-
                   </div>
-
-
-
                 </div>
                 <div class="form-group" *ngIf="this.noFavorito">
                 </div>
@@ -149,15 +127,13 @@ export class enviarCancion extends BSModalContext {
                 required
                 name="lugar2"
                 [(ngModel)]="lugar_"
-                (change)="forma.token = getCookie('jucabox token ' + lugar_)"
+(               change)="token = getCookie('jucabox token ' + lugar_)"
                 #lugar2="ngModel"
                 >
                   <option value="0" *ngIf="context._lugaresService.getLugaresNombreT(termino).length==0">Sin resultados...</option>
                   <option  *ngFor="let lugar of context._lugaresService.getLugaresNombreT(termino)" [value]="lugar.id"><strong>{{lugar.nombre}}</strong> - {{lugar.ciudad}} - {{lugar.provincia}}</option>
-
                 </select>
                 </div>
-
                 </div>
                 <div class="form-group " [ngClass]="{'has-error': token2.errors?.required  && token2.touched && token2.pattern }" *ngIf="this.noFavorito">
                   <label for="token" class="col-sm-12 control-label" style="text-align:left;">Token <span *ngIf="token2.errors?.required  && token2.touched"> - El Token es necesario</span><span *ngIf="token2.errors?.pattern  && token2.touched"> - El Token es incorrecto</span></label>
@@ -171,9 +147,7 @@ export class enviarCancion extends BSModalContext {
                   #token2="ngModel"
                   >
                   </div>
-
                 </div>
-
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -183,7 +157,6 @@ export class enviarCancion extends BSModalContext {
               <!-- /.box-footer -->
             </form>
           </div>
-
 `
 })
 export class AdditionalWindow implements ModalComponent<enviarCancion> {
