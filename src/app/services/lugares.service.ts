@@ -1,9 +1,18 @@
 import { Injectable } from '@angular/core';
-
+import { Select2OptionData } from 'ng2-select2';
 
 @Injectable()
 export class LugaresService {
-
+  private tokenLugares:any[]=[
+    {
+      id:"1",
+      token:"Token1"
+    },
+    {
+      id:"2",
+      token:"Token2"
+    }
+  ];
   private lugaresFav:Lugar[]=[{
     id: "1",
     nombre: "Niño Perdio",
@@ -49,6 +58,14 @@ export class LugaresService {
 
     return this.lugares;
 
+  }
+  getToken(id:string){
+    if(id){
+
+    return this.tokenLugares.filter(
+      function(data){ return data.id == id }
+    )[0]['token'];
+  }
   }
 
   getLugaresFav(){

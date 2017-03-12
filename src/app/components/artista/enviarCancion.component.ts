@@ -1,19 +1,35 @@
-import { Component } from '@angular/core';
+import { Component}  from '@angular/core';
 import { NgForm } from '@angular/forms'
 import { DialogRef, ModalComponent } from 'angular2-modal';
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { LugaresService } from '../../services/lugares.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 export class enviarCancion extends BSModalContext {
-  termino:string;
+  termino:string="";
   Lugares:any[]=[];
+
   lugar_:string="-1";
-  token_:string;
+  token_:string="";
   noFavorito:boolean;
-  constructor(public Cancion:any,public _lugaresService:LugaresService) {
-      super();
+  forma: FormGroup;
+
+  EnvioToken:Object = {
 
   }
+  public options: any;
+
+  constructor(public Cancion:any,public _lugaresService:LugaresService) {
+      super();
+      this.forma = new FormGroup({
+      'lugar': new FormControl('',[Validators.required]),
+      'token': new FormControl('',[Validators.required,Validators.pattern("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$")])
+      //'Cancion': new FormControl('',[Validators.required, Validators.pattern("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$")]),
+    });
+
+  }
+
+
 
   // getLugaresNombre(){
   //   this.Lugares=this._lugaresService.getLugaresNombre(this.termino,'','');
@@ -25,6 +41,7 @@ export class enviarCancion extends BSModalContext {
  */
 @Component({
   selector: 'modal-content',
+
   styles: [`.custom-modal-container {
 
 
@@ -64,6 +81,7 @@ export class enviarCancion extends BSModalContext {
             <!-- form start -->
             <form class="form-horizontal" (ngSubmit)="guardar(forma)" #forma="ngForm" novalidate="novalidate">
               <div class="box-body">
+
                 <!--<div class="form-group">
                   <label for="inputEmail3" class="col-sm-2 control-label">Lugar</label>
 
@@ -84,6 +102,7 @@ export class enviarCancion extends BSModalContext {
                   <select class="form-control" id="lugar"
                   required
                   name="lugar"
+                  (change)="forma.token = getCookie('jucabox token ' + lugar_)"
                   [(ngModel)]="lugar_"
                   #lugar="ngModel"
                   >
@@ -93,17 +112,18 @@ export class enviarCancion extends BSModalContext {
                   </select>
                   </div>
                 </div>
-                <div class="form-group " [ngClass]="{'has-error': token.errors?.required  && token.touched}" *ngIf="!this.noFavorito">
-                  <label for="lugar" class="col-sm-12 control-label" style="text-align:left;">Token <span *ngIf="token.errors?.required  && token.touched"> - El Token es necesario</span></label>
+                <div class="form-group " [ngClass]="{'has-error': token.errors?.required  && token.touched && token.errors?.pattern}" *ngIf="!this.noFavorito">
+                  <label for="lugar" class="col-sm-12 control-label" style="text-align:left;">Token <span *ngIf="token.errors?.required  && token.touched"> - El Token es necesario</span><span *ngIf="token.errors?.pattern  && token.touched"> - El Token es incorrecto</span></label>
                   <div class="col-sm-12">
 
                   <input type="text" class="col-sm-12 form-control"
                   [(ngModel)]="token_"
+                  id="token"
                   type="text" name="token"
                   #token="ngModel"
                   placeholder="Introduce el token de validación del lugar..."
                   required
-
+                  [pattern]="getToken(lugar_)"
                   >
 
 
@@ -129,6 +149,7 @@ export class enviarCancion extends BSModalContext {
                 required
                 name="lugar2"
                 [(ngModel)]="lugar_"
+                (change)="forma.token = getCookie('jucabox token ' + lugar_)"
                 #lugar2="ngModel"
                 >
                   <option value="0" *ngIf="context._lugaresService.getLugaresNombreT(termino).length==0">Sin resultados...</option>
@@ -138,13 +159,14 @@ export class enviarCancion extends BSModalContext {
                 </div>
 
                 </div>
-                <div class="form-group " [ngClass]="{'has-error': token2.errors?.required  && token2.touched}" *ngIf="this.noFavorito">
-                  <label for="token" class="col-sm-12 control-label" style="text-align:left;">Token <span *ngIf="token2.errors?.required  && token2.touched"> - El Token es necesario</span></label>
+                <div class="form-group " [ngClass]="{'has-error': token2.errors?.required  && token2.touched && token2.pattern }" *ngIf="this.noFavorito">
+                  <label for="token" class="col-sm-12 control-label" style="text-align:left;">Token <span *ngIf="token2.errors?.required  && token2.touched"> - El Token es necesario</span><span *ngIf="token2.errors?.pattern  && token2.touched"> - El Token es incorrecto</span></label>
                   <div class="col-sm-12">
                   <input type="text" class="col-sm-12 form-control"
                   type="text" name="token2"
                   placeholder="Introduce el token de validación del lugar..."
                   required
+                  [pattern]="getToken(lugar_)"
                   [(ngModel)]="token_"
                   #token2="ngModel"
                   >
@@ -155,8 +177,8 @@ export class enviarCancion extends BSModalContext {
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <button type="submit" class="btn btn-default">Cancel</button>
-                <button type="submit" class="btn btn-success pull-right">Enviar</button>
+                <button type="submit" class="btn btn-default" (click)="this.dialog.close();">Cancel</button>
+                <button type="submit" class="btn btn-success pull-right" (click)="enviarCancionOK(lugar_,token_);">Enviar</button>
               </div>
               <!-- /.box-footer -->
             </form>
@@ -176,18 +198,54 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
     this.wrongAnswer = true;
 
   }
-
+  getToken(id:string){
+    return this.context._lugaresService.getToken(id);
+  }
   onKeyUp(value) {
     this.wrongAnswer = value != 5;
 
     this.dialog.close();
   }
 
+  imprimeToken(){
+    console.log(this.context.token_) ;
+  }
+
+
+
+
   guardar(forma:NgForm){
       console.log("ngForm",forma);
       console.log("Valor forma",forma.value);
   }
 
+  enviarCancionOK(lugar_:string,token_:string){
+    //console.log(this.getCookie("token " + lugar_));
+    this.setCookie("jucabox token " + lugar_,token_,6);
+    this.dialog.close();
+
+    // let object = {value: token_, timestamp: new Date().getTime()+ (6*60*60*1000)}
+    // localStorage.setItem('token_' + lugar_, JSON.stringify(object));
+  }
+
+
+
+  public getCookie(name: string) {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+  }
+
+  public deleteCookie(name) {
+      this.setCookie(name, "", -1);
+  }
+
+  public setCookie(name: string, value: string, expireHours: number, path: string = "") {
+      let d:Date = new Date();
+      d.setTime(d.getTime() + expireHours * 60 * 60 * 1000);
+      let expires:string = "expires=" + d.toUTCString();
+      document.cookie = name + "=" + value + "; " + expires + (path.length > 0 ? "; path=" + path : "");
+  }
   beforeDismiss(): boolean {
 
     return true;
