@@ -51,9 +51,6 @@ export class JucaboxService {
                     }
                   }
               //  return res.json().artists.items;
-              console.log(res.json());
-              console.log(nombre,artista);
-              console.log(this.canciones);
               return this.canciones;
             })
 
@@ -66,7 +63,7 @@ export class JucaboxService {
 
     return this.http.get(url)
             .map( res =>{
-                console.log(res.json());
+              //  console.log(res.json());
               //  this.artistas =  res.json().artists.items;
                 return res.json();
 

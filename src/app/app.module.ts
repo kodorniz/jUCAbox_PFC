@@ -72,7 +72,7 @@ import { NotificationBoxComponent } from './widgets/notification-box';
 import { TasksBoxComponent } from './widgets/tasks-box';
 import { UserBoxComponent } from './widgets/user-box';
 import { BreadcrumbComponent } from './widgets/breadcrumb';
-
+import {SelectModule} from 'ng-select';
 
 
 let widgets = [
@@ -132,6 +132,7 @@ let services = [
     SimpleNotificationsModule.forRoot(),
     ModalModule.forRoot(),
     BootstrapModalModule,
+    SelectModule,
     ...modules
   ],
   providers:

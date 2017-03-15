@@ -5,6 +5,7 @@ import { DialogRef, ModalComponent } from 'angular2-modal';
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { LugaresService } from '../../services/lugares.service';
 import { FormGroup } from '@angular/forms';
+import {SelectModule} from 'ng-select';
 
 export class enviarCancion extends BSModalContext {
   termino:string="";
@@ -13,12 +14,17 @@ export class enviarCancion extends BSModalContext {
   lugar_:string="-1";
   token_:string="";
   noFavorito:boolean;
-
+  LugaresFavS2:any[]=[];
+  LugaresS2:any[]=[];
 
   constructor(public Cancion:any,public _lugaresService:LugaresService) {
       super();
-
-
+        for( let lugar of _lugaresService.getLugaresFav()){
+              this.LugaresFavS2.push({value: lugar.id,label: lugar.nombre + " - " + lugar.provincia + " - " + lugar.ciudad});
+            }
+            for( let lugar of _lugaresService.getLugares()){
+                  this.LugaresS2.push({value: lugar.id,label: lugar.nombre + " - " + lugar.provincia + " - " + lugar.ciudad});
+          }
   }
 
 
@@ -77,10 +83,23 @@ export class enviarCancion extends BSModalContext {
                     <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
                   </div>
                 </div> -->
+
                 <div class="form-group " *ngIf="context._lugaresService.getLugaresFav().length!=0 && !this.noFavorito">
                   <label for="lugar" class="col-sm-4 control-label">Seleccione un lugar favorito</label>
                   <div class="col-sm-12">
-                  <select class="form-control" id="lugar"
+                  <ng-select  id="lugar"
+                    [options]="context.LugaresFavS2"
+                    placeholder="Seleccione un lugar favorito"
+                    [allowClear]="true"
+                      name="lugar"
+                      filterPlaceholder="Puede filtrar por nombre,ciudad o provincia"
+                      notFoundMsg="Sin resultado..."
+                      (closed)="token_ = getCookie('jucabox token ' + lugar_)"
+                      [(ngModel)]="lugar_"
+                      #lugar="ngModel"
+                    required>
+                  </ng-select>
+                <!--  <select class="form-control" id="lugar"
                   required
                   name="lugar"
                   (change)="token_ = getCookie('jucabox token ' + lugar_)"
@@ -88,7 +107,7 @@ export class enviarCancion extends BSModalContext {
                   #lugar="ngModel"
                   >
                     <option  *ngFor="let lugar of context._lugaresService.getLugaresFav()" [value]="lugar.id"><strong>{{lugar.nombre}}</strong> - {{lugar.ciudad}} - {{lugar.provincia}}</option>
-                  </select>
+                  </select>-->
                   </div>
                 </div>
                 <div class="form-group " [ngClass]="{'has-error':  !getTokenValido()}" *ngIf="!this.noFavorito">
@@ -105,20 +124,31 @@ export class enviarCancion extends BSModalContext {
                   >
                   </div>
                 </div>
-                <div class="form-group" *ngIf="this.noFavorito">
-                </div>
-                <div class="form-group " *ngIf="this.noFavorito">
-                  <label for="lugar" class="col-sm-4 control-label" style="text-align:left;">Buscar lugar</label>
+              <!--  <div class="form-group " *ngIf="this.noFavorito">
+
                   <div class="col-sm-12">
                   <input type="text" class="col-sm-12 form-control"
                   [(ngModel)]="termino"
                   type="text" name="termino"
                   placeholder="Introduce nombre ...">
                   </div>
-                </div>
+                </div>-->
                 <div class="form-group" *ngIf="this.noFavorito">
+                <label for="lugar" class="col-sm-4 control-label" style="text-align:left;">Buscar lugar</label>
                 <div class="col-sm-12">
-                <select class="form-control" id="lugar2"
+                <ng-select  id="lugar2"
+                  [options]="context.LugaresS2"
+                  placeholder="Seleccione un lugar"
+                  [allowClear]="true"
+                  filterPlaceholder="Puede filtrar por nombre,ciudad o provincia"
+                    name="lugar"
+                    notFoundMsg="Sin resultado..."
+                    (closed)="token_ = getCookie('jucabox token ' + lugar_)"
+                    [(ngModel)]="lugar_"
+                    #lugar2="ngModel"
+                  required>
+                </ng-select>
+                <!--<select class="form-control" id="lugar2"
                 required
                 name="lugar"
                 [(ngModel)]="lugar_"
@@ -127,7 +157,7 @@ export class enviarCancion extends BSModalContext {
                 >
                   <option value="0" *ngIf="context._lugaresService.getLugaresNombreT(termino).length==0">Sin resultados...</option>
                   <option  *ngFor="let lugar of context._lugaresService.getLugaresNombreT(termino)" [value]="lugar.id"><strong>{{lugar.nombre}}</strong> - {{lugar.ciudad}} - {{lugar.provincia}}</option>
-                </select>
+                </select>-->
                 </div>
                 </div>
                 <div class="form-group " *ngIf="this.noFavorito">
@@ -224,7 +254,7 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
 
 
   public getCookie(name: string) {
-    console.log(name);
+
   var value = "; " + document.cookie;
   var parts = value.split("; " + name + "=");
 
