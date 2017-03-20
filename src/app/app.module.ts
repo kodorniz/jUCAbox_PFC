@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule, Http } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { SimpleNotificationsModule } from 'angular2-notifications';
@@ -122,7 +122,8 @@ let services = [
     UsuarioComponent,
         AdditionalWindow,
     ...widgets,
-    ...pages
+    ...pages,
+    UsuarioComponent
   ],
   imports: [
     BrowserModule,
@@ -133,6 +134,7 @@ let services = [
     ModalModule.forRoot(),
     BootstrapModalModule,
     SelectModule,
+    ReactiveFormsModule,
     ...modules
   ],
   providers:

@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { TranslateService } from 'ng2-translate';
+import {Auth} from '../../services/auth.service';
+
 
 @Component( {
     selector: 'app-header',
@@ -8,8 +10,10 @@ import { TranslateService } from 'ng2-translate';
 })
 export class AppHeaderComponent {
 
-  constructor(
+  constructor(private auth: Auth
   ) {
     // TODO
   }
+
+
 }

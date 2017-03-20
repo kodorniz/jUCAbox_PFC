@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import {Auth} from './services/auth.service';
+import { User } from './models/user';
+//import { UserService } from '../../../services/user.service';
 
 
 @Component({
@@ -9,7 +11,12 @@ import {Auth} from './services/auth.service';
 })
 export class AppComponent {
   title = 'app works!';
-  constructor( ){
+      //private currentUser: User;
+      //public currentUser: ReplaySubject<User> = new ReplaySubject<User>( 1 );
+  constructor(private userServ: Auth){
+
+    let user = new User(this.userServ.getProfile());
+    this.userServ.setCurrentUser(user);
 
 
   }

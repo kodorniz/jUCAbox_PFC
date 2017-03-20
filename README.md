@@ -3,12 +3,13 @@
 PFC Universidad de Cádiz
 
 TODO:
-- Cambiar select normal por select2
-  - Cambiado en enviarCancion
+- conectar perfil con mongodb
+- Añadir Lugares Favoritos y Administrar lugares
+- Añadir Artistas favoritos y canciones
+- Añadir/buscar Amigos (Al final)
 
 Siguientes Pasos:
-- Poner el login
 - Enviar Cancion a objeto json de canciones pedidas y luego a la playlist.
-- Cambiar buscador general el autoplay de spotify.
-- Añadir el componente enviarCancion
-- Crear lo mismo pero para busqueda de canciones desde lugares y lugar
+- Crear lo mismo pero para busqueda de canciones desde lugares y lugar (enviarCancion)
+- Arreglar el Home
+- Notificaciones en tiempo real (socket.io)

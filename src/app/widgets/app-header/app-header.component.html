@@ -3,7 +3,7 @@
 	<!-- Logo -->
 	<a [routerLink]="['home']" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
 		<!-- <span class="logo-mini"><img src="/assets/img/logo.png" width="auto" height="30" class="d-inline-block align-top" alt=""><strong>J</strong></span>
-		<!-- <span class="logo-lg"><img src="/assets/img/logofull.png" width="auto" height="30" class="d-inline-block align-top" alt="">j<strong>UCA</strong>box</span> --> 
+		<!-- <span class="logo-lg"><img src="/assets/img/logofull.png" width="auto" height="30" class="d-inline-block align-top" alt="">j<strong>UCA</strong>box</span> -->
 		<span class="logo-mini"><strong>J</strong></span> <!-- logo for regular state and mobile devices -->
 		<span class="logo-lg">j<strong>UCA</strong>box</span>
 
@@ -18,16 +18,18 @@
 		<div class="navbar-custom-menu">
 			<ul class="nav navbar-nav" >
 				<!-- Messages: style can be found in dropdown.less-->
-				<li class="dropdown messages-menu messagesBox"></li>
+				<!-- <li class="dropdown messages-menu messagesBox"></li> -->
 				<!-- Notifications Menu -->
 				<li class="dropdown notifications-menu notificationsBox"></li>
 				<!-- Tasks Menu -->
-				<li class="dropdown tasks-menu tasksBox"></li>
+				<!-- <li class="dropdown tasks-menu tasksBox"></li> -->
 				<!-- User Account Menu -->
-				<li class="dropdown user user-menu userBox"></li>
+				<li class="dropdown user user-menu userBox" *ngIf="auth.authenticated()"></li>
+				<li *ngIf="!auth.authenticated()" style="cursor: pointer;"><a (click)="auth.login()" [href]=""
+					class="toggle-sidebar-right"><i class="fa fa-user"></i></a></li>
 				<!-- Control Sidebar Toggle Button -->
-				<li><a href="#" data-toggle="control-sidebar"
-					class="toggle-sidebar-right"><i class="fa fa-gears"></i></a></li>
+				<!-- <li><a href="#" data-toggle="control-sidebar"
+					class="toggle-sidebar-right"><i class="fa fa-gears"></i></a></li> -->
 			</ul>
 		</div>
 	</nav>

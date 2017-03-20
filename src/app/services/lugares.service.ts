@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Select2OptionData } from 'ng2-select2';
+//import { Select2OptionData } from 'ng2-select2';
 
 @Injectable()
 export class LugaresService {

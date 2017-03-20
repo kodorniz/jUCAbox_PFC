@@ -17,6 +17,41 @@
     background: white;
     z-index: -1;
 }
+
+.img-wrapper_ {
+  position: relative;
+ }
+
+.img-overlay_ {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+div.show-image button {
+    opacity:0;
+
+}
+
+div.show-image:hover img {
+    opacity:0.5;
+
+}
+
+div.show-image:hover button {
+    opacity:1;
+
+}
+
+.img-overlay_:before {
+  content: ' ';
+  display: block;
+  /* adjust 'height' to position overlay content vertically */
+  height: 50%;
+}
 app-root:empty + .loading {
     opacity: 1;
     z-index: 100;
@@ -192,11 +227,23 @@ hr{
 
 
 .main-container{
-  margin-top: 30px;
+  margin-top: 5px;
 }
 
 .img-circle{
   border-radius: 100%;
+}
+
+.wrapC {
+    float: left;
+    position: relative;
+    left: 50%;
+}
+
+.contentC {
+    float: left;
+    position: relative;
+    left: -50%;
 }
 
 .button-bottom{

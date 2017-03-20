@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../../models/user';
-import { UserService } from '../../../services/user.service';
+//import { UserService } from '../../../services/user.service';
+import {Auth} from '../../../services/auth.service';
 import { LoggerService } from '../../../services/logger.service';
 
 import { ToasterService, ToasterConfig } from 'angular2-toaster/angular2-toaster';
@@ -15,8 +16,9 @@ export class LayoutsAuthComponent implements OnInit {
     private logger: LoggerService;
     private mylinks: Array<any> = [];
 
+
     constructor(
-      private userServ: UserService,
+      private userServ: Auth,
       private toastr: ToasterService,
       private translate: AdminLTETranslateService
     ) {
@@ -25,11 +27,14 @@ export class LayoutsAuthComponent implements OnInit {
             showCloseButton: true,
             tapToDismiss: false
         });
+
+
         // this.translate = translate.getTranslate();
         // this.logger = new LoggerService( this.translate );
     }
 
     public ngOnInit() {
+
         //  sedding the resize event, for AdminLTE to place the height
         let ie = this.detectIE();
         if ( !ie ) {

@@ -15,7 +15,7 @@ const APP_ROUTES: Routes = [
   { path: 'lugares', component: LugaresComponent },
   {
   path: 'usuario', component: UsuarioComponent,
-  //canActivate:[ AuthGuardService ]
+  canActivate:[ AuthGuardService ]
  },
   { path: 'lugar/:id', component: LugarComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'home' }
