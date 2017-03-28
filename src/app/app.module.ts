@@ -73,7 +73,10 @@ import { TasksBoxComponent } from './widgets/tasks-box';
 import { UserBoxComponent } from './widgets/user-box';
 import { BreadcrumbComponent } from './widgets/breadcrumb';
 import {SelectModule} from 'ng-select';
-
+import { SinfotoAvatarPipe } from './pipes/sinfoto-avatar.pipe';
+import { LogService } from './services/log.service';
+import { DateLogPipe } from './pipes/date-log.pipe';
+import { LOCALE_ID } from '@angular/core';
 
 let widgets = [
     AppComponent,
@@ -123,7 +126,9 @@ let services = [
         AdditionalWindow,
     ...widgets,
     ...pages,
-    UsuarioComponent
+    UsuarioComponent,
+    SinfotoAvatarPipe,
+    DateLogPipe
   ],
   imports: [
     BrowserModule,
@@ -142,6 +147,8 @@ let services = [
     LugaresService,
     Auth,
     AuthGuardService,
+    LogService,
+    { provide: LOCALE_ID, useValue: "es-ES" },
     ...services ],
   bootstrap: [AppComponent],
   entryComponents: [ AdditionalWindow ]

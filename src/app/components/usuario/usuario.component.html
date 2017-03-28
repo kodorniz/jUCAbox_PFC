@@ -24,9 +24,74 @@
 <div class="box-body"> -->
 <div class="box-header with-border">
   <h3 class="box-title"> Perfil de <strong>{{Usuario.getName()}}</strong> </h3>
+
+  <br>
+  <br>
+  <div class="btn-group" role="group">
+      <button type="button" class="btn" [ngClass]="{'btn-default':!visHistorialAcciones , 'btn-primary':visHistorialAcciones}" (click)="verHistorialAcciones()"><i class="fa fa-list"></i> Historial de acciones</button>
+      <button type="button" class="btn" [ngClass]="{'btn-default':!visAmigos , 'btn-primary':visAmigos}" (click)="verAmigos()"><i class="fa fa-users" ></i> Amigos</button>
+      <button type="button" class="btn" [ngClass]="{'btn-default':!visArtistasFavoritos , 'btn-primary':visArtistasFavoritos}" (click)="verArtistasFavoritos()"><i class="fa fa-music" ></i> Artistas Favoritos</button>
+      <button type="button" class="btn" [ngClass]="{'btn-default':!visLugaresFavoritos , 'btn-primary':visLugaresFavoritos}" (click)="verLugaresFavoritos()"><i class="fa fa-home" ></i> Lugares Favoritos</button>
+     <button type="button" class="btn" [ngClass]="{'btn-default':!visInformacionPersonal , 'btn-primary':visInformacionPersonal}" (click)="verInformacionPersonal()"><i class="fa fa-user" ></i> Información personal</button>
+  </div>
 </div>
 <br>
-              <form class="form-horizontal" role="form" [formGroup]="forma" (ngSubmit) = "guardarCambios()">
+
+<!-- timeline de usuario -->
+<div *ngIf="visHistorialAcciones">
+<ul class="timeline" >
+<ng-container *ngFor="let dates_ of logService.getLogDates()">
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-red">
+            {{dates_ | date:'longDate'}}
+        </span>
+    </li>
+
+    <!-- getLogDates /.timeline-label -->
+
+    <!-- timeline item -->
+
+    <li *ngFor="let logEvent of logService.getLog(Usuario.GlobalClientID,dates_)">
+        <!-- timeline icon -->
+        <i class="fa fa-home bg-blue"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> {{logEvent.FechaLog | dateLog}}</span>
+
+            <h3 class="timeline-header" style="background-color: #ecf0f5;border-radius: 2%;">
+                {{logEvent.verboMensaje}} - <strong> {{logEvent.objetoMensaje}}</strong></h3>
+
+            <div class="timeline-body">
+                {{logEvent.mensaje}}
+            </div>
+
+            <!-- <div class="timeline-footer">
+                <a class="btn btn-primary btn-xs">...</a>
+            </div> -->
+        </div>
+    </li>
+    <!-- END timeline item -->
+</ng-container>
+</ul>
+<!-- crear paginado -->
+<div class="btn-group" role="group" *ngIf="logService.getLogMax(Usuario.GlobalClientID)!=1">
+    <button type="button" class="btn" *ngIf="logService.paginaActual > 1" ><i class="fa fa-angle-double-left"></i></button>
+    <button type="button" class="btn" *ngIf="logService.paginaActual > 1"><i class="fa fa-angle-left"></i></button>
+    <ng-container *ngFor="let numberPage of logService.getLogCount(Usuario.GlobalClientID)">
+    <button type="button" class="btn" (click)="CambiaPagina(numberPage)">{{numberPage}}</button>
+    </ng-container>
+    <button type="button" class="btn" *ngIf="logService.getLogMax(Usuario.GlobalClientID) != logService.paginaActual"><i class="fa fa-angle-right"></i></button>
+    <button type="button" class="btn" *ngIf="logService.getLogMax(Usuario.GlobalClientID) != logService.paginaActual"><i class="fa fa-angle-double-right"></i></button>
+  </div>
+</div>
+<!-- amigos -->
+
+<!-- artistas favoritos -->
+
+<!-- lugares favoritos -->
+
+<!-- informacion de usuario -->
+              <form class="form-horizontal" role="form" [formGroup]="forma" (ngSubmit) = "guardarCambios()" *ngIf="visInformacionPersonal">
 
                 <div class="form-group">
                     <!-- <label for="firstName" class="col-sm-3 control-label">Nombre</label> -->
@@ -34,7 +99,7 @@
                         <!-- <input type="text" id="Avatar" placeholder="Nombre" class="form-control"
                         autofocus
                         formControlName = "AvatarUrl"> -->
-                        <img  [src]="Usuario.avatarUrl" class="img-responsive img-thumbnail img-circle" style="width: 200px;
+                        <img  [src]="Usuario.avatarUrl | sinfotoAvatar " class="img-responsive img-thumbnail img-circle" style="width: 200px;
                                                                                                   height: auto;
                                                                                                   margin-left: auto;
                                                                                                   margin-right: auto;

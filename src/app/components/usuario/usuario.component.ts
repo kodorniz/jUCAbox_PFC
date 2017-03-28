@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Auth} from '../../services/auth.service';
+import {LogService} from '../../services/log.service';
 import { User } from '../../models/user';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -10,12 +11,23 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class UsuarioComponent implements OnInit {
 
+
+    //Variables de visibilidad
+    visAmigos:boolean = false;
+    visInformacionPersonal:boolean = false;
+    visArtistasFavoritos:boolean = false;
+    visLugaresFavoritos:boolean = false;
+    visHistorialAcciones:boolean = true;
+    //log:any[];
     //perfil: Object;
     forma: FormGroup;
     private Usuario:User;
     mostrarboton:boolean = false;
-    constructor( private userServ:Auth) {
+    constructor( private userServ:Auth, private logService: LogService) {
+      
       this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
+      //this.log = logService.getTotalLog(this.Usuario.GlobalClientID);
+
       this.forma = new FormGroup({
       'nombre': new FormControl(this.Usuario.firstname,[Validators.required,Validators.minLength(3)]),
       'apellidos': new FormControl(this.Usuario.lastname,[Validators.required,Validators.minLength(3)]),
@@ -40,6 +52,46 @@ export class UsuarioComponent implements OnInit {
     this.Usuario.setUser(this.forma.value,this.userServ.getProfile());
   }
   valorboton(){
-    console.log(this.mostrarboton);
+    //console.log(this.mostrarboton);
+  }
+
+  verAmigos(){
+    this.visAmigos = true;
+    this.visInformacionPersonal = false;
+    this.visArtistasFavoritos = false;
+    this.visLugaresFavoritos = false;
+    this.visHistorialAcciones = false;
+  }
+
+  verInformacionPersonal(){
+    this.visAmigos = false;
+    this.visInformacionPersonal = true;
+    this.visArtistasFavoritos = false;
+    this.visLugaresFavoritos = false;
+    this.visHistorialAcciones = false;
+  }
+
+  verArtistasFavoritos(){
+    this.visAmigos = false;
+    this.visInformacionPersonal = false;
+    this.visArtistasFavoritos = true;
+    this.visLugaresFavoritos = false;
+    this.visHistorialAcciones = false;
+  }
+
+  verLugaresFavoritos(){
+    this.visAmigos = false;
+    this.visInformacionPersonal = false;
+    this.visArtistasFavoritos = false;
+    this.visLugaresFavoritos = true;
+    this.visHistorialAcciones = false;
+  }
+
+  verHistorialAcciones(){
+    this.visAmigos = false;
+    this.visInformacionPersonal = false;
+    this.visArtistasFavoritos = false;
+    this.visLugaresFavoritos = false;
+    this.visHistorialAcciones = true;
   }
 }
