@@ -3,11 +3,10 @@
 PFC Universidad de Cádiz
 
 TODO:
-- Añadir Servicio Log
-- conectar perfil con mongodb
-- Añadir Lugares Favoritos y Administrar lugares
-- Añadir Artistas favoritos y canciones
-- Añadir/buscar Amigos (Al final)
+- Listar Artistas Favoritos
+    - Borrado
+- Listar Lugares Favoritos (Incluido si eres admin)
+    - Borrado
 
 Siguientes Pasos:
 - Paginado api spotify (offset y total)
@@ -15,3 +14,7 @@ Siguientes Pasos:
 - Crear lo mismo pero para busqueda de canciones desde lugares y lugar (enviarCancion)
 - Arreglar el Home
 - Notificaciones en tiempo real (socket.io)
+- conectar perfil con mongodb
+- Añadir Lugares Favoritos y Administrar lugares
+- Añadir Artistas favoritos y canciones
+- Añadir/buscar Amigos (Al final)

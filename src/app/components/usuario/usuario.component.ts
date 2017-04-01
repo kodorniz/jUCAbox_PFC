@@ -24,9 +24,10 @@ export class UsuarioComponent implements OnInit {
     private Usuario:User;
     mostrarboton:boolean = false;
     constructor( private userServ:Auth, private logService: LogService) {
-      
+
       this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
       //this.log = logService.getTotalLog(this.Usuario.GlobalClientID);
+      logService.getLogInit(this.Usuario.GlobalClientID);
 
       this.forma = new FormGroup({
       'nombre': new FormControl(this.Usuario.firstname,[Validators.required,Validators.minLength(3)]),

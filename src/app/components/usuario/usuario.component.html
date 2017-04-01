@@ -40,11 +40,11 @@
 <!-- timeline de usuario -->
 <div *ngIf="visHistorialAcciones">
 <ul class="timeline" >
-<ng-container *ngFor="let dates_ of logService.getLogDates()">
+<ng-container *ngFor="let dates_ of logService.getLogDates(Usuario.GlobalClientID)">
     <!-- timeline time label -->
     <li class="time-label">
         <span class="bg-red">
-            {{dates_ | date:'longDate'}}
+            {{dates_ | date:'longDate' }}
         </span>
     </li>
 
@@ -54,7 +54,7 @@
 
     <li *ngFor="let logEvent of logService.getLog(Usuario.GlobalClientID,dates_)">
         <!-- timeline icon -->
-        <i class="fa fa-home bg-blue"></i>
+        <i [className]="logService.iconType(logEvent.tipoMensaje)"></i>
         <div class="timeline-item">
             <span class="time"><i class="fa fa-clock-o"></i> {{logEvent.FechaLog | dateLog}}</span>
 
@@ -75,13 +75,13 @@
 </ul>
 <!-- crear paginado -->
 <div class="btn-group" role="group" *ngIf="logService.getLogMax(Usuario.GlobalClientID)!=1">
-    <button type="button" class="btn" *ngIf="logService.paginaActual > 1" ><i class="fa fa-angle-double-left"></i></button>
-    <button type="button" class="btn" *ngIf="logService.paginaActual > 1"><i class="fa fa-angle-left"></i></button>
+    <button type="button" class="btn" [ngClass]="{'disabled': logService.paginaActual == 1}" (click)="logService.firstPage(Usuario.GlobalClientID)" [disabled]="logService.paginaActual == 1" ><i class="fa fa-angle-double-left"></i></button>
+    <button type="button" class="btn" [ngClass]="{'disabled': logService.paginaActual == 1}" (click)="logService.previousPage(Usuario.GlobalClientID)" [disabled]="logService.paginaActual == 1" ><i class="fa fa-angle-left"></i></button>
     <ng-container *ngFor="let numberPage of logService.getLogCount(Usuario.GlobalClientID)">
-    <button type="button" class="btn" (click)="CambiaPagina(numberPage)">{{numberPage}}</button>
+    <button type="button" class="btn" (click)="logService.CambiaPagina(numberPage,Usuario.GlobalClientID)">{{numberPage}}</button>
     </ng-container>
-    <button type="button" class="btn" *ngIf="logService.getLogMax(Usuario.GlobalClientID) != logService.paginaActual"><i class="fa fa-angle-right"></i></button>
-    <button type="button" class="btn" *ngIf="logService.getLogMax(Usuario.GlobalClientID) != logService.paginaActual"><i class="fa fa-angle-double-right"></i></button>
+    <button type="button" class="btn" [ngClass]="{'disabled': logService.getLogMax(Usuario.GlobalClientID) == logService.paginaActual}" (click)="logService.nextPage(Usuario.GlobalClientID)" [disabled]="logService.getLogMax(Usuario.GlobalClientID) == logService.paginaActual" ><i class="fa fa-angle-right"></i></button>
+    <button type="button" class="btn" [ngClass]="{'disabled': logService.getLogMax(Usuario.GlobalClientID) == logService.paginaActual}" (click)="logService.lastPage(Usuario.GlobalClientID)"  [disabled]="logService.getLogMax(Usuario.GlobalClientID) == logService.paginaActual"><i class="fa fa-angle-double-right"></i></button>
   </div>
 </div>
 <!-- amigos -->
@@ -118,7 +118,8 @@
                     </div>
                 </div>
 </div> -->
-                  <div class="form-group">
+<div style="padding-right: 30px;">
+                  <div class="form-group" >
                       <label for="firstName" class="col-sm-3 control-label">Nombre</label>
                       <div class="col-sm-9">
                           <input type="text" id="firstName" placeholder="Nombre" class="form-control"
@@ -177,6 +178,7 @@
                           <button type="submit" class="btn btn-primary btn-block">Guardar cambios</button>
                       </div>
                   </div>
+          </div>
               </form> <!-- /form -->
             <!-- </div>
             <div class="box-footer">

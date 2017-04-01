@@ -5,7 +5,7 @@ export class LogService {
 
   Log:any[] = [{
     id:"XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR",
-    tipoMensaje: "CancionEnviada",
+    tipoMensaje: "Cancion",
     objetoMensaje:"Lloraré las penas",
     verboMensaje:"Canción enviada",
     mensaje: "Prueba de cancion enviada",
@@ -13,7 +13,7 @@ export class LogService {
   },
   {
     id:"XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR",
-    tipoMensaje: "SolicitudAmistadAceptada",
+    tipoMensaje: "Amistad",
     objetoMensaje:"Alejandro Utrera",
     verboMensaje:"Solicitud aceptada",
     mensaje: "Prueba de solicitud amistad aceptada",
@@ -21,7 +21,7 @@ export class LogService {
   },
   {
     id:"XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR",
-    tipoMensaje: "LugarFavoritoAñadido",
+    tipoMensaje: "Lugar",
     objetoMensaje:"El niño perdio",
     verboMensaje:"Lugar añadido a favoritos",
     mensaje: "Prueba Lugar Favorito Añadido",
@@ -29,19 +29,33 @@ export class LogService {
   },
   {
     id:"OtroUsuario",
-    tipoMensaje: "LugarFavoritoAñadido",
+    tipoMensaje: "Lugar",
     objetoMensaje:"El niño perdio",
     verboMensaje:"Lugar añadido a favoritos",
     mensaje: "Prueba Lugar Favorito Añadido",
     FechaLog: new Date(2017, 2, 28, 19, 24, 18)
   }];
-
+  private initLog:any[]=[];
   private paginaActual:number = 1;
-  private limitePaginas:number = 1;
+  private limitePaginas:number = 2;
   //Fechas:any[]=[];
   constructor() {
 
   //  this.Fechas = this.getLogDates();
+   }
+
+   iconType(type:string){
+     switch(type){
+       case 'Cancion':
+          return 'fa  bg-blue fa-music';
+      case 'Amistad':
+          return 'fa  bg-blue fa-users';
+      case 'Lugar':
+          return 'fa  bg-blue fa-home';
+      default:
+          return 'fa  bg-blue fa-question';
+
+     }
    }
 
   addLog(GlobalClientID:string, tipoMensaje:string, mensaje:string,objetoMensaje:string,verboMensaje:string){
@@ -54,9 +68,25 @@ export class LogService {
   });
   }
 
+  getLogInit(GlobalClientID:string){
+    let objetoFinal:any[]=[];
+    let numeroVueltas:number = 0;
+    let objeto =  this.Log.filter(
+      function(data){
+        return data.id == GlobalClientID
+      }
+    );
+    numeroVueltas=this.getVueltas(objeto.length,this.paginaActual,this.limitePaginas);
+    for(let i = 0;i<numeroVueltas;i++){
+      objetoFinal.push(objeto[i+((this.paginaActual-1)*this.limitePaginas)]);
+    }
+    this.initLog = objetoFinal;
+  }
+
   getLog(GlobalClientID:string,Fecha:Date){
     let objetoFinal:any[]=[];
-    let objeto =  this.Log.filter(
+    let numeroVueltas:number = 0;
+    let objeto =  this.initLog.filter(
       function(data){
 
         let d:any = new Date(data.FechaLog);
@@ -67,12 +97,19 @@ export class LogService {
         return data.id == GlobalClientID && d - fech == 0
       }
     );
-
-    for(let i = 0;i<objeto.length;i++){
-      objetoFinal.push(objeto[i+((this.paginaActual-1)*this.limitePaginas)]);
-    }
-    return objetoFinal;
+    // numeroVueltas=this.getVueltas(objeto.length,this.paginaActual,this.limitePaginas);
+    // for(let i = 0;i<numeroVueltas;i++){
+    //   objetoFinal.push(objeto[i+((this.paginaActual-1)*this.limitePaginas)]);
+    // }
+    return objeto;
   }
+
+getVueltas(total:number,paginaActual:number,limitePaginas:number):any{
+  if(limitePaginas*paginaActual > total)
+    return limitePaginas*paginaActual - total;
+  else
+    return limitePaginas;
+}
 
   getLogCount(GlobalClientID:string){
     let paginado:any[] = [];
@@ -81,7 +118,7 @@ export class LogService {
         return data.id == GlobalClientID
       }
     ).length/this.limitePaginas;
-    for(let i=0;i<=Math.round(total);i++){
+    for(let i=0;i<Math.ceil(total);i++){
       paginado.push(i+1);
     }
     return paginado;
@@ -94,13 +131,18 @@ export class LogService {
         return data.id == GlobalClientID
       }
     ).length/this.limitePaginas;
-    return Math.round(total)+1
+    return Math.ceil(total);
 
   }
 
-  getLogDates(){
+  getLogDates(GlobalClientID:string){
     var lookup = {};
-    var items = this.Log;
+
+    var items =  this.initLog.filter(
+      function(data){
+        return data.id == GlobalClientID;
+      }
+    );
 
     var result = [];
 
@@ -119,8 +161,34 @@ export class LogService {
 
       }
 
-    CambiaPagina(nuevaPagina:number){
+    CambiaPagina(nuevaPagina:number,GlobalClientID:string){
           this.paginaActual = nuevaPagina;
+          this.getLogInit(GlobalClientID);
+          console.log(this.initLog);
         }
+
+    nextPage(GlobalClientID:string){
+
+        this.CambiaPagina(this.paginaActual+1,GlobalClientID);
+
+    }
+
+    previousPage(GlobalClientID:string){
+
+        this.CambiaPagina(this.paginaActual-1,GlobalClientID);
+
+    }
+
+    firstPage(GlobalClientID:string){
+
+        this.CambiaPagina(1,GlobalClientID);
+
+    }
+
+    lastPage(GlobalClientID:string){
+
+        this.CambiaPagina(this.getLogMax(GlobalClientID),GlobalClientID);
+
+    }
 
 }
