@@ -7,17 +7,28 @@
     </div>
     <div class ="col-md-4">
         <label for="termino"> Buscador </label>
-        <input [(ngModel)]="termino"
-        (keyup)="buscarArtista()"
-        type="text" name="termino"
-        class = "form-control"
-        placeholder="Buscar por artista, canción...">
 
+        <div class="input-group">
+          <input [(ngModel)]="termino"
+          (keyup)="clickBoton=false"
+          type="text" name="termino"
+          class = "form-control"
+          placeholder="Buscar por artista, canción...">
+        <span class="input-group-btn">
+            <button   (click)="buscarArtista()" class="btn btn-default fa fa-search"></button>
+        </span>
+        </div>
+
+
+        <label class="checkbox-inline"><input type="checkbox"  [(ngModel)]="chkArtista">Artista</label>
+        <label class="checkbox-inline"><input type="checkbox"  [(ngModel)]="chkCancion">Cancion</label>
+        <label class="checkbox-inline"><input type="checkbox" [(ngModel)]="chkPlaylist">Playlist</label>
+        <label class="checkbox-inline"><input type="checkbox"  [(ngModel)]="chkAlbum">Album</label>
     </div>
 
   </div>
     <hr>
-    <div class = "row" *ngIf="_jucaboxService.artistas.length == 0 && termino.length > 0 && _jucaboxService.canciones.length == 0">
+    <div class = "row" *ngIf="clickBoton==true && _jucaboxService.artistas.length == 0 && termino.length > 0 && _jucaboxService.canciones.length == 0">
       <div class="col-sm-12">
         <div class = "alert alert-danger" role="alert">
             No existen resultados con el termino: {{termino}}

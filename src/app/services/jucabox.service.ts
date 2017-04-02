@@ -16,20 +16,32 @@ export class JucaboxService {
 
   constructor(private http:Http) { }
 
-  getArtistas(nombre:string){
-    let query = "?q=" + nombre + "&type=track,artist,playlist,album";
+  getArtistas(nombre:string,tipo:string='&type=track,artist,playlist,album'){
+
+    let query = "?q=*" + nombre + '*' + tipo;
     let url = this.urlBusqueda + query;
 
     return this.http.get(url)
             .map( res =>{
               //  console.log(res.json().artists.items);
+              this.playlists=[];
+              this.artistas=[];
+              this.albumes=[];
+              this.canciones=[];
+              if (typeof res.json().playlists != "undefined")
                 this.playlists = res.json().playlists.items;
+
+              if (typeof res.json().artists != "undefined")
                 this.artistas =  res.json().artists.items;
+
+              if (typeof res.json().albums != "undefined")
                 this.albumes = res.json().albums.items;
+
+              if (typeof res.json().tracks != "undefined")
                 this.canciones = res.json().tracks.items;
 
               //  return res.json().artists.items;
-              console.log(res.json());
+              //console.log(res.json());
             })
 
 
