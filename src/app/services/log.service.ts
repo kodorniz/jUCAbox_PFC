@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class LogService {
 
   Log:any[] = [{
-    id:"XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR",
+    GlobalClientID:"XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR",
     tipoMensaje: "Cancion",
     objetoMensaje:"Lloraré las penas",
     verboMensaje:"Canción enviada",
@@ -12,7 +12,7 @@ export class LogService {
     FechaLog: new Date(2017, 2, 28, 19, 20, 12)
   },
   {
-    id:"XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR",
+    GlobalClientID:"XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR",
     tipoMensaje: "Amistad",
     objetoMensaje:"Alejandro Utrera",
     verboMensaje:"Solicitud aceptada",
@@ -20,7 +20,7 @@ export class LogService {
     FechaLog: new Date(2017, 2, 27, 19, 22, 12)
   },
   {
-    id:"XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR",
+    GlobalClientID:"XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR",
     tipoMensaje: "Lugar",
     objetoMensaje:"El niño perdio",
     verboMensaje:"Lugar añadido a favoritos",
@@ -28,7 +28,7 @@ export class LogService {
     FechaLog: new Date(2017,2, 27, 19, 24, 18)
   },
   {
-    id:"OtroUsuario",
+    GlobalClientID:"OtroUsuario",
     tipoMensaje: "Lugar",
     objetoMensaje:"El niño perdio",
     verboMensaje:"Lugar añadido a favoritos",
@@ -59,7 +59,7 @@ export class LogService {
    }
 
   addLog(GlobalClientID:string, tipoMensaje:string, mensaje:string,objetoMensaje:string,verboMensaje:string){
-    this.Log.push({id:GlobalClientID,
+    this.Log.push({GlobalClientID:GlobalClientID,
                    tipoMensaje: tipoMensaje,
                    objetoMensaje: objetoMensaje,
                    verboMensaje:verboMensaje,
@@ -73,7 +73,7 @@ export class LogService {
     let numeroVueltas:number = 0;
     let objeto =  this.Log.filter(
       function(data){
-        return data.id == GlobalClientID
+        return data.GlobalClientID == GlobalClientID
       }
     );
     numeroVueltas=this.getVueltas(objeto.length,this.paginaActual,this.limitePaginas);
@@ -94,7 +94,7 @@ export class LogService {
 
         let fech:any = new Date(Fecha);
 
-        return data.id == GlobalClientID && d - fech == 0
+        return data.GlobalClientID == GlobalClientID && d - fech == 0
       }
     );
     // numeroVueltas=this.getVueltas(objeto.length,this.paginaActual,this.limitePaginas);
@@ -115,7 +115,7 @@ getVueltas(total:number,paginaActual:number,limitePaginas:number):any{
     let paginado:any[] = [];
     let total:number = this.Log.filter(
       function(data){
-        return data.id == GlobalClientID
+        return data.GlobalClientID == GlobalClientID
       }
     ).length/this.limitePaginas;
     for(let i=0;i<Math.ceil(total);i++){
@@ -128,7 +128,7 @@ getVueltas(total:number,paginaActual:number,limitePaginas:number):any{
     let paginado:any[] = [];
     let total:number = this.Log.filter(
       function(data){
-        return data.id == GlobalClientID
+        return data.GlobalClientID == GlobalClientID
       }
     ).length/this.limitePaginas;
     return Math.ceil(total);
@@ -140,7 +140,7 @@ getVueltas(total:number,paginaActual:number,limitePaginas:number):any{
 
     var items =  this.initLog.filter(
       function(data){
-        return data.id == GlobalClientID;
+        return data.GlobalClientID == GlobalClientID;
       }
     );
 

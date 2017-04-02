@@ -13,16 +13,19 @@ export class LugaresService {
       token:"Token2"
     }
   ];
-  private lugaresFav:Lugar[]=[{
-    id: "1",
-    nombre: "Niño Perdio",
-    descripcion: "Discoteca 1: El poder más reconocido de Aquaman es la capacidad telepática para comunicarse con la vida marina, la cual puede convocar a grandes distancias.",
-    img: ["assets/img/disco1.jpg",
-     "assets/img/disco1.jpg",
-    "assets/img/disco1.jpg"],
-    provincia: "Madrid",
-    ciudad:"Boadilla del Monte",
-    direccion:"Calle Severo Ochoa"
+
+  private lugaresAdmin:any[]=[{
+    lugarID: "1",
+    globalClientID: "XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR"
+  }];
+
+  private lugaresFav:any[]=[{
+    lugarID: "1",
+    globalClientID: "XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR"
+  },
+  {
+    lugarID: "2",
+    globalClientID: "XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR"
   }];
   private lugares:Lugar[] = [
       {
@@ -54,6 +57,20 @@ export class LugaresService {
 
    }
 
+  isAdmin(lugarID:string,userID:string){
+
+    let objeto =  this.lugaresAdmin.filter(
+      function(data){
+        return data.globalClientID == userID && data.lugarID == lugarID
+      }
+    );
+
+    if(objeto.length!=0)
+      return true;
+    else
+      return false;
+  }
+
   getLugares(){
 
     return this.lugares;
@@ -68,8 +85,23 @@ export class LugaresService {
   }
   }
 
-  getLugaresFav(){
-    return this.lugaresFav;
+  getLugaresFav(userID:string){
+    let objeto:LugarFav[] =  this.lugaresFav.filter(
+      function(data){
+        return data.globalClientID == userID;
+      }
+    );
+    let objetoFinal:any[]=[];
+    for(let i=0;i<objeto.length;i++ ){
+      for(let j=0;j<this.lugares.length;j++ ){
+        if(objeto[i].lugarID == this.lugares[j].id){
+          objetoFinal.push(this.lugares[j]);
+        }
+      }
+
+    }
+
+    return objetoFinal;
   }
   getLugaresNombreT(termino:string){
 
@@ -120,6 +152,12 @@ export class LugaresService {
     this.lugaresFav.push(this.getLugar(id));
   }
 
+  removeFav(lugarID:string,GlobalClientID:string){
+    console.log("ELIMINAR CON MONGO")
+
+    //this.lugaresFav.pop(this.getLugar(lugarID));
+  }
+
   getFav(id:string){
     return this.lugaresFav.filter(
       function(data){ return data.id == id }
@@ -147,6 +185,10 @@ export class LugaresService {
 
 
 
+}
+export interface LugarFav{
+  lugarID: string,
+  globalClientID:string
 }
 
 export interface Lugar{

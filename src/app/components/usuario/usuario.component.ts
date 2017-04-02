@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Auth} from '../../services/auth.service';
 import {LogService} from '../../services/log.service';
+import {LugaresService} from '../../services/lugares.service';
 import { User } from '../../models/user';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -23,12 +24,13 @@ export class UsuarioComponent implements OnInit {
     forma: FormGroup;
     private Usuario:User;
     mostrarboton:boolean = false;
-    constructor( private userServ:Auth, private logService: LogService) {
+    private lugares:any[] = [];
+    constructor( private userServ:Auth, private logService: LogService, private _lugaresService: LugaresService) {
 
       this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
       //this.log = logService.getTotalLog(this.Usuario.GlobalClientID);
       logService.getLogInit(this.Usuario.GlobalClientID);
-
+      this.lugares = _lugaresService.getLugaresFav(this.Usuario.GlobalClientID);
       this.forma = new FormGroup({
       'nombre': new FormControl(this.Usuario.firstname,[Validators.required,Validators.minLength(3)]),
       'apellidos': new FormControl(this.Usuario.lastname,[Validators.required,Validators.minLength(3)]),
