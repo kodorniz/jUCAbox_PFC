@@ -148,20 +148,29 @@ export class LugaresService {
   return lugaresArr;
   }
 
-  addFav(id:string){
-    this.lugaresFav.push(this.getLugar(id));
+  addFav(id:string,GlobalClientID:string){
+    //ADD MONGODB
+    this.lugaresFav.push(
+      {lugarID: id,
+        globalClientID: GlobalClientID
+      });
   }
 
   removeFav(lugarID:string,GlobalClientID:string){
+
     console.log("ELIMINAR CON MONGO")
 
     //this.lugaresFav.pop(this.getLugar(lugarID));
   }
 
-  getFav(id:string){
+  getFav(id:string,GlobalClientID:string){
+    //return this.lugaresFav.filter(
+    //  function(data){ return data.id === id && data.globalClientID === GlobalClientID }
+    //)[0];
     return this.lugaresFav.filter(
-      function(data){ return data.id == id }
+      function(data){ return data.lugarID === id && data.globalClientID === GlobalClientID }
     )[0];
+
     // for(let lugar of this.lugares){
     //   if(lugar.id == id){
     //     return lugar;

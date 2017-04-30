@@ -6,6 +6,8 @@ import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { LugaresService } from '../../services/lugares.service';
 import { FormGroup } from '@angular/forms';
 import {SelectModule} from 'ng-select';
+import { User } from '../../models/user';
+import {Auth} from '../../services/auth.service';
 
 export class enviarCancion extends BSModalContext {
   termino:string="";
@@ -16,15 +18,21 @@ export class enviarCancion extends BSModalContext {
   noFavorito:boolean;
   LugaresFavS2:any[]=[];
   LugaresS2:any[]=[];
+  usuarioID:string="";
+  private Usuario:User;
 
-  constructor(public Cancion:any,public _lugaresService:LugaresService) {
+  constructor(public Cancion:any,public _lugaresService:LugaresService,private userServ:Auth) {
       super();
-        for( let lugar of _lugaresService.getLugaresFav()){
+      this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
+      this.usuarioID = this.Usuario.getUserID();
+        for( let lugar of _lugaresService.getLugaresFav(this.Usuario.getUserID())){
+
               this.LugaresFavS2.push({value: lugar.id,label: lugar.nombre + " - " + lugar.provincia + " - " + lugar.ciudad});
             }
             for( let lugar of _lugaresService.getLugares()){
                   this.LugaresS2.push({value: lugar.id,label: lugar.nombre + " - " + lugar.provincia + " - " + lugar.ciudad});
           }
+
   }
 
 
@@ -83,8 +91,10 @@ export class enviarCancion extends BSModalContext {
                     <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
                   </div>
                 </div> -->
+                <div>
 
-                <div class="form-group " *ngIf="context._lugaresService.getLugaresFav().length!=0 && !this.noFavorito">
+                </div>
+                <div class="form-group " *ngIf="context._lugaresService.getLugaresFav(this.getUser()).length!=0 && !this.noFavorito">
                   <label for="lugar" class="col-sm-4 control-label">Seleccione un lugar favorito</label>
                   <div class="col-sm-12">
                   <ng-select  id="lugar"
@@ -198,6 +208,10 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
     this.context = dialog.context;
     this.wrongAnswer = true;
 
+  }
+
+  getUser(){
+    return this.context.usuarioID;
   }
   getTokenRelleno(){
     return this.tokenRelleno;

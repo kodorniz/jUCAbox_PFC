@@ -5,6 +5,7 @@ import { AdditionalWindow, enviarCancion } from '../artista/enviarCancion.compon
 import { Overlay } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { LugaresService } from '../../services/lugares.service';
+import {Auth} from '../../services/auth.service';
 
 @Component({
   selector: 'app-search',
@@ -27,7 +28,8 @@ export class SearchComponent implements OnInit {
 
   constructor(private _jucaboxService:JucaboxService,
                overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal,
-              public _lugaresService:LugaresService) {
+              public _lugaresService:LugaresService
+            ,public userServ:Auth) {
 
                 overlay.defaultViewContainer = vcRef;
               }
@@ -85,7 +87,7 @@ export class SearchComponent implements OnInit {
   enviarCancion(Cancion) {
 
   this.modal
-  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService)} );
+  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ)} );
   }
 
   // compruebaCheck(check:string){

@@ -1,5 +1,6 @@
 import { Component, OnInit,trigger,state, transition, style, animate} from '@angular/core';
 import { LugaresService } from '../../services/lugares.service';
+import { UserService } from '../../services/user.service';
 import { NotificationsService } from 'angular2-notifications';
 
 @Component({
@@ -32,8 +33,9 @@ export class LugaresComponent implements OnInit {
   provincia:string="";
   busquedaAvanzada:boolean = false;
   menuState:string = 'out';
-  constructor(private _lugaresService:LugaresService, private _notificationService: NotificationsService ) {
-
+  usuarioID:string = "";
+  constructor(private _lugaresService:LugaresService, private _notificationService: NotificationsService, private _usuarioService: UserService ) {
+    this.usuarioID = _usuarioService.getCurrentUser();
      }
 
      public options = {
@@ -55,14 +57,17 @@ export class LugaresComponent implements OnInit {
 
   }
 
-  addFav(id:string,nombre:string){
-    if(!this._lugaresService.getFav(id))
+  addFav(id:string,GlobalClientID:string,nombre:string){
+
+    if(!this._lugaresService.getFav(id,GlobalClientID))
       {
-          this._lugaresService.addFav(id);
-          this._notificationService.success( nombre,"añadido a favoritos correctamente");
+          this._lugaresService.addFav(id,GlobalClientID);
+          this._notificationService.success( nombre,"Añadido a favoritos correctamente");
       }else{
-        this._notificationService.error(nombre,"No se puede añadir, ya está añadido");
+        this._lugaresService.removeFav(id,GlobalClientID);
+        this._notificationService.success(nombre,"Eliminado de favoritos");
       }
+
   }
 
 }

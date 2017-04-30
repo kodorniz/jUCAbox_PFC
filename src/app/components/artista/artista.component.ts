@@ -5,6 +5,7 @@ import { Overlay } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { AdditionalWindow, enviarCancion } from './enviarCancion.component';
 import { LugaresService } from '../../services/lugares.service';
+import {Auth} from '../../services/auth.service';
 
 @Component({
   selector: 'app-artista',
@@ -23,7 +24,7 @@ export class ArtistaComponent implements OnInit {
   constructor( private activatedRoute:ActivatedRoute,
                private _jucaboxService:JucaboxService,
                overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal,
-               public _lugaresService:LugaresService
+               public _lugaresService:LugaresService,public userServ:Auth
               ) {
                   overlay.defaultViewContainer = vcRef;
               }
@@ -106,7 +107,7 @@ buscarCanciones(){
   enviarCancion(Cancion) {
 
   this.modal
-  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService)} );
+  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ)} );
 //  }
 // enviarCancion(Cancion) {
 //   console.log("click");

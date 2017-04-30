@@ -3,9 +3,8 @@
 PFC Universidad de Cádiz
 
 TODO:
-- Añadir addFavoritosArtista
-- Listar Artistas Favoritos
-    - Borrado
+- Añadir addFavoritosArtista en ArtistaComponent
+
 - Realizar servicio Amigos
 
 Siguientes Pasos:
@@ -18,8 +17,3 @@ Siguientes Pasos:
 - Añadir Lugares Favoritos y Administrar lugares
 - Añadir Artistas favoritos y canciones
 - Añadir/buscar Amigos (Al final)
-
-Revisar:
-- Listar Lugares Favoritos (Incluido si eres admin) OK
-    - Borrado (Hacer con Mongo)
-    - Revisar Favoritos con Mongo

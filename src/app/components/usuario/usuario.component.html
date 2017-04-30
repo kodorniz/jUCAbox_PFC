@@ -122,6 +122,36 @@
 <!-- amigos -->
 
 <!-- artistas favoritos -->
+<div  *ngIf="artistas.length != 0 && visArtistasFavoritos">
+<div class="col-sm-12 left-20">
+  <div class="box box-info animated fadeIn fast" *ngFor="let artista of artistas;let i = index">
+          <div class="box-header with-border">
+            <h3 class="box-title">{{artista.name}}</h3>
+          </div><!-- /.box-header -->
+          <div class="box-body">
+                    <div class="row">
+                      <div class="col-md-2">
+                          <div style="float:left;padding-right:10px;">
+                              <img class= "img-fluid img-thumbnail" style = "height: 90px;" [src]="artista.images | sinfoto" [alt]="artista.name">
+                          </div>
+                      </div>
+                      <div class="col-md-10">
+                          <p>
+                            <span class="important-text">Géneros: </span>
+                            <span *ngFor="let generos of artista.genres; let isLast=last">
+                              {{generos}}{{isLast ? '' : ', '}}
+                            </span>
+                          </p>
+
+                            <button [routerLink]="['/artista',artista.id]" class="btn btn-primary"  style="float:right;margin:5px;" ><i class="fa fa-music" aria-hidden="true"></i>  Ver canciones TOP</button>
+                            <button (click)="_artistasService.removeFav(artista.id,Usuario.GlobalClientID)" class="btn btn-danger"  style="float:right;margin:5px;" ><i class="fa fa-remove" aria-hidden="true"></i>  Eliminar artista favorito</button>
+
+                        </div>
+                  </div><!-- /.box-body -->
+        </div>
+        </div>
+</div>
+</div>
 
 <!-- lugares favoritos -->
 <div  *ngIf="lugares.length != 0 && visLugaresFavoritos">

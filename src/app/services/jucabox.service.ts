@@ -77,12 +77,15 @@ export class JucaboxService {
             .map( res =>{
               //  console.log(res.json());
               //  this.artistas =  res.json().artists.items;
+
                 return res.json();
 
             })
 
 
   }
+
+
 
 
 

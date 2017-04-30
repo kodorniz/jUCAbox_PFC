@@ -74,6 +74,7 @@ import { UserBoxComponent } from './widgets/user-box';
 import { BreadcrumbComponent } from './widgets/breadcrumb';
 import {SelectModule} from 'ng-select';
 import { SinfotoAvatarPipe } from './pipes/sinfoto-avatar.pipe';
+import { ArtistasService } from './services/artistas.service';
 import { LogService } from './services/log.service';
 import { DateLogPipe } from './pipes/date-log.pipe';
 import { LOCALE_ID } from '@angular/core';
@@ -148,6 +149,7 @@ let services = [
     Auth,
     AuthGuardService,
     LogService,
+    ArtistasService,
     { provide: LOCALE_ID, useValue: "es-ES" },
     ...services ],
   bootstrap: [AppComponent],

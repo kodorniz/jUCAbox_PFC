@@ -70,4 +70,9 @@ export class User {
     public getName() {
         return this.firstname + ' ' + this.lastname;
     }
+
+    public getUserID() {
+        return this.GlobalClientID;
+    }
+
 }

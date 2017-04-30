@@ -69,7 +69,7 @@
             <div  style="display: inline-block;margin-top:20px;">
               <div class="button-bottom20 button-top20 " >
               <a href="#" [routerLink]="['/lugar',lugar.id]" class="btn btn-secondary " ><i class="fa fa-eye " aria-hidden="true"><span class = "hide">  Ver Lugar...</span></i></a>
-              <button (click)="addFav(lugar.id,lugar.nombre)"  class="btn btn-primary" ><i class="fa fa-heart" aria-hidden="true"><span class = "hide">  Añadir a favoritos...</span></i></button>
+              <button (click)="addFav(lugar.id,usuarioID,lugar.nombre)" [ngClass]="{'btn-primary': !_lugaresService.getFav(lugar.id,usuarioID),'btn-danger': _lugaresService.getFav(lugar.id,usuarioID)}" class="btn" ><i class="fa fa-heart" aria-hidden="true"><span class = "hide">  Añadir a favoritos...</span></i></button>
               <a href="#" class="btn btn-success " ><i class="fa fa-cloud-upload" aria-hidden="true"><span class = "hide">  Enviar Cancion...</span></i></a>
             </div>
             </div>
