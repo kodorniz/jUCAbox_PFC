@@ -3,8 +3,6 @@
 PFC Universidad de Cádiz
 
 TODO:
-- Añadir addFavoritosArtista en ArtistaComponent
-
 - Realizar servicio Amigos
 
 Siguientes Pasos:

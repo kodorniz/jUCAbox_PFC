@@ -94,10 +94,21 @@
             <span class="time"><i class="fa fa-clock-o"></i> {{logEvent.FechaLog | dateLog}}</span>
 
             <h3 class="timeline-header" style="background-color: #ecf0f5;border-radius: 2%;">
-                {{logEvent.verboMensaje}} - <strong> {{logEvent.objetoMensaje}}</strong></h3>
+                {{logEvent.verboMensaje}} - <strong style="cursor: pointer;" (click)=navigateLog(logEvent.url)> {{logEvent.objetoMensaje}}</strong></h3>
 
             <div class="timeline-body">
-                {{logEvent.mensaje}}
+                <div class="row" *ngIf="logEvent.tipoMensaje == 'Cancion'">
+                  <div class="col-xs-1">
+                  <button class="btn btn-primary"  *ngIf="true != visiblePlay" (click)="sendCancion(logEvent.previewUrl)"><i class="fa fa-play"><span class = "hide"> Play</span></i></button>
+                  <button class="btn btn-danger" *ngIf="true == visiblePlay" (click)="stopCancion()"><i class="fa fa-stop"><span class = "hide"> Stop</span></i></button>
+                </div>
+                <div class="col-xs-11">
+                  {{logEvent.mensaje}}
+                </div>
+                </div>
+                <div *ngIf="logEvent.tipoMensaje != 'Cancion'">
+                  {{logEvent.mensaje}}
+                </div>
             </div>
 
             <!-- <div class="timeline-footer">

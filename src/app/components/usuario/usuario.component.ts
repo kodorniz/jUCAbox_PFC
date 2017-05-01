@@ -6,6 +6,7 @@ import {LugaresService} from '../../services/lugares.service';
 import {ArtistasService} from '../../services/artistas.service';
 import { User } from '../../models/user';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {  Router } from '@angular/router';
 
 @Component({
   selector: 'app-usuario',
@@ -21,6 +22,7 @@ export class UsuarioComponent implements OnInit {
     visArtistasFavoritos:boolean = false;
     visLugaresFavoritos:boolean = false;
     visHistorialAcciones:boolean = true;
+
     //log:any[];
     //perfil: Object;
     forma: FormGroup;
@@ -28,7 +30,10 @@ export class UsuarioComponent implements OnInit {
     mostrarboton:boolean = false;
     private lugares:any[] = [];
     private artistas:any[] = [];
-    constructor( private userServ:Auth, private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService) {
+    audio = new Audio();
+    cancion:any;
+    visiblePlay:boolean = false;
+    constructor( private router: Router,private userServ:Auth, private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService) {
 
       this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
       //this.log = logService.getTotalLog(this.Usuario.GlobalClientID);
@@ -53,6 +58,10 @@ export class UsuarioComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  navigateLog(url:any){
+    this.router.navigateByUrl(url);
   }
 
   guardarCambios(){
@@ -100,5 +109,19 @@ export class UsuarioComponent implements OnInit {
     this.visArtistasFavoritos = false;
     this.visLugaresFavoritos = false;
     this.visHistorialAcciones = true;
+  }
+
+  sendCancion(cancion){
+    this.cancion = cancion;
+    this.audio.src =  this.cancion;
+    this.audio.load();
+    this.audio.play();
+    this.visiblePlay=true;
+  }
+  stopCancion(){
+    this.audio.pause();
+    this.audio.currentTime = 0;
+    this.cancion = null;
+    this.visiblePlay=false;
   }
 }

@@ -6,10 +6,12 @@ export class LogService {
   Log:any[] = [{
     GlobalClientID:"XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR",
     tipoMensaje: "Cancion",
-    objetoMensaje:"Lloraré las penas",
-    verboMensaje:"Canción enviada",
+    objetoMensaje:"David Bisbal",
+    verboMensaje:"Canción Lloraré las penas enviada",
     mensaje: "Prueba de cancion enviada",
-    FechaLog: new Date(2017, 2, 28, 19, 20, 12)
+    FechaLog: new Date(2017, 2, 28, 19, 20, 12),
+    url: 'artista/5gOJTI4TusSENizxhcG7jB',
+    previewUrl: 'https://p.scdn.co/mp3-preview/e5b76695ab2ab824b076c8d44be85b90f348fe17?cid=null'
   },
   {
     GlobalClientID:"XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR",
@@ -25,7 +27,8 @@ export class LogService {
     objetoMensaje:"El niño perdio",
     verboMensaje:"Lugar añadido a favoritos",
     mensaje: "Prueba Lugar Favorito Añadido",
-    FechaLog: new Date(2017,2, 27, 19, 24, 18)
+    FechaLog: new Date(2017,2, 27, 19, 24, 18),
+    url: "/lugar/1"
   },
   {
     GlobalClientID:"OtroUsuario",
@@ -52,20 +55,38 @@ export class LogService {
           return 'fa  bg-blue fa-users';
       case 'Lugar':
           return 'fa  bg-blue fa-home';
+      case 'Artista':
+              return 'fa  bg-blue fa-microphone';
       default:
           return 'fa  bg-blue fa-question';
 
      }
    }
 
-  addLog(GlobalClientID:string, tipoMensaje:string, mensaje:string,objetoMensaje:string,verboMensaje:string){
-    this.Log.push({GlobalClientID:GlobalClientID,
+  addLog(GlobalClientID:string, tipoMensaje:string, mensaje:string,objetoMensaje:string,verboMensaje:string,url_:string,previewUrl?:string){
+    let today = new Date();
+    if(previewUrl){
+      this.Log.unshift({GlobalClientID:GlobalClientID,
+                     tipoMensaje: tipoMensaje,
+                     objetoMensaje: objetoMensaje,
+                     verboMensaje:verboMensaje,
+                     mensaje: mensaje,
+                     FechaLog: new Date(today.getFullYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes(),today.getSeconds()),
+                     url:url_,
+                     previewUrl: previewUrl
+    });
+    }else{
+
+    this.Log.unshift({GlobalClientID:GlobalClientID,
                    tipoMensaje: tipoMensaje,
                    objetoMensaje: objetoMensaje,
                    verboMensaje:verboMensaje,
                    mensaje: mensaje,
-                   FechaLog: Date.now()
+                   FechaLog: new Date(today.getFullYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes(),today.getSeconds()),
+                   url:url_
   });
+  }
+  console.log(this.Log);
   }
 
   getLogInit(GlobalClientID:string){

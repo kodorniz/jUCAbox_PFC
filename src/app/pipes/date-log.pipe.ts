@@ -8,19 +8,19 @@ export class DateLogPipe implements PipeTransform {
   private     datePipe: DatePipe = new DatePipe('es-ES');
   transform(value: any, args?: any): any {
 
-
+    console.log(value);
     var today:any = new Date();
 
     var diffMs = ( today - value);
+
+    var diffSeconds = Math.round(Math.abs((today.getTime() - value.getTime())/1000));  //Math.round(((diffMs % 86400000) % 3600000) % 60000 / 60000);
+    console.log("diferencia segundos",diffSeconds)
     var diffMinutes = Math.round(((diffMs % 86400000) % 3600000) / 60000);
     var diffHours = Math.floor((diffMs % 86400000) / 3600000);
     let nuevaFecha = new Date(value);
-    console.log('value',nuevaFecha.setHours(0,0,0,0));
-    console.log('date',new Date().setHours(0,0,0,0));
-    console.log('date trans',this.datePipe.transform(value, 'dd/MM/yyyy HH:mm:ss'));
+
     if (nuevaFecha.setHours(0,0,0,0)== new Date().setHours(0,0,0,0)){
-      console.log('horas',diffHours);
-      console.log('minutes',diffMinutes);
+
 
       if(diffHours < 1){
         if (diffMinutes > 1){
@@ -28,6 +28,9 @@ export class DateLogPipe implements PipeTransform {
         }
         if (diffMinutes == 1){
           return "Hace " + diffMinutes + " minuto."
+        }
+        if (diffMinutes < 1){
+          return "Hace " + diffSeconds + " segundos."
         }
       }
       if(diffHours == 1){

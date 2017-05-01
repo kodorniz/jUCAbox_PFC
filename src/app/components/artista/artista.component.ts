@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewContainerRef  } from '@angular/core';
+import { Component, OnInit,ViewContainerRef,trigger,state, transition, style, animate  } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JucaboxService } from '../../services/jucabox.service';
 import { Overlay } from 'angular2-modal';
@@ -6,10 +6,31 @@ import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { AdditionalWindow, enviarCancion } from './enviarCancion.component';
 import { LugaresService } from '../../services/lugares.service';
 import {Auth} from '../../services/auth.service';
+import {UserService} from '../../services/user.service';
+import {ArtistasService} from '../../services/artistas.service';
+import {LogService} from '../../services/log.service';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'app-artista',
-  templateUrl: './artista.component.html'
+  templateUrl: './artista.component.html',
+  animations: [
+    trigger('shrinkOut', [
+    state('in', style({height: 0})),
+    transition('* => void', [
+      style({height: '*'}),
+      animate(250, style({height: 0,opacity:'0'}))
+    ]),
+    state('out', style({ height: '*'})),
+    transition('void => *', [
+      style({height: 0}),
+      animate(250, style({height: '*',opacity:'1'}))
+    ]),
+
+
+    ])
+    ]
+
 })
 export class ArtistaComponent implements OnInit {
 
@@ -20,19 +41,34 @@ export class ArtistaComponent implements OnInit {
   visiblePlay:boolean = false;
   audio = new Audio();
   termino:string="";
+  menuState:string = 'out';
+  usuarioID:string = "";
 
   constructor( private activatedRoute:ActivatedRoute,
                private _jucaboxService:JucaboxService,
                overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal,
-               public _lugaresService:LugaresService,public userServ:Auth
+               public _lugaresService:LugaresService,public userServ:Auth,
+              public _user:UserService,
+              public _artistasService:ArtistasService,private _notificationService: NotificationsService,
+              public _logService:LogService
               ) {
                   overlay.defaultViewContainer = vcRef;
+                  this.usuarioID = _user.getCurrentUser();
               }
-
+              public options = {
+                  position: ["bottom", "left"],
+                  timeOut: 5000,
+                  lastOnBottom: true
+              }
+                toggleMenu() {
+                  // 1-line if statement that toggles the value:
+                  this.menuState = this.menuState === 'out' ? 'in' : 'out';
+                }
   ngOnInit() {
     this.activatedRoute.params.map(
       parametros =>{
         return parametros['id'];
+
       }
     ).subscribe(id =>{
       //console.log(id);
@@ -90,6 +126,20 @@ buscarCanciones(){
 
     })
 
+}
+
+addFav(artistaID:string,userID:string,nombreArtista:string){
+
+  if(!this._artistasService.getFav(artistaID,userID))
+    {
+        this._artistasService.addFav(artistaID,userID);
+        this._notificationService.success( nombreArtista,"Añadido a favoritos correctamente");
+        this._logService.addLog(this.usuarioID,"Artista","Artista añadido a favoritos",nombreArtista,"Se ha añadido a " + nombreArtista + " a sus artistas preferidos.","/artista/"+artistaID);
+
+    }else{
+      this._artistasService.removeFav(artistaID,userID);
+      this._notificationService.success(nombreArtista,"Eliminado de favoritos");
+    }
 }
   // getActualuri(){
     // return this.cancion.uri;
