@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,AfterViewChecked } from '@angular/core';
 import {Auth} from '../../services/auth.service';
 import {LogService} from '../../services/log.service';
 import { SinfotoPipe } from '../../pipes/sinfoto.pipe';
 import {LugaresService} from '../../services/lugares.service';
 import {ArtistasService} from '../../services/artistas.service';
+import {UserService} from '../../services/user.service';
+import {FriendsService} from '../../services/friends.service';
 import { User } from '../../models/user';
+import { KeysPipe } from '../../pipes/keys.pipe';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {  Router } from '@angular/router';
 
@@ -33,13 +36,33 @@ export class UsuarioComponent implements OnInit {
     audio = new Audio();
     cancion:any;
     visiblePlay:boolean = false;
-    constructor( private router: Router,private userServ:Auth, private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService) {
+    users:any[]=[];
+    amigos:any[]=[];
+    constructor( private router: Router,private _friendsService:FriendsService,private userServ:Auth,private _userServ:UserService,  private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService) {
 
       this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
       //this.log = logService.getTotalLog(this.Usuario.GlobalClientID);
-      logService.getLogInit(this.Usuario.GlobalClientID);
-      this.lugares = _lugaresService.getLugaresFav(this.Usuario.GlobalClientID);
-      this.artistas = _artistasService.getArtistasFav(this.Usuario.GlobalClientID);
+      /*this._userServ.getUsers().subscribe(
+         data =>{
+            let users = data.json();
+            this.users = users;
+         }
+       );*/
+
+       this._userServ.getUsers().subscribe(
+          data =>{
+             let users = data.json();
+             this.users = users;
+          }
+        );
+
+
+      //console.log(this._userServ.getTokenApi());
+      //console.log('sale getokenAPI');
+      logService.getLogInit(this.Usuario.userID);
+      this.lugares = _lugaresService.getLugaresFav(this.Usuario.userID);
+      this.artistas = _artistasService.getArtistasFav(this.Usuario.userID);
+
       this.forma = new FormGroup({
       'nombre': new FormControl(this.Usuario.firstname,[Validators.required,Validators.minLength(3)]),
       'apellidos': new FormControl(this.Usuario.lastname,[Validators.required,Validators.minLength(3)]),
@@ -53,15 +76,36 @@ export class UsuarioComponent implements OnInit {
     //  'apellido': new FormControl('',Validators.required),
     //  'correo': new FormControl('',[Validators.required, Validators.pattern("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$")]),
     });
+
     //this.Usuario = this.auth.getProfileComplete("1");
     //console.log(this.perfil);
   }
 
   ngOnInit() {
+    console.log('init');
   }
-
+  ngAfterViewChecked() {
+    this.amigos = this._friendsService.getFriendsUser(this.Usuario.userID,this.users);
+  }
   navigateLog(url:any){
     this.router.navigateByUrl(url);
+  }
+
+
+  iconTypeLogin(type:string){
+    switch(type){
+      case 'twitter':
+         return 'fa  fa-twitter';
+     case 'google-oauth2':
+         return 'fa  fa-google';
+     case 'facebook':
+         return 'fa  fa-facebook';
+     case 'auth0':
+             return 'fa fa-lock';
+     default:
+         return 'fa fa-question';
+
+    }
   }
 
   guardarCambios(){
@@ -112,6 +156,7 @@ export class UsuarioComponent implements OnInit {
   }
 
   sendCancion(cancion){
+
     this.cancion = cancion;
     this.audio.src =  this.cancion;
     this.audio.load();

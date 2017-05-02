@@ -10,33 +10,35 @@ export class ArtistasService {
   constructor(private _jucaboxService:JucaboxService) { }
   private artistasFav:any[]=[{
     artistaID: "08td7MxkoHQkXnWAYD8d6Q",
-    globalClientID: "XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR"
+    userID: "google-oauth2|113690553810319532231"
   },
   {
     artistaID: "5gOJTI4TusSENizxhcG7jB",
-    globalClientID: "XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR"
+    userID: "google-oauth2|113690553810319532231"
   }];
 
   public getArtistasFav(userID: string){
     let artistasTotal:any[]=[];
 
     for (var _i = 0; _i < this.artistasFav.length; _i++){
-
+      if(this.artistasFav[_i].userID == userID){
       this._jucaboxService.getArtista(this.artistasFav[_i].artistaID).subscribe(data =>{
+
          artistasTotal.push(data);
        });
-      console.log(artistasTotal);
+     }
+
     }
 
     return artistasTotal;
   }
 
-  getFav(id:string,GlobalClientID:string){
+  getFav(id:string,userID:string){
     //return this.lugaresFav.filter(
     //  function(data){ return data.id === id && data.globalClientID === GlobalClientID }
     //)[0];
     return this.artistasFav.filter(
-      function(data){ return data.artistaID === id && data.globalClientID === GlobalClientID }
+      function(data){ return data.artistaID === id && data.userID === userID }
     )[0];
 }
 
@@ -45,7 +47,7 @@ export class ArtistasService {
     this.artistasFav.push(
       {
         artistaID: artistaID,
-        globalClientID: userID
+        userID: userID
       });
 
   }

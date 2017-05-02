@@ -1,4 +1,5 @@
 export class User {
+    public userID: string;
     public firstname: string;
     public lastname: string;
     public email: string;
@@ -26,6 +27,7 @@ export class User {
         // recuperar usuario de la base de datos
         // let userMdb = getUserDb(global_client_id);
 
+        this.userID = data.user_id;
         this.firstname = data.given_name || '';
         this.lastname = data.family_name || '';
         this.email = data.email || '';
@@ -72,7 +74,7 @@ export class User {
     }
 
     public getUserID() {
-        return this.GlobalClientID;
+        return this.userID;
     }
 
 }

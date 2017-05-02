@@ -75,8 +75,9 @@
 <!-- timeline de usuario -->
 <div *ngIf="visHistorialAcciones">
 <ul class="timeline" >
-<ng-container *ngFor="let dates_ of logService.getLogDates(Usuario.GlobalClientID)">
+<ng-container *ngFor="let dates_ of logService.getLogDates(Usuario.userID)">
     <!-- timeline time label -->
+
     <li class="time-label">
         <span class="bg-red">
             {{dates_ | date:'longDate' }}
@@ -87,7 +88,7 @@
 
     <!-- timeline item -->
 
-    <li *ngFor="let logEvent of logService.getLog(Usuario.GlobalClientID,dates_)">
+    <li *ngFor="let logEvent of logService.getLog(Usuario.userID,dates_)">
         <!-- timeline icon -->
         <i [className]="logService.iconType(logEvent.tipoMensaje)"></i>
         <div class="timeline-item">
@@ -118,20 +119,61 @@
     </li>
     <!-- END timeline item -->
 </ng-container>
+
 </ul>
 <!-- crear paginado -->
-<div class="btn-group" role="group" *ngIf="logService.getLogMax(Usuario.GlobalClientID)!=1">
-    <button type="button" class="btn" [ngClass]="{'disabled': logService.paginaActual == 1}" (click)="logService.firstPage(Usuario.GlobalClientID)" [disabled]="logService.paginaActual == 1" ><i class="fa fa-angle-double-left"></i></button>
-    <button type="button" class="btn" [ngClass]="{'disabled': logService.paginaActual == 1}" (click)="logService.previousPage(Usuario.GlobalClientID)" [disabled]="logService.paginaActual == 1" ><i class="fa fa-angle-left"></i></button>
-    <ng-container *ngFor="let numberPage of logService.getLogCount(Usuario.GlobalClientID); let i = index">
-    <button type="button" [ngClass]="{'btn-primary': logService.paginaActual==i+1}" class="btn" (click)="logService.CambiaPagina(numberPage,Usuario.GlobalClientID)">{{numberPage}}</button>
+<div class="btn-group" role="group" *ngIf="logService.getLogMax(Usuario.userID)!=1">
+    <button type="button" class="btn" [ngClass]="{'disabled': logService.paginaActual == 1}" (click)="logService.firstPage(Usuario.userID)" [disabled]="logService.paginaActual == 1" ><i class="fa fa-angle-double-left"></i></button>
+    <button type="button" class="btn" [ngClass]="{'disabled': logService.paginaActual == 1}" (click)="logService.previousPage(Usuario.userID)" [disabled]="logService.paginaActual == 1" ><i class="fa fa-angle-left"></i></button>
+    <ng-container *ngFor="let numberPage of logService.getLogCount(Usuario.userID); let i = index">
+    <button type="button" [ngClass]="{'btn-primary': logService.paginaActual==i+1}" class="btn" (click)="logService.CambiaPagina(numberPage,Usuario.userID)">{{numberPage}}</button>
     </ng-container>
-    <button type="button" class="btn" [ngClass]="{'disabled': logService.getLogMax(Usuario.GlobalClientID) == logService.paginaActual}" (click)="logService.nextPage(Usuario.GlobalClientID)" [disabled]="logService.getLogMax(Usuario.GlobalClientID) == logService.paginaActual" ><i class="fa fa-angle-right"></i></button>
-    <button type="button" class="btn" [ngClass]="{'disabled': logService.getLogMax(Usuario.GlobalClientID) == logService.paginaActual}" (click)="logService.lastPage(Usuario.GlobalClientID)"  [disabled]="logService.getLogMax(Usuario.GlobalClientID) == logService.paginaActual"><i class="fa fa-angle-double-right"></i></button>
+    <button type="button" class="btn" [ngClass]="{'disabled': logService.getLogMax(Usuario.userID) == logService.paginaActual}" (click)="logService.nextPage(Usuario.userID)" [disabled]="logService.getLogMax(Usuario.userID) == logService.paginaActual" ><i class="fa fa-angle-right"></i></button>
+    <button type="button" class="btn" [ngClass]="{'disabled': logService.getLogMax(Usuario.userID) == logService.paginaActual}" (click)="logService.lastPage(Usuario.userID)"  [disabled]="logService.getLogMax(Usuario.userID) == logService.paginaActual"><i class="fa fa-angle-double-right"></i></button>
   </div>
 </div>
 <!-- amigos -->
+<div  *ngIf="amigos.length != 0 && visAmigos">
+  <div class="box box-warning animated fadeIn fast" *ngFor="let amigo of amigos;let i = index">
+        <div class="box-header with-border">
+          <h3 class="box-title">{{amigo.nickname}}</h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <div class="row">
+            <div class="col-md-2">
+              <img class="profile-user-img img-responsive img-circle" [src]="amigo.picture" alt="User profile picture">
+              <br>
+              <div class="text-center"><button type="button" class="btn btn-primary " name="button"><i class="fa fa-user"></i> Ver perfil </button></div>
+            </div>
+            <div class="col-md-10">
+              <br>
+              <div class="input-group">
+      <div class="input-group-addon"><i class="fa fa-info"></i> Nombre</div>
+      <input type="text" class="form-control" id="exampleInputAmount" placeholder="Sin Nombre" value ={{amigo.name}} disabled style="text-align: right;">
 
+    </div>
+    <br>
+              <div class="input-group">
+      <div class="input-group-addon"><i class="fa fa-envelope"></i>  Email</div>
+      <input type="text" class="form-control" id="exampleInputAmount" placeholder="Sin Email" value ={{amigo.email}} disabled style="text-align: right;">
+
+    </div>
+    <br>
+              <div class="input-group">
+      <div class="input-group-addon"><i class="fa fa-sign-in"></i>  Registrado con</div>
+      <input type="text" class="form-control" id="exampleInputAmount" placeholder="Sin Email" value ="{{amigo.identities[0] |keys:'provider' }}" disabled style="text-align: right;">
+      <div class="input-group-addon"><i [className]="iconTypeLogin(amigo.identities[0].provider)"></i></div>
+    </div>
+
+            </div>
+
+          </div>
+
+        </div><!-- /.box-body -->
+</div>
+
+
+</div>
 <!-- artistas favoritos -->
 <div  *ngIf="artistas.length != 0 && visArtistasFavoritos">
 <div class="col-sm-12 left-20">
@@ -155,7 +197,7 @@
                           </p>
 
                             <button [routerLink]="['/artista',artista.id]" class="btn btn-primary"  style="float:right;margin:5px;" ><i class="fa fa-music" aria-hidden="true"></i>  Ver canciones TOP</button>
-                            <button (click)="_artistasService.removeFav(artista.id,Usuario.GlobalClientID)" class="btn btn-danger"  style="float:right;margin:5px;" ><i class="fa fa-remove" aria-hidden="true"></i>  Eliminar artista favorito</button>
+                            <button (click)="_artistasService.removeFav(artista.id,Usuario.userID)" class="btn btn-danger"  style="float:right;margin:5px;" ><i class="fa fa-remove" aria-hidden="true"></i>  Eliminar artista favorito</button>
 
                         </div>
                   </div><!-- /.box-body -->
@@ -189,8 +231,8 @@
           <div  style="display: inline-block;margin-top:20px;"> -->
             <!-- <div class="button-bottom20 button-top20 " > -->
             <!-- <a href="#" [routerLink]="['/lugar',lugar.id]" class="btn btn-secondary " ><i class="fa fa-eye " aria-hidden="true"><span class = "hide">  Ver Lugar...</span></i></a> -->
-            <button *ngIf="!_lugaresService.isAdmin(lugar.id,Usuario.GlobalClientID)" (click)="_lugaresService.removeFav(lugar.id,Usuario.GlobalClientID)"  class="btn btn-danger" style="float:right;margin:5px;"><i class="fa fa-times" aria-hidden="true"></i> Eliminar</button>
-            <button *ngIf="_lugaresService.isAdmin(lugar.id,Usuario.GlobalClientID)" (click)="_lugaresService.removeFav(lugar.id,Usuario.GlobalClientID)"  class="btn btn-warning" style="float:right;margin:5px;"><i class="fa fa-cogs" aria-hidden="true"></i> Administrar</button>
+            <button *ngIf="!_lugaresService.isAdmin(lugar.id,Usuario.userID)" (click)="_lugaresService.removeFav(lugar.id,Usuario.userID)"  class="btn btn-danger" style="float:right;margin:5px;"><i class="fa fa-times" aria-hidden="true"></i> Eliminar</button>
+            <button *ngIf="_lugaresService.isAdmin(lugar.id,Usuario.userID)" (click)="_lugaresService.removeFav(lugar.id,Usuario.userID)"  class="btn btn-warning" style="float:right;margin:5px;"><i class="fa fa-cogs" aria-hidden="true"></i> Administrar</button>
             <button [routerLink]="['/lugar',lugar.id]"  class="btn btn-info" style="float:right;margin:5px;"><i class="fa fa-search" aria-hidden="true"></i> Ver detalles</button>
             <!-- <a href="#" class="btn btn-success " ><i class="fa fa-cloud-upload" aria-hidden="true"><span class = "hide">  Enviar Cancion...</span></i></a> -->
           <!-- </div> -->

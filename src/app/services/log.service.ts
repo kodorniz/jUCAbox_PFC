@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class LogService {
 
   Log:any[] = [{
-    GlobalClientID:"XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR",
+    userID:"google-oauth2|113690553810319532231",
     tipoMensaje: "Cancion",
     objetoMensaje:"David Bisbal",
     verboMensaje:"Canción Lloraré las penas enviada",
@@ -14,7 +14,7 @@ export class LogService {
     previewUrl: 'https://p.scdn.co/mp3-preview/e5b76695ab2ab824b076c8d44be85b90f348fe17?cid=null'
   },
   {
-    GlobalClientID:"XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR",
+    userID:"google-oauth2|113690553810319532231",
     tipoMensaje: "Amistad",
     objetoMensaje:"Alejandro Utrera",
     verboMensaje:"Solicitud aceptada",
@@ -22,7 +22,7 @@ export class LogService {
     FechaLog: new Date(2017, 2, 27, 19, 22, 12)
   },
   {
-    GlobalClientID:"XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR",
+    userID:"google-oauth2|113690553810319532231",
     tipoMensaje: "Lugar",
     objetoMensaje:"El niño perdio",
     verboMensaje:"Lugar añadido a favoritos",
@@ -31,7 +31,7 @@ export class LogService {
     url: "/lugar/1"
   },
   {
-    GlobalClientID:"OtroUsuario",
+    userID:"OtroUsuario",
     tipoMensaje: "Lugar",
     objetoMensaje:"El niño perdio",
     verboMensaje:"Lugar añadido a favoritos",
@@ -63,10 +63,10 @@ export class LogService {
      }
    }
 
-  addLog(GlobalClientID:string, tipoMensaje:string, mensaje:string,objetoMensaje:string,verboMensaje:string,url_:string,previewUrl?:string){
+  addLog(userID:string, tipoMensaje:string, mensaje:string,objetoMensaje:string,verboMensaje:string,url_:string,previewUrl?:string){
     let today = new Date();
     if(previewUrl){
-      this.Log.unshift({GlobalClientID:GlobalClientID,
+      this.Log.unshift({userID:userID,
                      tipoMensaje: tipoMensaje,
                      objetoMensaje: objetoMensaje,
                      verboMensaje:verboMensaje,
@@ -77,7 +77,7 @@ export class LogService {
     });
     }else{
 
-    this.Log.unshift({GlobalClientID:GlobalClientID,
+    this.Log.unshift({userID:userID,
                    tipoMensaje: tipoMensaje,
                    objetoMensaje: objetoMensaje,
                    verboMensaje:verboMensaje,
@@ -86,27 +86,36 @@ export class LogService {
                    url:url_
   });
   }
-  console.log(this.Log);
+
   }
 
-  getLogInit(GlobalClientID:string){
+  getLogInit(userID:string){
     let objetoFinal:any[]=[];
     let numeroVueltas:number = 0;
+    console.log("getLogInit");
     let objeto =  this.Log.filter(
       function(data){
-        return data.GlobalClientID == GlobalClientID
+        return data.userID == userID
       }
     );
+
     numeroVueltas=this.getVueltas(objeto.length,this.paginaActual,this.limitePaginas);
+
     for(let i = 0;i<numeroVueltas;i++){
       objetoFinal.push(objeto[i+((this.paginaActual-1)*this.limitePaginas)]);
     }
+
     this.initLog = objetoFinal;
+
   }
 
-  getLog(GlobalClientID:string,Fecha:Date){
+  emptyLog(userID:string){
+
+  }
+  getLog(userID:string,Fecha:Date){
     let objetoFinal:any[]=[];
     let numeroVueltas:number = 0;
+
     let objeto =  this.initLog.filter(
       function(data){
 
@@ -115,7 +124,7 @@ export class LogService {
 
         let fech:any = new Date(Fecha);
 
-        return data.GlobalClientID == GlobalClientID && d - fech == 0
+        return data.userID == userID && d - fech == 0
       }
     );
     // numeroVueltas=this.getVueltas(objeto.length,this.paginaActual,this.limitePaginas);
@@ -132,11 +141,11 @@ getVueltas(total:number,paginaActual:number,limitePaginas:number):any{
     return limitePaginas;
 }
 
-  getLogCount(GlobalClientID:string){
+  getLogCount(userID:string){
     let paginado:any[] = [];
     let total:number = this.Log.filter(
       function(data){
-        return data.GlobalClientID == GlobalClientID
+        return data.userID == userID
       }
     ).length/this.limitePaginas;
     for(let i=0;i<Math.ceil(total);i++){
@@ -145,23 +154,23 @@ getVueltas(total:number,paginaActual:number,limitePaginas:number):any{
     return paginado;
   }
 
-  getLogMax(GlobalClientID:string){
+  getLogMax(userID:string){
     let paginado:any[] = [];
     let total:number = this.Log.filter(
       function(data){
-        return data.GlobalClientID == GlobalClientID
+        return data.userID == userID
       }
     ).length/this.limitePaginas;
     return Math.ceil(total);
 
   }
 
-  getLogDates(GlobalClientID:string){
+  getLogDates(userID:string){
     var lookup = {};
 
     var items =  this.initLog.filter(
       function(data){
-        return data.GlobalClientID == GlobalClientID;
+        return data.userID == userID;
       }
     );
 
@@ -182,33 +191,33 @@ getVueltas(total:number,paginaActual:number,limitePaginas:number):any{
 
       }
 
-    CambiaPagina(nuevaPagina:number,GlobalClientID:string){
+    CambiaPagina(nuevaPagina:number,userID:string){
           this.paginaActual = nuevaPagina;
-          this.getLogInit(GlobalClientID);
+          this.getLogInit(userID);
           console.log(this.initLog);
         }
 
-    nextPage(GlobalClientID:string){
+    nextPage(userID:string){
 
-        this.CambiaPagina(this.paginaActual+1,GlobalClientID);
-
-    }
-
-    previousPage(GlobalClientID:string){
-
-        this.CambiaPagina(this.paginaActual-1,GlobalClientID);
+        this.CambiaPagina(this.paginaActual+1,userID);
 
     }
 
-    firstPage(GlobalClientID:string){
+    previousPage(userID:string){
 
-        this.CambiaPagina(1,GlobalClientID);
+        this.CambiaPagina(this.paginaActual-1,userID);
 
     }
 
-    lastPage(GlobalClientID:string){
+    firstPage(userID:string){
 
-        this.CambiaPagina(this.getLogMax(GlobalClientID),GlobalClientID);
+        this.CambiaPagina(1,userID);
+
+    }
+
+    lastPage(userID:string){
+
+        this.CambiaPagina(this.getLogMax(userID),userID);
 
     }
 

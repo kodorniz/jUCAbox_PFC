@@ -57,14 +57,14 @@ export class LugaresComponent implements OnInit {
 
   }
 
-  addFav(id:string,GlobalClientID:string,nombre:string){
+  addFav(id:string,userID:string,nombre:string){
 
-    if(!this._lugaresService.getFav(id,GlobalClientID))
+    if(!this._lugaresService.getFav(id,userID))
       {
-          this._lugaresService.addFav(id,GlobalClientID);
+          this._lugaresService.addFav(id,userID);
           this._notificationService.success( nombre,"Añadido a favoritos correctamente");
       }else{
-        this._lugaresService.removeFav(id,GlobalClientID);
+        this._lugaresService.removeFav(id,userID);
         this._notificationService.success(nombre,"Eliminado de favoritos");
       }
 

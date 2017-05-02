@@ -69,6 +69,7 @@
               <!-- <audio controls>
                 <source [src]="cancion.preview_url">
               </audio> -->
+
               <button class="btn btn-primary"  *ngIf="getActualCancion() != cancion" (click)="sendCancion(cancion)"><i class="fa fa-play"><span class = "hide"> Play</span></i></button>
               <button class="btn btn-danger" *ngIf="getActualCancion() == cancion" (click)="stopCancion()"><i class="fa fa-stop"><span class = "hide"> Stop</span></i></button>
           </td>

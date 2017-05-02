@@ -16,16 +16,16 @@ export class LugaresService {
 
   private lugaresAdmin:any[]=[{
     lugarID: "1",
-    globalClientID: "XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR"
+    userID: "google-oauth2|113690553810319532231"
   }];
 
   private lugaresFav:any[]=[{
     lugarID: "1",
-    globalClientID: "XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR"
+    userID: "google-oauth2|113690553810319532231"
   },
   {
     lugarID: "2",
-    globalClientID: "XXlEf03iy4rwFqqOTIQJ1JEskirj54ZR"
+    userID: "google-oauth2|113690553810319532231"
   }];
   private lugares:Lugar[] = [
       {
@@ -61,7 +61,7 @@ export class LugaresService {
 
     let objeto =  this.lugaresAdmin.filter(
       function(data){
-        return data.globalClientID == userID && data.lugarID == lugarID
+        return data.userID == userID && data.lugarID == lugarID
       }
     );
 
@@ -88,7 +88,7 @@ export class LugaresService {
   getLugaresFav(userID:string){
     let objeto:LugarFav[] =  this.lugaresFav.filter(
       function(data){
-        return data.globalClientID == userID;
+        return data.userID == userID;
       }
     );
     let objetoFinal:any[]=[];
@@ -148,27 +148,27 @@ export class LugaresService {
   return lugaresArr;
   }
 
-  addFav(id:string,GlobalClientID:string){
+  addFav(id:string,userID:string){
     //ADD MONGODB
     this.lugaresFav.push(
       {lugarID: id,
-        globalClientID: GlobalClientID
+        userID: userID
       });
   }
 
-  removeFav(lugarID:string,GlobalClientID:string){
+  removeFav(lugarID:string,userID:string){
 
     console.log("ELIMINAR CON MONGO")
 
     //this.lugaresFav.pop(this.getLugar(lugarID));
   }
 
-  getFav(id:string,GlobalClientID:string){
+  getFav(id:string,userID:string){
     //return this.lugaresFav.filter(
     //  function(data){ return data.id === id && data.globalClientID === GlobalClientID }
     //)[0];
     return this.lugaresFav.filter(
-      function(data){ return data.lugarID === id && data.globalClientID === GlobalClientID }
+      function(data){ return data.lugarID === id && data.userID === userID }
     )[0];
 
     // for(let lugar of this.lugares){
@@ -197,7 +197,7 @@ export class LugaresService {
 }
 export interface LugarFav{
   lugarID: string,
-  globalClientID:string
+  userID:string
 }
 
 export interface Lugar{

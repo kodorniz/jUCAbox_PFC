@@ -1,14 +1,24 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule, Http } from '@angular/http';
+import { HttpModule, Http,RequestOptions } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { AlertModule, DatepickerModule } from 'ng2-bootstrap';
 import { ToasterModule } from 'angular2-toaster/angular2-toaster';
 import { environment } from '../environments/environment';
 import { TranslateModule, TranslateLoader, TranslateStaticLoader } from 'ng2-translate';
+import { AuthHttp, AuthConfig } from 'angular2-jwt';
 
+
+
+export function authHttpServiceFactory(http: Http, options: RequestOptions) {
+
+  return new AuthHttp(new AuthConfig({
+		globalHeaders: [{'Content-Type':'application/json'}]
+  }), http, options);
+
+}
 
 //Rutas
 import {APP_ROUTING} from './app.routes';
@@ -76,6 +86,7 @@ import {SelectModule} from 'ng-select';
 import { SinfotoAvatarPipe } from './pipes/sinfoto-avatar.pipe';
 import { ArtistasService } from './services/artistas.service';
 import { LogService } from './services/log.service';
+import { FriendsService } from './services/friends.service';
 import { DateLogPipe } from './pipes/date-log.pipe';
 import { LOCALE_ID } from '@angular/core';
 
@@ -150,6 +161,12 @@ let services = [
     AuthGuardService,
     LogService,
     ArtistasService,
+    FriendsService,
+    {
+      provide: AuthHttp,
+      useFactory: authHttpServiceFactory,
+      deps: [Http, RequestOptions]
+    },
     { provide: LOCALE_ID, useValue: "es-ES" },
     ...services ],
   bootstrap: [AppComponent],

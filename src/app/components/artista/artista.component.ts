@@ -85,6 +85,7 @@ export class ArtistaComponent implements OnInit {
 
   }
 sendCancion(cancion){
+
   this.cancion = cancion;
   this.audio.src =  this.cancion.preview_url;
   this.audio.load();
@@ -92,11 +93,13 @@ sendCancion(cancion){
   this.visiblePlay=true;
 }
 stopCancion(){
+
   this.audio.pause();
   this.audio.currentTime = 0;
   this.cancion = null;
 }
 getActualCancion(){
+
   return this.cancion;
 }
 

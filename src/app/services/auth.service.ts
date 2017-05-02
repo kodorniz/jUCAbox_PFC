@@ -27,6 +27,7 @@ language: "es"
   userProfile: Object;
 
   constructor( private router:Router) {
+
     // Add callback for lock `authenticated` event
     this.lock.on("authenticated", (authResult) => {
       localStorage.setItem('id_token', authResult.idToken);

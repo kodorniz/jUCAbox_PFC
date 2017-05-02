@@ -6,8 +6,9 @@ export class KeysPipe implements PipeTransform {
     let keys = [];
 
     for (let key in value) {
-
+      
       if(args.toLowerCase() == key.toLowerCase()){
+
       keys.push(value[key]);
       }
     }
