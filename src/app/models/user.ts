@@ -66,6 +66,7 @@ export class User {
         this.pais = data.pais || '';
         this.nickName = data.nickname || profile.nickName || '';
 
+
         //Save on mongoDB
     }
 

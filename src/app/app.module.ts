@@ -35,6 +35,7 @@ import { NotificationService } from './services/notification.service';
 import { BreadcrumbService } from './services/breadcrumb.service';
 import { AdminLTETranslateService } from './services/translate.service';
 import { LoggerService } from './services/logger.service';
+import { FriendDetailService } from './services/friend-detail.service';
 
 //Componentes
 import { AppComponent } from './app.component';
@@ -89,6 +90,7 @@ import { LogService } from './services/log.service';
 import { FriendsService } from './services/friends.service';
 import { DateLogPipe } from './pipes/date-log.pipe';
 import { LOCALE_ID } from '@angular/core';
+import { AmigoDetalleComponent } from './components/amigo-detalle/amigo-detalle.component';
 
 let widgets = [
     AppComponent,
@@ -140,7 +142,8 @@ let services = [
     ...pages,
     UsuarioComponent,
     SinfotoAvatarPipe,
-    DateLogPipe
+    DateLogPipe,
+    AmigoDetalleComponent
   ],
   imports: [
     BrowserModule,
@@ -162,6 +165,7 @@ let services = [
     LogService,
     ArtistasService,
     FriendsService,
+    FriendDetailService,
     {
       provide: AuthHttp,
       useFactory: authHttpServiceFactory,

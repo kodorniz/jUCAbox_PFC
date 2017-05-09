@@ -6,6 +6,7 @@ import {LugaresService} from '../../services/lugares.service';
 import {ArtistasService} from '../../services/artistas.service';
 import {UserService} from '../../services/user.service';
 import {FriendsService} from '../../services/friends.service';
+import { FriendDetailService } from '../../services/friend-detail.service';
 import { User } from '../../models/user';
 import { KeysPipe } from '../../pipes/keys.pipe';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -38,17 +39,14 @@ export class UsuarioComponent implements OnInit {
     visiblePlay:boolean = false;
     users:any[]=[];
     amigos:any[]=[];
-    constructor( private router: Router,private _friendsService:FriendsService,private userServ:Auth,private _userServ:UserService,  private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService) {
-
+    prueba:any;
+    usuarioAmigo:User;
+    constructor( private router: Router,private _friendsService:FriendsService,private _friendDetailService:FriendDetailService,private userServ:Auth,private _userServ:UserService,  private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService) {
+      //console.log(this._userServ.getTokenApi());
       this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
       //this.log = logService.getTotalLog(this.Usuario.GlobalClientID);
-      /*this._userServ.getUsers().subscribe(
-         data =>{
-            let users = data.json();
-            this.users = users;
-         }
-       );*/
-
+      this.Usuario = _userServ.completeUser(this.Usuario);
+      console.log(this.Usuario);
        this._userServ.getUsers().subscribe(
           data =>{
              let users = data.json();
@@ -86,6 +84,7 @@ export class UsuarioComponent implements OnInit {
   }
   ngAfterViewChecked() {
     this.amigos = this._friendsService.getFriendsUser(this.Usuario.userID,this.users);
+
   }
   navigateLog(url:any){
     this.router.navigateByUrl(url);
@@ -113,6 +112,21 @@ export class UsuarioComponent implements OnInit {
   }
   valorboton(){
     //console.log(this.mostrarboton);
+  }
+
+  navigateFriend(userID:string){
+
+    console.log('Antes',this.usuarioAmigo);
+    console.log('userID',userID);
+    console.log('amigos',this.amigos);
+    this.usuarioAmigo = this.amigos.filter(
+      function(data){
+        return data.user_id == userID;
+      }
+    )[0];
+
+    this._friendDetailService.pushFriend(this._userServ.completeUser(this.usuarioAmigo));
+    this.router.navigateByUrl('/amigo-detalle');
   }
 
   verAmigos(){
