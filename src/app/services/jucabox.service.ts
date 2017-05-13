@@ -4,7 +4,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class JucaboxService {
-  pais:any = "ES";
+  pais:any = "US";
   artistas:any[]=[];
   canciones:any[]=[];
   albumes:any[]=[];

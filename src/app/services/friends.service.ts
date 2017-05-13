@@ -17,6 +17,14 @@ export class FriendsService {
   {
     friendID: "auth0|59074faa5d4f881ecedb23de",
     userID: "google-oauth2|113690553810319532231"
+  },
+  {
+    friendID: "google-oauth2|113690553810319532231" ,
+    userID: "twitter|153942704"
+  },
+  {
+    friendID: "google-oauth2|113690553810319532231",
+    userID: "auth0|59074faa5d4f881ecedb23de"
   }];
 
 
@@ -41,5 +49,15 @@ export class FriendsService {
       }
     }
     return amigosDatos;
+  }
+
+  public countFriends(userID:string){
+    let amigos:any[] =  this.friends.filter(
+      function(data){
+        return data.userID == userID;
+      }
+    );
+
+    return amigos.length; 
   }
 }

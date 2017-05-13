@@ -16,10 +16,10 @@
                         <b>Amigos</b> <a class="pull-right">50</a>
                       </li>
                       <li class="list-group-item">
-                        <b>Lugares Favoritos</b> <a class="pull-right">543</a>
+                        <b>Lugares Favoritos</b> <a class="pull-right">{{_lugaresService.countLugaresFav(Usuario.userID)}}</a>
                       </li>
                       <li class="list-group-item">
-                        <b>Artistas Favoritos</b> <a class="pull-right">13,287</a>
+                        <b>Artistas Favoritos</b> <a class="pull-right">{{_artistasService.countArtistasFav(Usuario.userID)}}</a>
                       </li>
                     </ul>
 
@@ -43,7 +43,7 @@
       <button type="button" class="btn" [ngClass]="{'btn-default':!visAmigos , 'btn-primary':visAmigos}" (click)="verAmigos()"><i class="fa fa-users" ></i> Amigos</button>
       <button type="button" class="btn" [ngClass]="{'btn-default':!visArtistasFavoritos , 'btn-primary':visArtistasFavoritos}" (click)="verArtistasFavoritos()"><i class="fa fa-music" ></i> Artistas Favoritos</button>
       <button type="button" class="btn" [ngClass]="{'btn-default':!visLugaresFavoritos , 'btn-primary':visLugaresFavoritos}" (click)="verLugaresFavoritos()"><i class="fa fa-home" ></i> Lugares Favoritos</button>
-     <button type="button" class="btn" [ngClass]="{'btn-default':!visInformacionPersonal , 'btn-primary':visInformacionPersonal}" (click)="verInformacionPersonal()"><i class="fa fa-user" ></i> Información personal</button>
+
   </div>
 </div>
 <br>
@@ -120,7 +120,7 @@
               <img class="profile-user-img img-responsive img-circle" [src]="amigo.picture" alt="User profile picture">
               <br>
 
-              <div class="text-center"><button type="button" class="btn btn-primary " name="button" (click)="navigateFriend(amigo.user_id)"><i class="fa fa-user"></i> Ver perfil </button></div>
+              <!--<div class="text-center"><button type="button" class="btn btn-primary " name="button" (click)="navigateFriend(amigo.user_id)"><i class="fa fa-user"></i> Ver perfil </button></div>-->
             </div>
             <div class="col-md-10">
               <br>
@@ -174,7 +174,7 @@
                           </p>
 
                             <button [routerLink]="['/artista',artista.id]" class="btn btn-primary"  style="float:right;margin:5px;" ><i class="fa fa-music" aria-hidden="true"></i>  Ver canciones TOP</button>
-                            <button (click)="_artistasService.removeFav(artista.id,Usuario.userID)" class="btn btn-danger"  style="float:right;margin:5px;" ><i class="fa fa-remove" aria-hidden="true"></i>  Eliminar artista favorito</button>
+                          <!--  <button (click)="_artistasService.removeFav(artista.id,Usuario.userID)" class="btn btn-danger"  style="float:right;margin:5px;" ><i class="fa fa-remove" aria-hidden="true"></i>  Eliminar artista favorito</button>-->
 
                         </div>
                   </div><!-- /.box-body -->
@@ -208,8 +208,8 @@
           <div  style="display: inline-block;margin-top:20px;"> -->
             <!-- <div class="button-bottom20 button-top20 " > -->
             <!-- <a href="#" [routerLink]="['/lugar',lugar.id]" class="btn btn-secondary " ><i class="fa fa-eye " aria-hidden="true"><span class = "hide">  Ver Lugar...</span></i></a> -->
-            <button *ngIf="!_lugaresService.isAdmin(lugar.id,Usuario.userID)" (click)="_lugaresService.removeFav(lugar.id,Usuario.userID)"  class="btn btn-danger" style="float:right;margin:5px;"><i class="fa fa-times" aria-hidden="true"></i> Eliminar</button>
-            <button *ngIf="_lugaresService.isAdmin(lugar.id,Usuario.userID)" (click)="_lugaresService.removeFav(lugar.id,Usuario.userID)"  class="btn btn-warning" style="float:right;margin:5px;"><i class="fa fa-cogs" aria-hidden="true"></i> Administrar</button>
+            <!--<button *ngIf="!_lugaresService.isAdmin(lugar.id,Usuario.userID)" (click)="_lugaresService.removeFav(lugar.id,Usuario.userID)"  class="btn btn-danger" style="float:right;margin:5px;"><i class="fa fa-times" aria-hidden="true"></i> Eliminar</button>-->
+            <!--<button *ngIf="_lugaresService.isAdmin(lugar.id,Usuario.userID)" (click)="_lugaresService.removeFav(lugar.id,Usuario.userID)"  class="btn btn-warning" style="float:right;margin:5px;"><i class="fa fa-cogs" aria-hidden="true"></i> Administrar</button>-->
             <button [routerLink]="['/lugar',lugar.id]"  class="btn btn-info" style="float:right;margin:5px;"><i class="fa fa-search" aria-hidden="true"></i> Ver detalles</button>
             <!-- <a href="#" class="btn btn-success " ><i class="fa fa-cloud-upload" aria-hidden="true"><span class = "hide">  Enviar Cancion...</span></i></a> -->
           <!-- </div> -->
@@ -241,95 +241,7 @@
 </div>
 </div>
 <!-- informacion de usuario -->
-              <form class="form-horizontal" role="form" [formGroup]="forma" (ngSubmit) = "guardarCambios()" *ngIf="visInformacionPersonal">
 
-                <div class="form-group">
-                    <!-- <label for="firstName" class="col-sm-3 control-label">Nombre</label> -->
-                    <div class="col-sm-12 img-wrapper_ show-image" >
-                        <!-- <input type="text" id="Avatar" placeholder="Nombre" class="form-control"
-                        autofocus
-                        formControlName = "AvatarUrl"> -->
-                        <img  [src]="Usuario.avatarUrl | sinfotoAvatar " class="img-responsive img-thumbnail img-circle" style="width: 200px;
-                                                                                                  height: auto;
-                                                                                                  margin-left: auto;
-                                                                                                  margin-right: auto;
-                                                                                                  display: block;">
-                        <div class="img-overlay_" >
-                             <button style="background-color:transparent; border-color:transparent;outline: none"><i class="fa fa-camera fa-3x " style="color:#7D7D7D" aria-hidden="true"></i></button>
-                        </div>
-
-                    </div>
-                </div>
-<!-- <div class="form-group">
-                <div class="img-wrapper_">
-                    <img class="img-responsive" src="https://lh6.googleusercontent.com/-KVlCnaKUIpY/AAAAAAAAAAI/AAAAAAAAAak/yQR2HowkFVU/photo.jpg">
-                    <div class="img-overlay_">
-                      <button class="btn btn-md btn-success">Button</button>
-                    </div>
-                </div>
-</div> -->
-<div style="padding-right: 30px;">
-                  <div class="form-group" >
-                      <label for="firstName" class="col-sm-3 control-label">Nombre</label>
-                      <div class="col-sm-9">
-                          <input type="text" id="firstName" placeholder="Nombre" class="form-control"
-                          autofocus
-                          formControlName = "nombre">
-                      </div>
-                  </div>
-                  <div class="form-group">
-                      <label for="lastname" class="col-sm-3 control-label">Apellidos</label>
-                      <div class="col-sm-9">
-                          <input type="text" id="lastname" placeholder="Apellidos" class="form-control"
-                          formControlName = "apellidos">
-                      </div>
-                  </div>
-                  <div class="form-group">
-                      <label for="nickname" class="col-sm-3 control-label">NickName</label>
-                      <div class="col-sm-9">
-                          <input type="text" id="nickname" placeholder="Nickname" class="form-control" formControlName = "nickname">
-                      </div>
-                  </div>
-                  <div class="form-group">
-                      <label for="email" class="col-sm-3 control-label">Email</label>
-                      <div class="col-sm-9">
-                          <input type="email" id="email" placeholder="Email" class="form-control" formControlName = "email">
-                      </div>
-                  </div>
-                  <div class="form-group">
-                      <label for="ciudad" class="col-sm-3 control-label">Ciudad</label>
-                      <div class="col-sm-9">
-                          <input type="text" id="ciudad" placeholder="Ciudad" class="form-control" formControlName = "ciudad">
-                      </div>
-                  </div>
-                  <div class="form-group">
-                      <label for="provincia" class="col-sm-3 control-label">Provincia</label>
-                      <div class="col-sm-9">
-                          <input type="text" id="provincia" placeholder="Provincia" class="form-control" formControlName = "provincia">
-                      </div>
-                  </div>
-                  <div class="form-group">
-                      <label for="Pais" class="col-sm-3 control-label">Pais</label>
-                      <div class="col-sm-9">
-                          <input type="text" id="pais" placeholder="Pais" class="form-control" formControlName = "pais">
-                      </div>
-                  </div>
-
-
-                  <!-- <div class="form-group">
-                      <div class="col-sm-9 col-sm-offset-3">
-                          <button type="button" class="btn btn-success btn-block" (click)="SesionSpotify()"><img src="../../assets/img/logo_.png" style="width:25px;"> Iniciar sesión Spotify</button>
-                          <span class="form-text text-muted"><small>Es necesario si eres administrador de un lugar</small></span>
-                      </div>
-                  </div> -->
-                   <!-- /.form-group -->
-                  <div class="form-group">
-                      <div class="col-sm-9 col-sm-offset-3">
-                          <button type="submit" class="btn btn-primary btn-block">Guardar cambios</button>
-                      </div>
-                  </div>
-          </div>
-              </form> <!-- /form -->
             <!-- </div>
             <div class="box-footer">
               The footer of the box

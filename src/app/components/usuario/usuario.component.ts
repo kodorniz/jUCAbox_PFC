@@ -1,16 +1,19 @@
-import { Component, OnInit,AfterViewChecked } from '@angular/core';
+import { Component, OnInit,AfterViewChecked,ViewContainerRef,trigger,state, transition, style, animate } from '@angular/core';
 import {Auth} from '../../services/auth.service';
 import {LogService} from '../../services/log.service';
 import { SinfotoPipe } from '../../pipes/sinfoto.pipe';
 import {LugaresService} from '../../services/lugares.service';
 import {ArtistasService} from '../../services/artistas.service';
 import {UserService} from '../../services/user.service';
+import { Overlay } from 'angular2-modal';
 import {FriendsService} from '../../services/friends.service';
 import { FriendDetailService } from '../../services/friend-detail.service';
 import { User } from '../../models/user';
 import { KeysPipe } from '../../pipes/keys.pipe';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {  Router } from '@angular/router';
+import { Modal } from 'angular2-modal/plugins/bootstrap';
+import { AdditionalWindow, enviarCancion } from '../artista/enviarCancion.component';
 
 @Component({
   selector: 'app-usuario',
@@ -29,6 +32,7 @@ export class UsuarioComponent implements OnInit {
 
     //log:any[];
     //perfil: Object;
+      menuState:string = 'out';
     forma: FormGroup;
     private Usuario:User;
     mostrarboton:boolean = false;
@@ -41,9 +45,11 @@ export class UsuarioComponent implements OnInit {
     amigos:any[]=[];
     prueba:any;
     usuarioAmigo:User;
-    constructor( private router: Router,private _friendsService:FriendsService,private _friendDetailService:FriendDetailService,private userServ:Auth,private _userServ:UserService,  private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService) {
+    constructor( private router: Router,overlay: Overlay, vcRef: ViewContainerRef,public modal: Modal,private _friendsService:FriendsService,private _friendDetailService:FriendDetailService,private userServ:Auth,private _userServ:UserService,  private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService) {
       //console.log(this._userServ.getTokenApi());
+      overlay.defaultViewContainer = vcRef;
       this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
+
       //this.log = logService.getTotalLog(this.Usuario.GlobalClientID);
       this.Usuario = _userServ.completeUser(this.Usuario);
       console.log(this.Usuario);
@@ -78,7 +84,15 @@ export class UsuarioComponent implements OnInit {
     //this.Usuario = this.auth.getProfileComplete("1");
     //console.log(this.perfil);
   }
-
+  public options = {
+      position: ["bottom", "left"],
+      timeOut: 5000,
+      lastOnBottom: true
+  }
+    toggleMenu() {
+      // 1-line if statement that toggles the value:
+      this.menuState = this.menuState === 'out' ? 'in' : 'out';
+    }
   ngOnInit() {
     console.log('init');
   }
@@ -116,9 +130,7 @@ export class UsuarioComponent implements OnInit {
 
   navigateFriend(userID:string){
 
-    console.log('Antes',this.usuarioAmigo);
-    console.log('userID',userID);
-    console.log('amigos',this.amigos);
+
     this.usuarioAmigo = this.amigos.filter(
       function(data){
         return data.user_id == userID;
@@ -170,7 +182,7 @@ export class UsuarioComponent implements OnInit {
   }
 
   sendCancion(cancion){
-
+    cancion = cancion.preview_url;
     this.cancion = cancion;
     this.audio.src =  this.cancion;
     this.audio.load();
@@ -183,4 +195,10 @@ export class UsuarioComponent implements OnInit {
     this.cancion = null;
     this.visiblePlay=false;
   }
+  enviarCancion(Cancion) {
+
+  this.modal
+  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ)} );
+}
+
 }

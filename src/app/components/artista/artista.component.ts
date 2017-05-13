@@ -10,6 +10,7 @@ import {UserService} from '../../services/user.service';
 import {ArtistasService} from '../../services/artistas.service';
 import {LogService} from '../../services/log.service';
 import { NotificationsService } from 'angular2-notifications';
+import {Router} from '@angular/router/src/router';
 
 @Component({
   selector: 'app-artista',
@@ -50,10 +51,17 @@ export class ArtistaComponent implements OnInit {
                public _lugaresService:LugaresService,public userServ:Auth,
               public _user:UserService,
               public _artistasService:ArtistasService,private _notificationService: NotificationsService,
-              public _logService:LogService
+              public _logService:LogService,
+              private router: Router
               ) {
                   overlay.defaultViewContainer = vcRef;
                   this.usuarioID = _user.getCurrentUser();
+                  this.router.events.subscribe((event) => {
+                    console.log('SI',event);
+                    if(event.url) {
+                        this.stopCancion();
+                    }
+                });
               }
               public options = {
                   position: ["bottom", "left"],

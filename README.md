@@ -3,7 +3,11 @@
 PFC Universidad de Cádiz
 
 TODO:
-- Realizar servicio Amigos
+- Crear Lugar y Administrar Lugar
+  - Añadir datos del sitio y subir imagen (node dejar preparado)
+  - Crear Lista en Spotify
+  - Ver quien te tiene de favorito
+  - Ver canciones tops entre fechas
 
 Siguientes Pasos:
 - Paginado api spotify (offset y total)

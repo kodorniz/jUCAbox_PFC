@@ -6,6 +6,7 @@ import { Overlay } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { LugaresService } from '../../services/lugares.service';
 import {Auth} from '../../services/auth.service';
+import {Router} from '@angular/router/src/router';
 
 @Component({
   selector: 'app-search',
@@ -29,8 +30,15 @@ export class SearchComponent implements OnInit {
   constructor(private _jucaboxService:JucaboxService,
                overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal,
               public _lugaresService:LugaresService
-            ,public userServ:Auth) {
+            ,public userServ:Auth,
+          private router: Router) {
 
+              this.router.events.subscribe((event) => {
+                console.log('SI',event);
+                if(event.url) {
+                    this.stopCancion();
+                }
+            });
                 overlay.defaultViewContainer = vcRef;
               }
 
@@ -69,6 +77,7 @@ export class SearchComponent implements OnInit {
 
   }
   sendCancion(cancion){
+    
     this.cancion = cancion;
     this.audio.src =  this.cancion.preview_url;
     this.audio.load();

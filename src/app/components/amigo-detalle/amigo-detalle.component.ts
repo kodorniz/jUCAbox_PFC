@@ -41,10 +41,13 @@ export class AmigoDetalleComponent implements OnInit {
   usuarioAmigo:User;
   constructor( private router: Router,private _friendsService:FriendsService,private _friendDetailService:FriendDetailService,private userServ:Auth,private _userServ:UserService,  private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService) {
     //console.log(this._userServ.getTokenApi());
-    this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
+    //this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
     //this.log = logService.getTotalLog(this.Usuario.GlobalClientID);
+
+    this.Usuario = new User(_friendDetailService.getFriend());
+
     this.Usuario = _userServ.completeUser(this.Usuario);
-    console.log(this.Usuario);
+
      this._userServ.getUsers().subscribe(
         data =>{
            let users = data.json();
@@ -55,7 +58,9 @@ export class AmigoDetalleComponent implements OnInit {
 
     //console.log(this._userServ.getTokenApi());
     //console.log('sale getokenAPI');
+
     logService.getLogInit(this.Usuario.userID);
+
     this.lugares = _lugaresService.getLugaresFav(this.Usuario.userID);
     this.artistas = _artistasService.getArtistasFav(this.Usuario.userID);
 
@@ -78,13 +83,15 @@ export class AmigoDetalleComponent implements OnInit {
   }
 
   ngOnInit() {
-  console.log('init');
+
   }
   ngAfterViewChecked() {
+
   this.amigos = this._friendsService.getFriendsUser(this.Usuario.userID,this.users);
 
   }
   navigateLog(url:any){
+
   this.router.navigateByUrl(url);
   }
 
@@ -168,7 +175,7 @@ export class AmigoDetalleComponent implements OnInit {
   }
 
   sendCancion(cancion){
-
+  cancion = cancion.preview_url;
   this.cancion = cancion;
   this.audio.src =  this.cancion;
   this.audio.load();

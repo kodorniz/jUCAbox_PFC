@@ -37,13 +37,13 @@
 
                     <ul class="list-group list-group-unbordered">
                       <li class="list-group-item">
-                        <b>Amigos</b> <a class="pull-right">50</a>
+                        <b>Amigos</b> <a class="pull-right">{{_friendsService.countFriends(Usuario.userID)}}</a>
                       </li>
                       <li class="list-group-item">
-                        <b>Lugares Favoritos</b> <a class="pull-right">543</a>
+                        <b>Lugares Favoritos</b> <a class="pull-right">{{_lugaresService.countLugaresFav(Usuario.userID)}}</a>
                       </li>
                       <li class="list-group-item">
-                        <b>Artistas Favoritos</b> <a class="pull-right">13,287</a>
+                        <b>Artistas Favoritos</b> <a class="pull-right">{{_artistasService.countArtistasFav(Usuario.userID)}}</a>
                       </li>
                     </ul>
 
@@ -100,10 +100,14 @@
             <div class="timeline-body">
                 <div class="row" *ngIf="logEvent.tipoMensaje == 'Cancion'">
                   <div class="col-xs-1">
-                  <button class="btn btn-primary"  *ngIf="true != visiblePlay" (click)="sendCancion(logEvent.previewUrl)"><i class="fa fa-play"><span class = "hide"> Play</span></i></button>
+
+                  <button class="btn btn-primary"  *ngIf="true != visiblePlay" (click)="sendCancion(logEvent.cancion)"><i class="fa fa-play"><span class = "hide"> Play</span></i></button>
                   <button class="btn btn-danger" *ngIf="true == visiblePlay" (click)="stopCancion()"><i class="fa fa-stop"><span class = "hide"> Stop</span></i></button>
-                </div>
-                <div class="col-xs-11">
+                  </div>
+                    <div class="col-xs-1">
+                              <button class="btn btn-danger" (click)="enviarCancion(logEvent.cancion)"><i class="fa fa-send" ><span class = "hide"> Enviar</span></i></button>
+                      </div>
+                <div class="col-xs-10">
                   {{logEvent.mensaje}}
                 </div>
                 </div>

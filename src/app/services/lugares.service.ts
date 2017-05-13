@@ -71,6 +71,16 @@ export class LugaresService {
       return false;
   }
 
+  public countLugaresFav(userID:string){
+    let count:any[] =  this.lugaresFav.filter(
+      function(data){
+        return data.userID == userID;
+      }
+    );
+
+    return count.length;
+  }
+
   getLugares(){
 
     return this.lugares;

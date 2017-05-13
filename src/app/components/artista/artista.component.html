@@ -69,8 +69,10 @@
               <!-- <audio controls>
                 <source [src]="cancion.preview_url">
               </audio> -->
-
-              <button class="btn btn-primary"  *ngIf="getActualCancion() != cancion" (click)="sendCancion(cancion)"><i class="fa fa-play"><span class = "hide"> Play</span></i></button>
+              <button class="btn btn-primary"  *ngIf="cancion.preview_url != null && getActualCancion() != cancion" (click)="sendCancion(cancion)"><i class="fa fa-play"><span class = "hide"> Play</span></i></button>
+              <button class="btn btn-primary"  *ngIf="cancion.preview_url == null && getActualCancion() != cancion" (click)="sendCancion(cancion)" disabled="true" title="No disponible para reproduccion de 30 segundos">                  <i class="fa fa-ban text-error"></i>
+                <span class = "hide"> Play</span></button>
+              <!--<button class="btn btn-primary"  *ngIf="getActualCancion() != cancion" (click)="sendCancion(cancion)"><i class="fa fa-play"><span class = "hide"> Play</span></i></button>-->
               <button class="btn btn-danger" *ngIf="getActualCancion() == cancion" (click)="stopCancion()"><i class="fa fa-stop"><span class = "hide"> Stop</span></i></button>
           </td>
 

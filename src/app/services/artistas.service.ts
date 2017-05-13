@@ -32,6 +32,15 @@ export class ArtistasService {
 
     return artistasTotal;
   }
+  public countArtistasFav(userID:string){
+    let count:any[] =  this.artistasFav.filter(
+      function(data){
+        return data.userID == userID;
+      }
+    );
+
+    return count.length;
+  }
 
   getFav(id:string,userID:string){
     //return this.lugaresFav.filter(
