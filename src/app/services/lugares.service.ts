@@ -192,6 +192,26 @@ export class LugaresService {
     // }
   }
 
+  literalFav(id:string,userID:string){
+    //return this.lugaresFav.filter(
+    //  function(data){ return data.id === id && data.globalClientID === GlobalClientID }
+    //)[0];
+    if( this.lugaresFav.filter(
+      function(data){ return data.lugarID === id && data.userID === userID }
+    )[0] )
+    {
+      return "Eliminar de favoritos..."
+    }else{
+      return "Añadir a favoritos..."
+    }
+
+    // for(let lugar of this.lugares){
+    //   if(lugar.id == id){
+    //     return lugar;
+    //   }
+    // }
+  }
+
   getLugar(id:string){
     return this.lugares.filter(
       function(data){ return data.id == id }

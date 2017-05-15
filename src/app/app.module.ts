@@ -94,6 +94,7 @@ import { DateLogPipe } from './pipes/date-log.pipe';
 import { LOCALE_ID } from '@angular/core';
 import { AmigoDetalleComponent } from './components/amigo-detalle/amigo-detalle.component';
 import { PlaylistService } from './services/playlist.service';
+import { CrearlugarComponent } from './components/crearlugar/crearlugar.component';
 
 
 let widgets = [
@@ -147,7 +148,8 @@ let services = [
     UsuarioComponent,
     SinfotoAvatarPipe,
     DateLogPipe,
-    AmigoDetalleComponent
+    AmigoDetalleComponent,
+    CrearlugarComponent
   ],
   imports: [
     BrowserModule,

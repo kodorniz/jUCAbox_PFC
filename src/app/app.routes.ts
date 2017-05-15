@@ -8,6 +8,7 @@ import { LugarComponent } from './components/lugar/lugar.component';
 import { UsuarioComponent } from './components/usuario/usuario.component';
 import {AuthGuardService} from './services/auth-guard.service';
 import {AmigoDetalleComponent} from './components/amigo-detalle/amigo-detalle.component';
+import {CrearlugarComponent} from './components/crearlugar/crearlugar.component';
 
 const APP_ROUTES: Routes = [
   { path: 'home', component: HomeComponent },
@@ -16,9 +17,15 @@ const APP_ROUTES: Routes = [
   { path: 'lugares', component: LugaresComponent },
   { path: 'amigo-detalle', component: AmigoDetalleComponent , canActivate:[ AuthGuardService ] },
   {
+
   path: 'usuario', component: UsuarioComponent,
   canActivate:[ AuthGuardService ]
  },
+ {
+
+ path: 'crear-lugar', component: CrearlugarComponent,
+ canActivate:[ AuthGuardService ]
+},
   { path: 'lugar/:id', component: LugarComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'home' }
 ];

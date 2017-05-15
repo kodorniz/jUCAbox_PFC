@@ -1,12 +1,13 @@
+<simple-notifications [options]="options"></simple-notifications>
 <div class="box box-default">
   <div class="box-body animated fadeIn fast">
 <div class="">
-<simple-notifications [options]="options"></simple-notifications>
+
   <div class="row">
     <div class="col-md-9">
 
 
-    <h1> Lugares <small> jUCAbox </small></h1>
+      <a href="#" [routerLink]="['/crear-lugar']" class="btn btn-info " ><i class="fa fa-plus " aria-hidden="true"></i>   Añadir nuevo Lugar...</a>
     </div>
     <div class="col-md-3">
       <label for="termino"> Buscador de lugares </label>
@@ -68,9 +69,9 @@
             <div style="margin-top: 30px;">
             <div  style="display: inline-block;margin-top:20px;">
               <div class="button-bottom20 button-top20 " >
-              <a href="#" [routerLink]="['/lugar',lugar.id]" class="btn btn-secondary " ><i class="fa fa-eye " aria-hidden="true"><span class = "hide">  Ver Lugar...</span></i></a>
-              <button (click)="addFav(lugar.id,usuarioID,lugar.nombre)" [ngClass]="{'btn-primary': !_lugaresService.getFav(lugar.id,usuarioID),'btn-danger': _lugaresService.getFav(lugar.id,usuarioID)}" class="btn" ><i class="fa fa-heart" aria-hidden="true"><span class = "hide">  Añadir a favoritos...</span></i></button>
-              <a href="#" class="btn btn-success " ><i class="fa fa-cloud-upload" aria-hidden="true"><span class = "hide">  Enviar Cancion...</span></i></a>
+              <a href="#" [routerLink]="['/lugar',lugar.id]" class="btn btn-success " ><i class="fa fa-eye " aria-hidden="true"></i>  Ver Lugar...</a>
+              <button (click)="addFav(lugar.id,usuarioID,lugar.nombre)" [ngClass]="{'btn-primary': !_lugaresService.getFav(lugar.id,usuarioID),'btn-danger': _lugaresService.getFav(lugar.id,usuarioID)}" class="btn" ><i class="fa fa-heart" aria-hidden="true"></i>  {{_lugaresService.literalFav(lugar.id,usuarioID)}}</button>
+              <!--<a href="#" class="btn btn-success " ><i class="fa fa-cloud-upload" aria-hidden="true"></i>  Enviar Cancion...</a>-->
             </div>
           </div>
           </div>
