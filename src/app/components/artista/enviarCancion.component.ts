@@ -1,5 +1,5 @@
 
-import { Component}  from '@angular/core';
+import { Component, OnInit,trigger,state, transition, style, animate}  from '@angular/core';
 import { NgForm } from '@angular/forms'
 import { DialogRef, ModalComponent } from 'angular2-modal';
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
@@ -8,6 +8,8 @@ import { FormGroup } from '@angular/forms';
 import {SelectModule} from 'ng-select';
 import { User } from '../../models/user';
 import {Auth} from '../../services/auth.service';
+import {PlaylistService} from '../../services/playlist.service';
+import { NotificationsService } from 'angular2-notifications';
 
 export class enviarCancion extends BSModalContext {
   termino:string="";
@@ -19,9 +21,10 @@ export class enviarCancion extends BSModalContext {
   LugaresFavS2:any[]=[];
   LugaresS2:any[]=[];
   usuarioID:string="";
+
   private Usuario:User;
 
-  constructor(public Cancion:any,public _lugaresService:LugaresService,private userServ:Auth) {
+  constructor(public Cancion:any,public _lugaresService:LugaresService,private userServ:Auth,public _playlistService:PlaylistService,public _notificationService: NotificationsService) {
       super();
 
       this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
@@ -50,6 +53,22 @@ export class enviarCancion extends BSModalContext {
 @Component({
   selector: 'modal-content',
 
+  animations: [
+    trigger('shrinkOut', [
+    state('in', style({height: 0})),
+    transition('* => void', [
+      style({height: '*'}),
+      animate(250, style({height: 0,opacity:'0'}))
+    ]),
+    state('out', style({ height: '*'})),
+    transition('void => *', [
+      style({height: 0}),
+      animate(250, style({height: '*',opacity:'1'}))
+    ]),
+
+
+    ])
+  ],
   styles: [`.custom-modal-container {
         }
         .custom-modal-header {
@@ -203,6 +222,7 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
   tokenRelleno:boolean=true;
   tokenValido: boolean=true;
   lugarRelleno:boolean=true;
+  menuState:string = 'out';
 
   constructor(public dialog: DialogRef<enviarCancion>) {
 
@@ -211,6 +231,15 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
     this.wrongAnswer = true;
 
   }
+  public options = {
+      position: ["bottom", "left"],
+      timeOut: 5000,
+      lastOnBottom: true
+  }
+    toggleMenu() {
+      // 1-line if statement that toggles the value:
+      this.menuState = this.menuState === 'out' ? 'in' : 'out';
+    }
 
   getUser(){
     return this.context.usuarioID;
@@ -241,6 +270,8 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
 
 
   guardar(forma:NgForm){
+
+
       console.log("ngForm",forma);
       console.log("Valor forma",forma.value);
   }
@@ -248,10 +279,16 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
   enviarCancionOK(lugar_:string,token_:string,forma:NgForm){
     this.lugarRelleno=true;
     this.tokenValido=true;
-    console.log("formulario",forma)
     if(forma.valid){
     this.setCookie("jucabox token " + lugar_,token_,6);
+    //Enviar Cancion al Lugar
+
+    this.context._playlistService.enviarCancion(this.context.Cancion,lugar_,this.context.usuarioID);
+
+
+
     this.dialog.close();
+    this.context._notificationService.success( this.context.Cancion.name,"Enviada a validación del local");
   }else{
     if (forma.controls['lugar']['errors']) {
 

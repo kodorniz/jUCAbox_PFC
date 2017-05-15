@@ -1,48 +1,103 @@
+<style>
+.parallax {
+    /* The image used */
+    background-image: url("parallax1.jpg");
+
+    /* Set a specific height */
+    height: 340px;
+    border-radius: 5px;
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.cabecera{
+  text-shadow: 4px 3px 0 #868686, 9px 8px 0 rgba(167, 167, 167, 0.15);
+  font-size: 80px;
+  color: #b7b7b7;
+  font-family: museo-slab,Georgia,'Times New Roman',Times,serif;
+  font-weight: 500;
+}
+
+@media (max-width: 767px){
+.cabecera {
+    font-size: 39px;
+}
+}
+
+.letrero{
+  font-size: 20px;
+  font-family: proxima-nova-sc,'Helvetica Neue',Helvetica,Arial,sans-serif;
+  color: #292929;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+
+
+}
+@media (max-width: 767px){
+.letrero {
+    font-size: 10px;
+}
+}
+
+.letrero2{
+  font-size: 15px;
+  font-family: proxima-nova-sc,'Helvetica Neue',Helvetica,Arial,sans-serif;
+  color: #292929;
+  text-shadow: 2px 2px 0 rgba(134, 134, 134, 0.23);
+
+
+}
+@media (max-width: 767px){
+.letrero2 {
+    font-size: 8px;
+}
+}
+</style>
+
+<!-- Container element -->
+
 <div class="box box-default">
-  <div class="box-body">
-<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-  <ol class="carousel-indicators">
-    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-  </ol>
-  <div class="carousel-inner" role="listbox" >
+  <div class="box-body  animated fadeIn fast">
+    <div class="row">
+      <div class="col-md-12 " style="padding-left:50px" >
+        <h1 class="cabecera"><i class="fa fa-music" style="padding-right:2%; color:#4a4a4a"></i>j<b><span style="color:#f39c12">U</span><span style="color:#00678e">CA</span></b>box</h1>
+        <p class="letrero">
+        Siéntete escuchado por todos</p>
+      </div>
+    </div>
+    <hr>
+<div class="parallax">
 
-    <div class="carousel-item active" style="background-image:url(assets/img/ed-sheeran.jpg)"></div>
-    <div class="carousel-item" style="background-image:url(assets/img/metallica.jpg)"></div>
-    <div class="carousel-item" style="background-image:url(assets/img/heroes.jpg)"></div>
-
-
-
-
-  </div>
-  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-</div>
-<div class="container top-30">
-  <div class="row">
-    <div class="col-md-4 text-center">
-      <img src="assets/img/artist.png" alt="">
-      <hr>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+  <div class="row  " style="
+    width: 50%;
+    margin: 0 auto;
+    padding-top:30px;
+" >
+    <div class="col-md-4 text-center" >
+        <i style="color:#fff;text-shadow: 4px 3px 0 rgba(134, 134, 134, 0.23)" class="fa fa-headphones fa-5x"></i>
+        <br>
+        <span style="color:#fff" class="letrero2">
+        Envía tus canciones al DJ
+      </span>
     </div>
     <div class="col-md-4 text-center">
-      <img src="assets/img/album.png" alt="">
-      <hr>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+      <i style="color:#fff;text-shadow: 4px 3px 0 rgba(134, 134, 134, 0.23)" class="fa fa-star fa-5x"></i>
+      <br>
+      <span style="color:#fff" class="letrero2">
+        Visualiza las canciones de moda en tu local favorito
+      </span>
     </div>
     <div class="col-md-4 text-center">
-      <img src="assets/img/music.png" alt="">
-      <hr>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+      <i style="color:#fff;text-shadow: 4px 3px 0 rgba(134, 134, 134, 0.23)" class="fa fa-share-alt-square fa-5x"></i>
+      <br>
+      <span style="color:#fff" class="letrero2">
+       Comparte experiencias con tus amigos
+     </span>
     </div>
   </div>
+
 
 </div>
 </div>

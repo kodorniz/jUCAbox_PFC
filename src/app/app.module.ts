@@ -52,6 +52,7 @@ import { TruncatePipe } from './pipes/truncate.pipe';
 import { UsuarioComponent } from './components/usuario/usuario.component';
 import { ModalModule } from 'angular2-modal';
 import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
+
 import { AdditionalWindow } from './components/artista/enviarCancion.component';
 
 
@@ -84,6 +85,7 @@ import { TasksBoxComponent } from './widgets/tasks-box';
 import { UserBoxComponent } from './widgets/user-box';
 import { BreadcrumbComponent } from './widgets/breadcrumb';
 import {SelectModule} from 'ng-select';
+
 import { SinfotoAvatarPipe } from './pipes/sinfoto-avatar.pipe';
 import { ArtistasService } from './services/artistas.service';
 import { LogService } from './services/log.service';
@@ -91,6 +93,8 @@ import { FriendsService } from './services/friends.service';
 import { DateLogPipe } from './pipes/date-log.pipe';
 import { LOCALE_ID } from '@angular/core';
 import { AmigoDetalleComponent } from './components/amigo-detalle/amigo-detalle.component';
+import { PlaylistService } from './services/playlist.service';
+
 
 let widgets = [
     AppComponent,
@@ -166,6 +170,7 @@ let services = [
     ArtistasService,
     FriendsService,
     FriendDetailService,
+    PlaylistService,
     {
       provide: AuthHttp,
       useFactory: authHttpServiceFactory,

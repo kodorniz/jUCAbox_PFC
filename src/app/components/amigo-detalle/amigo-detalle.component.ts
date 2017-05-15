@@ -1,21 +1,41 @@
-import { Component, OnInit,AfterViewChecked } from '@angular/core';
+import { Component, OnInit,AfterViewChecked,ViewContainerRef,trigger,state, transition, style, animate } from '@angular/core';
 import {Auth} from '../../services/auth.service';
 import {LogService} from '../../services/log.service';
 import { SinfotoPipe } from '../../pipes/sinfoto.pipe';
 import {LugaresService} from '../../services/lugares.service';
 import {ArtistasService} from '../../services/artistas.service';
 import {UserService} from '../../services/user.service';
+import { Overlay } from 'angular2-modal';
 import {FriendsService} from '../../services/friends.service';
 import { FriendDetailService } from '../../services/friend-detail.service';
 import { User } from '../../models/user';
 import { KeysPipe } from '../../pipes/keys.pipe';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {  Router } from '@angular/router';
+import { Modal } from 'angular2-modal/plugins/bootstrap';
+import { AdditionalWindow, enviarCancion } from '../artista/enviarCancion.component';
+import {PlaylistService} from '../../services/playlist.service';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'app-amigo-detalle',
   templateUrl: './amigo-detalle.component.html',
-  styleUrls: ['./amigo-detalle.component.css']
+    animations: [
+      trigger('shrinkOut', [
+      state('in', style({height: 0})),
+      transition('* => void', [
+        style({height: '*'}),
+        animate(250, style({height: 0,opacity:'0'}))
+      ]),
+      state('out', style({ height: '*'})),
+      transition('void => *', [
+        style({height: 0}),
+        animate(250, style({height: '*',opacity:'1'}))
+      ]),
+
+
+      ])
+    ]
 })
 export class AmigoDetalleComponent implements OnInit {
 
@@ -24,7 +44,7 @@ export class AmigoDetalleComponent implements OnInit {
   visArtistasFavoritos:boolean = false;
   visLugaresFavoritos:boolean = false;
   visHistorialAcciones:boolean = true;
-
+  menuState:string = 'out';
   //log:any[];
   //perfil: Object;
   forma: FormGroup;
@@ -39,11 +59,11 @@ export class AmigoDetalleComponent implements OnInit {
   amigos:any[]=[];
   prueba:any;
   usuarioAmigo:User;
-  constructor( private router: Router,private _friendsService:FriendsService,private _friendDetailService:FriendDetailService,private userServ:Auth,private _userServ:UserService,  private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService) {
+  constructor( private router: Router,overlay: Overlay, vcRef: ViewContainerRef,public modal: Modal,private _friendsService:FriendsService,private _friendDetailService:FriendDetailService,private userServ:Auth,private _userServ:UserService,  private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService,public _playlistService:PlaylistService,public _notificationService: NotificationsService) {
     //console.log(this._userServ.getTokenApi());
     //this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
     //this.log = logService.getTotalLog(this.Usuario.GlobalClientID);
-
+    overlay.defaultViewContainer = vcRef;
     this.Usuario = new User(_friendDetailService.getFriend());
 
     this.Usuario = _userServ.completeUser(this.Usuario);
@@ -81,7 +101,15 @@ export class AmigoDetalleComponent implements OnInit {
   //this.Usuario = this.auth.getProfileComplete("1");
   //console.log(this.perfil);
   }
-
+  public options = {
+      position: ["bottom", "left"],
+      timeOut: 5000,
+      lastOnBottom: true
+  }
+    toggleMenu() {
+      // 1-line if statement that toggles the value:
+      this.menuState = this.menuState === 'out' ? 'in' : 'out';
+    }
   ngOnInit() {
 
   }
@@ -187,6 +215,11 @@ export class AmigoDetalleComponent implements OnInit {
   this.audio.currentTime = 0;
   this.cancion = null;
   this.visiblePlay=false;
+  }
+  enviarCancion(Cancion) {
+
+  this.modal
+  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService)} );
   }
 
 }

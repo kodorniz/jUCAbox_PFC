@@ -1,5 +1,5 @@
 <div class="box box-default">
-  <div class="box-body">
+  <div class="box-body animated fadeIn fast">
 <div class="">
 <simple-notifications [options]="options"></simple-notifications>
   <div class="row">
@@ -40,7 +40,7 @@
     </div>
   </div>
 
-  <hr style="margin-bottom: -10px;">
+  <hr style="margin-bottom: 0px;">
   <div class = "row" *ngIf="lugares.length == 0">
     <div class="col-sm-12">
       <div class = "alert alert-danger" role="alert">
@@ -72,7 +72,7 @@
               <button (click)="addFav(lugar.id,usuarioID,lugar.nombre)" [ngClass]="{'btn-primary': !_lugaresService.getFav(lugar.id,usuarioID),'btn-danger': _lugaresService.getFav(lugar.id,usuarioID)}" class="btn" ><i class="fa fa-heart" aria-hidden="true"><span class = "hide">  Añadir a favoritos...</span></i></button>
               <a href="#" class="btn btn-success " ><i class="fa fa-cloud-upload" aria-hidden="true"><span class = "hide">  Enviar Cancion...</span></i></a>
             </div>
-            </div>
+          </div>
           </div>
         </div>
 

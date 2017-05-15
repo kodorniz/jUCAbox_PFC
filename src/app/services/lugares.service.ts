@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class LugaresService {
+
+  // TODO FECHA INICIO FECHA FIN
   private tokenLugares:any[]=[
     {
       id:"1",
@@ -27,6 +29,8 @@ export class LugaresService {
     lugarID: "2",
     userID: "google-oauth2|113690553810319532231"
   }];
+
+  // TODO FECHA INICIO FECHA FIN
   private lugares:Lugar[] = [
       {
         id: "1",

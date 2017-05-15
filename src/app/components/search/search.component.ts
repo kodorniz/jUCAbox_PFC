@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewContainerRef } from '@angular/core';
+import { Component, OnInit,ViewContainerRef,trigger,state, transition, style, animate } from '@angular/core';
 import { JucaboxService } from '../../services/jucabox.service';
 import { SinfotoPipe } from '../../pipes/sinfoto.pipe';
 import { AdditionalWindow, enviarCancion } from '../artista/enviarCancion.component';
@@ -7,10 +7,28 @@ import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { LugaresService } from '../../services/lugares.service';
 import {Auth} from '../../services/auth.service';
 import {Router} from '@angular/router/src/router';
+import {PlaylistService} from '../../services/playlist.service';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'app-search',
-  templateUrl: './search.component.html'
+  templateUrl: './search.component.html',
+    animations: [
+      trigger('shrinkOut', [
+      state('in', style({height: 0})),
+      transition('* => void', [
+        style({height: '*'}),
+        animate(250, style({height: 0,opacity:'0'}))
+      ]),
+      state('out', style({ height: '*'})),
+      transition('void => *', [
+        style({height: 0}),
+        animate(250, style({height: '*',opacity:'1'}))
+      ]),
+
+
+      ])
+    ]
 })
 export class SearchComponent implements OnInit {
   termino:string = "";
@@ -26,12 +44,16 @@ export class SearchComponent implements OnInit {
   chkCancion:boolean = true;
   chkPlaylist:boolean = false;
   clickBoton:boolean = false;
-
+    users:any[]=[];
+  menuState:string = 'out';
   constructor(private _jucaboxService:JucaboxService,
                overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal,
               public _lugaresService:LugaresService
             ,public userServ:Auth,
-          private router: Router) {
+          private router: Router,public _playlistService:PlaylistService,public _notificationService: NotificationsService) {
+
+
+
 
               this.router.events.subscribe((event) => {
                 console.log('SI',event);
@@ -41,6 +63,15 @@ export class SearchComponent implements OnInit {
             });
                 overlay.defaultViewContainer = vcRef;
               }
+              public options = {
+                  position: ["bottom", "left"],
+                  timeOut: 5000,
+                  lastOnBottom: true
+              }
+                toggleMenu() {
+                  // 1-line if statement that toggles the value:
+                  this.menuState = this.menuState === 'out' ? 'in' : 'out';
+                }
 
   ngOnInit() {
 
@@ -77,7 +108,7 @@ export class SearchComponent implements OnInit {
 
   }
   sendCancion(cancion){
-    
+
     this.cancion = cancion;
     this.audio.src =  this.cancion.preview_url;
     this.audio.load();
@@ -96,7 +127,7 @@ export class SearchComponent implements OnInit {
   enviarCancion(Cancion) {
 
   this.modal
-  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ)} );
+  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService)} );
   }
 
   // compruebaCheck(check:string){

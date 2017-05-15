@@ -1,5 +1,6 @@
+<simple-notifications [options]="options"></simple-notifications>
 <div class="box box-default">
-  <div class="box-body">
+  <div class="box-body animated fadeIn fast">
 <div class="">
   <div class = "row">
     <div class="col-md-8">
@@ -114,7 +115,7 @@
           <td>
             <button class="btn btn-danger" (click)="enviarCancion(cancion)"><i class="fa fa-send" ><span class = "hide"> Enviar</span></i></button>
           </td>
-        
+
           <td>{{cancion.name}}</td>
           <td>{{cancion.album | keys:"name" }}</td>
           <td>{{cancion.album.artists[0] | keys:"name"}}</td>

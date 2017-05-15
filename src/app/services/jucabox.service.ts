@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpModule, Http,RequestOptions,Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
+import {GLOBAL} from './global';
 
 @Injectable()
 export class JucaboxService {
@@ -9,12 +10,23 @@ export class JucaboxService {
   canciones:any[]=[];
   albumes:any[]=[];
   playlists:any[]=[];
+  public url: string;
 
   urlBusqueda:string = "https://api.spotify.com/v1/search";
   urlBusquedaArtista:string = "https://api.spotify.com/v1/artists/"
 
 
-  constructor(private http:Http) { }
+  constructor(private http:Http) {
+      this.url = GLOBAL.url;
+  }
+
+
+  pruebaGet(){
+    return this.http.get(this.url)
+                    .map(res => res.json());
+  }
+
+
 
   getArtistas(nombre:string,tipo:string='&type=track,artist,playlist,album'){
 
@@ -107,5 +119,4 @@ export class JucaboxService {
 
 
   }
-
 }

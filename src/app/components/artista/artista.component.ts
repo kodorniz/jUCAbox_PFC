@@ -11,6 +11,7 @@ import {ArtistasService} from '../../services/artistas.service';
 import {LogService} from '../../services/log.service';
 import { NotificationsService } from 'angular2-notifications';
 import {Router} from '@angular/router/src/router';
+import {PlaylistService} from '../../services/playlist.service';
 
 @Component({
   selector: 'app-artista',
@@ -44,7 +45,6 @@ export class ArtistaComponent implements OnInit {
   termino:string="";
   menuState:string = 'out';
   usuarioID:string = "";
-
   constructor( private activatedRoute:ActivatedRoute,
                private _jucaboxService:JucaboxService,
                overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal,
@@ -52,7 +52,8 @@ export class ArtistaComponent implements OnInit {
               public _user:UserService,
               public _artistasService:ArtistasService,private _notificationService: NotificationsService,
               public _logService:LogService,
-              private router: Router
+              private router: Router,
+              public _playlistService:PlaylistService
               ) {
                   overlay.defaultViewContainer = vcRef;
                   this.usuarioID = _user.getCurrentUser();
@@ -168,7 +169,7 @@ addFav(artistaID:string,userID:string,nombreArtista:string){
   enviarCancion(Cancion) {
 
   this.modal
-  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ)} );
+  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService)} );
 //  }
 // enviarCancion(Cancion) {
 //   console.log("click");

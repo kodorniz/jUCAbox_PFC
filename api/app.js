@@ -4,7 +4,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require("request");
 var token;
-
+var routes = require('./routes/routes');
 var options = { method: 'POST',
   url: 'https://sergioruiz.eu.auth0.com/oauth/token',
   headers: { 'content-type': 'application/json' },
@@ -15,25 +15,27 @@ var options = { method: 'POST',
      audience: 'https://sergioruiz.eu.auth0.com/api/v2/' },
   json: true };
 
-var app= express();
+var app = express();
+
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
-app.get('/api', function(req,res){
-  res.status(200).send({
-    message: "Bienvenido a jucaBox"
-  })
+function getToken(){
 
+}
+
+app.get('/prueba',function(req,res){
+  res.status(200).send({message: 'raiz OK'});
 });
-app.post('/api')
+app.use('/api',routes);
+
+/*
+
+*/
 
 
 
-request(options, function (error, response, body) {
-  if (error) throw new Error(error);
-
-  token = body;
-});
-
-module.exports = app,token;
+module.exports =
+  app
+;

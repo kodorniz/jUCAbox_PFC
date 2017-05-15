@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Provider } from '@angular/core';
 import {Auth} from './services/auth.service';
 import { User } from './models/user';
+
+//import SpotifyService from 'angular2-spotify/angular2-spotify';
+
 //import { UserService } from '../../../services/user.service';
 
 
