@@ -146,6 +146,10 @@ export class UsuarioComponent implements OnInit {
     //console.log(this.mostrarboton);
   }
 
+  getActualCancion(){
+    console.log(this.cancion);
+    return this.cancion;
+  }
   navigateFriend(userID:string){
 
 
@@ -217,7 +221,7 @@ export class UsuarioComponent implements OnInit {
   enviarCancion(Cancion) {
 
   this.modal
-  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService)} );
+  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService,this.logService)} );
 
 }
 

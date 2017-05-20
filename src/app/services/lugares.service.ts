@@ -31,7 +31,7 @@ export class LugaresService {
   }];
 
   // TODO FECHA INICIO FECHA FIN
-  private lugares:Lugar[] = [
+  private lugares:any[] = [
       {
         id: "1",
         nombre: "Niño Perdio",
@@ -223,6 +223,12 @@ export class LugaresService {
     // }
   }
 
+  addLugar(lugar:any){
+
+    //Insertar en mongodb lugar nuevo TODO
+    this.lugares.push(lugar);
+    console.log(this.lugares);
+    }
 
 
 

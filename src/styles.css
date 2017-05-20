@@ -263,6 +263,10 @@ hr{
   font-size:   130%;
 }
 
+@font-face {
+    font-family: jucabox-font;
+    src: url('./assets/fonts/jucabox.ttf');
+}
 
 .roundrect {
 border-radius: 15px;

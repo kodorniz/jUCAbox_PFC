@@ -25,7 +25,8 @@
       <a [href]="artista.external_urls | keys:'spotify'" target="_blank" class="btn btn-success"><img src="/assets/img/logo_.png" width="17" height="17" class="d-inline-block align-top" alt=""> Ir a spotify </a>
 
       <a [routerLink]="['/buscar']" class="btn btn-primary"> Buscar otros artistas </a>
-      <a (click)="addFav(artista.id,usuarioID,artista.name)" class="btn btn-danger"><i class="fa fa-heart"></i> Añadir a favoritos </a>
+
+      <a  *ngIf="userServ.authenticated()" (click)="addFav(artista.id,usuarioID,artista.name)" class="btn btn-danger"><i class="fa fa-heart"></i> Añadir a favoritos </a>
     </div>
 
   </div>

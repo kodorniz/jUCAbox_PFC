@@ -69,6 +69,7 @@ export class LogService {
 
   addLog(userID:string, tipoMensaje:string, mensaje:string,objetoMensaje:string,verboMensaje:string,url_:string,previewUrl?:string){
     let today = new Date();
+    console.log('LOG COMPLETO ANTES',this.Log);
     if(previewUrl){
       this.Log.unshift({userID:userID,
                      tipoMensaje: tipoMensaje,
@@ -77,7 +78,7 @@ export class LogService {
                      mensaje: mensaje,
                      FechaLog: new Date(today.getFullYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes(),today.getSeconds()),
                      url:url_,
-                     previewUrl: previewUrl
+                     cancion: previewUrl
     });
     }else{
 
@@ -90,7 +91,7 @@ export class LogService {
                    url:url_
   });
   }
-
+    console.log('LOG COMPLETO DESPUES',this.Log);
   }
 
   getLogInit(userID:string){

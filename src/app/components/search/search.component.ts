@@ -9,6 +9,7 @@ import {Auth} from '../../services/auth.service';
 import {Router} from '@angular/router/src/router';
 import {PlaylistService} from '../../services/playlist.service';
 import { NotificationsService } from 'angular2-notifications';
+import {LogService} from '../../services/log.service';
 
 @Component({
   selector: 'app-search',
@@ -50,7 +51,7 @@ export class SearchComponent implements OnInit {
                overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal,
               public _lugaresService:LugaresService
             ,public userServ:Auth,
-          private router: Router,public _playlistService:PlaylistService,public _notificationService: NotificationsService) {
+          private router: Router,public _playlistService:PlaylistService,public _notificationService: NotificationsService,public _logService:LogService) {
 
 
 
@@ -127,7 +128,7 @@ export class SearchComponent implements OnInit {
   enviarCancion(Cancion) {
 
   this.modal
-  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService)} );
+  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService,this._logService)} );
   }
 
   // compruebaCheck(check:string){

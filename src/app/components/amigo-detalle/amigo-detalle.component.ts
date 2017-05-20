@@ -59,7 +59,7 @@ export class AmigoDetalleComponent implements OnInit {
   amigos:any[]=[];
   prueba:any;
   usuarioAmigo:User;
-  constructor( private router: Router,overlay: Overlay, vcRef: ViewContainerRef,public modal: Modal,private _friendsService:FriendsService,private _friendDetailService:FriendDetailService,private userServ:Auth,private _userServ:UserService,  private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService,public _playlistService:PlaylistService,public _notificationService: NotificationsService) {
+  constructor( private router: Router,overlay: Overlay, vcRef: ViewContainerRef,public modal: Modal,private _friendsService:FriendsService,private _friendDetailService:FriendDetailService,private userServ:Auth,private _userServ:UserService,  private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService,public _playlistService:PlaylistService,public _notificationService: NotificationsService,public _logService:LogService) {
     //console.log(this._userServ.getTokenApi());
     //this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
     //this.log = logService.getTotalLog(this.Usuario.GlobalClientID);
@@ -219,7 +219,7 @@ export class AmigoDetalleComponent implements OnInit {
   enviarCancion(Cancion) {
 
   this.modal
-  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService)} );
+  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService,this._logService)} );
   }
 
 }

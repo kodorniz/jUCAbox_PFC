@@ -10,6 +10,7 @@ import { User } from '../../models/user';
 import {Auth} from '../../services/auth.service';
 import {PlaylistService} from '../../services/playlist.service';
 import { NotificationsService } from 'angular2-notifications';
+import {LogService} from '../../services/log.service';
 
 export class enviarCancion extends BSModalContext {
   termino:string="";
@@ -24,7 +25,7 @@ export class enviarCancion extends BSModalContext {
 
   private Usuario:User;
 
-  constructor(public Cancion:any,public _lugaresService:LugaresService,private userServ:Auth,public _playlistService:PlaylistService,public _notificationService: NotificationsService) {
+  constructor(public Cancion:any,public _lugaresService:LugaresService,  private userServ:Auth,public _playlistService:PlaylistService,public _notificationService: NotificationsService,public _logService:LogService) {
       super();
 
       this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
@@ -87,10 +88,10 @@ export class enviarCancion extends BSModalContext {
   <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title bottom-30">Enviar <strong>{{context.Cancion.name}}</strong> a...</h3>
-              <div class="row">
+              <div *ngIf="context.userServ.authenticated()"   class="row">
               <div class="col-xs-12 top-15">
                 <div class="btn-group" role="group" aria-label="...">
-                        <button type="button" [ngClass]="{'btn': true,'btn-primary': !this.noFavorito, 'btn-default': this.noFavorito}"  (click)="this.noFavorito=false">Favoritos</button>
+                        <button type="button"[ngClass]="{'btn': true,'btn-primary': !this.noFavorito, 'btn-default': this.noFavorito}"  (click)="this.noFavorito=false">Favoritos</button>
                         <button type="button" [ngClass]="{'btn': true,'btn-primary': this.noFavorito, 'btn-default': !this.noFavorito}" (click)="this.noFavorito=true">Todos</button>
                 </div>
               </div>
@@ -115,7 +116,7 @@ export class enviarCancion extends BSModalContext {
                 <div>
 
                 </div>
-                <div class="form-group " *ngIf="context._lugaresService.getLugaresFav(this.getUser()).length!=0 && !this.noFavorito">
+                <div class="form-group " *ngIf="context._lugaresService.getLugaresFav(this.getUser()).length!=0 && !this.noFavorito && context.userServ.authenticated()">
                   <label for="lugar" class="col-sm-4 control-label">Seleccione un lugar favorito</label>
                   <div class="col-sm-12">
                   <ng-select  id="lugar"
@@ -141,7 +142,7 @@ export class enviarCancion extends BSModalContext {
                   </select>-->
                   </div>
                 </div>
-                <div class="form-group " [ngClass]="{'has-error':  !getTokenValido()}" *ngIf="!this.noFavorito">
+                <div class="form-group " [ngClass]="{'has-error':  !getTokenValido()}" *ngIf="!this.noFavorito && context.userServ.authenticated()">
                   <label for="lugar" class="col-sm-12 control-label" style="text-align:left;">Token <span *ngIf=" !getTokenValido()"> - El Token es incorrecto</span></label>
                   <div class="col-sm-12">
                   <input type="text" class="col-sm-12 form-control"
@@ -164,7 +165,7 @@ export class enviarCancion extends BSModalContext {
                   placeholder="Introduce nombre ...">
                   </div>
                 </div>-->
-                <div class="form-group" *ngIf="this.noFavorito">
+                <div class="form-group" *ngIf="this.noFavorito || !context.userServ.authenticated()">
                 <label for="lugar" class="col-sm-4 control-label" style="text-align:left;">Buscar lugar</label>
                 <div class="col-sm-12">
                 <ng-select  id="lugar2"
@@ -191,7 +192,7 @@ export class enviarCancion extends BSModalContext {
                 </select>-->
                 </div>
                 </div>
-                <div class="form-group " *ngIf="this.noFavorito">
+                <div class="form-group " *ngIf="this.noFavorito || !context.userServ.authenticated()">
                   <label for="token" class="col-sm-12 control-label" style="text-align:left;">Token </label>
                   <div class="col-sm-12">
                   <input type="text" class="col-sm-12 form-control"
@@ -279,6 +280,7 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
   enviarCancionOK(lugar_:string,token_:string,forma:NgForm){
     this.lugarRelleno=true;
     this.tokenValido=true;
+
     if(forma.valid){
     this.setCookie("jucabox token " + lugar_,token_,6);
     //Enviar Cancion al Lugar
@@ -289,6 +291,13 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
 
     this.dialog.close();
     this.context._notificationService.success( this.context.Cancion.name,"Enviada a validación del local");
+
+   let lugarNombre:any ="";
+
+    lugarNombre=this.context._lugaresService.getLugar(lugar_).nombre;
+
+    this.context._logService.addLog(this.context.usuarioID,"Cancion","Canción enviada a la lista de " + lugarNombre,this.context.Cancion.artists[0].name,"Canción " +  this.context.Cancion.name + " enviada","/artista/"+this.context.Cancion.artists[0].id,this.context.Cancion);
+
   }else{
     if (forma.controls['lugar']['errors']) {
 

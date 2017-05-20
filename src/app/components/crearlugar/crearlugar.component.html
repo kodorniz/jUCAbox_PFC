@@ -4,6 +4,114 @@
 
     <div class="box box-default">
       <div class="box-body">
-          hola
+        <form class="form-horizontal" role="form" [formGroup]="forma" (ngSubmit) = "guardarCambios()" >
+
+          <div class="form-group">
+              <!-- <label for="firstName" class="col-sm-3 control-label">Nombre</label> -->
+              <div class="col-sm-12 img-wrapper_ show-image" >
+
+                <!-- REVISAR IMAGEN TODO -->
+
+                  <!--<img  [src]="Usuario.avatarUrl | sinfotoAvatar " class="img-responsive img-thumbnail img-circle" style="width: 200px;
+                                                                                            height: auto;
+                                                                                            margin-left: auto;
+                                                                                            margin-right: auto;
+                                                                                            display: block;">
+                  <div class="img-overlay_" >
+                       <button style="background-color:transparent; border-color:transparent;outline: none"><i class="fa fa-camera fa-3x " style="color:#7D7D7D" aria-hidden="true"></i></button>
+                  </div>-->
+
+              </div>
+          </div>
+<!-- <div class="form-group">
+          <div class="img-wrapper_">
+              <img class="img-responsive" src="https://lh6.googleusercontent.com/-KVlCnaKUIpY/AAAAAAAAAAI/AAAAAAAAAak/yQR2HowkFVU/photo.jpg">
+              <div class="img-overlay_">
+                <button class="btn btn-md btn-success">Button</button>
+              </div>
+          </div>
+</div> -->
+  <div style="padding-right: 30px;">
+            <div class="form-group" >
+                <label for="nombre" class="col-sm-3 control-label">Nombre</label>
+                <div class="col-sm-9">
+                    <input type="text" id="nombre" placeholder="Nombre" class="form-control"
+                    autofocus
+                    formControlName = "nombre">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email" class="col-sm-3 control-label">Email</label>
+                <div class="col-sm-9">
+                    <input type="email" id="email" placeholder="email" class="form-control"
+                    formControlName = "email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="provincia" class="col-sm-3 control-label">Provincia</label>
+                <div class="col-sm-9">
+                    <input type="text" id="provincia" placeholder="Provincia" class="form-control" formControlName = "provincia">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="ciudad" class="col-sm-3 control-label">Ciudad</label>
+                <div class="col-sm-9">
+                    <input type="ciudad" id="ciudad" placeholder="Ciudad" class="form-control" formControlName = "ciudad">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="direccion" class="col-sm-3 control-label">Dirección</label>
+                <div class="col-sm-9">
+                    <input type="text" id="direccion" placeholder="Dirección" class="form-control" formControlName = "direccion">
+
+
+        </div>
+      </div>
+        <div class="form-group">
+            <label for="Map" class="col-sm-3 control-label">Mapa</label>
+            <div class="col-sm-9">
+                <iframe [src]="Cdireccion() | domseguro:'https://www.google.com/maps/embed/v1/place?key=AIzaSyBwnLPDBXY73nzl4ukbL3cGoeSu6nVSQl8&q='" width="100%" height="300" frameborder="1"  allowtransparency="true"></iframe>
+
+    </div>
+    </div>
+
+
+            <div class="form-group">
+                <label for="descripcion" class="col-sm-3 control-label">Tipo de música</label>
+                <div class="col-sm-9">
+
+                    <ng-select  id="tipoMusica"
+                      [options]="tipoMusicaValores"
+                      placeholder="Seleccione un tipo de música"
+                      [multiple]="true"
+                        filterPlaceholder="Puede filtrar por el tipo de música"
+                        formControlName = "tipoMusica">
+                    </ng-select>
+
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="descripcion" class="col-sm-3 control-label">Descripción</label>
+                <div class="col-sm-9">
+                    <textarea id="descripcion" placeholder="Descripcion" class="form-control" formControlName = "descripcion"></textarea>
+                </div>
+            </div>
+
+            <!-- <div class="form-group">
+                <div class="col-sm-9 col-sm-offset-3">
+                    <button type="button" class="btn btn-success btn-block" (click)="SesionSpotify()"><img src="../../assets/img/logo_.png" style="width:25px;"> Iniciar sesión Spotify</button>
+                    <span class="form-text text-muted"><small>Es necesario si eres administrador de un lugar</small></span>
+                </div>
+            </div> -->
+             <!-- /.form-group -->
+            <div class="form-group">
+                <div class="col-sm-9 col-sm-offset-3">
+                    <button type="submit" class="btn btn-primary btn-block">Guardar cambios</button>
+                </div>
+            </div>
+    </div>
+        </form>
       </div>
   </div>

@@ -31,4 +31,6 @@ constructor( private activatedRoute:ActivatedRoute,
    this.router.navigate(['/lugares']);
  }
 
+
+
 }

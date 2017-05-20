@@ -63,6 +63,7 @@ export class ArtistaComponent implements OnInit {
                         this.stopCancion();
                     }
                 });
+
               }
               public options = {
                   position: ["bottom", "left"],
@@ -91,6 +92,11 @@ export class ArtistaComponent implements OnInit {
 
        });
     })
+
+  }
+  userLogged(){
+
+      return this.userServ.authenticated();
 
   }
 sendCancion(cancion){
@@ -169,7 +175,7 @@ addFav(artistaID:string,userID:string,nombreArtista:string){
   enviarCancion(Cancion) {
 
   this.modal
-  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService)} );
+  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService,this._logService)} );
 //  }
 // enviarCancion(Cancion) {
 //   console.log("click");
