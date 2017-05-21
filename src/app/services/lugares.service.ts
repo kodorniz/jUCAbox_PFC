@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {SelectModule, IOption} from 'ng-select';
 //import { Select2OptionData } from 'ng2-select2';
 
 @Injectable()
@@ -41,7 +42,9 @@ export class LugaresService {
         "assets/img/disco1.jpg"],
         provincia: "Madrid",
         ciudad:"Boadilla del Monte",
-        direccion:"Calle Severo Ochoa"
+        direccion:"Calle Severo Ochoa",
+        tipoMusica: [{value: '0', label: 'Pop'},
+        {value: '1', label: 'Dance'}]
       },
       {
         id: "2",
@@ -52,7 +55,9 @@ export class LugaresService {
         "assets/img/disco2.jpg"],
         provincia: "Cádiz",
         ciudad:"Puerto de Santa Maria",
-        direccion:" Plaza Juan de la Cosa"
+        direccion:" Plaza Juan de la Cosa",
+        tipoMusica: [{value: '2', label: 'Reggaeton'},
+               {value: '3', label: 'Rock'}]
       }
     ];
 
@@ -141,19 +146,33 @@ export class LugaresService {
   }
   }
 
-  getLugaresNombre(termino:string,provincia:string,ciudad:string){
+  getLugaresNombre(termino:string,provincia:string,ciudad:string,tipoMusica:Array<IOption>){
 
     let lugaresArr:Lugar[] =[];
 
     termino = termino.toLowerCase();
-
+    provincia = provincia.toLowerCase();
+    ciudad = ciudad.toLowerCase();
+    console.log("ACTIVADO");
   for( let lugar of this.lugares){
 
     let nombre = lugar.nombre.toLowerCase();
     let _provincia = lugar.provincia.toLowerCase();
     let _ciudad = lugar.ciudad.toLowerCase();
+    let _tipoMusica = lugar.tipoMusica;
+    let tipoMusicaOK:boolean = true;
 
-    if( nombre.indexOf(termino)>=0 && _provincia.indexOf(provincia)>=0 && _ciudad.indexOf(ciudad)>=0){
+    if(tipoMusica!=undefined)
+      tipoMusicaOK=false;
+    for (let i = 0; i < lugar.tipoMusica.length; i++){
+      if (lugar.tipoMusica[i].value == tipoMusica){
+          tipoMusicaOK=true;
+      }
+    }
+
+    if( nombre.indexOf(termino)>=0  && _provincia.indexOf(provincia)>=0  && _ciudad.indexOf(ciudad)>=0 && tipoMusicaOK ){
+
+
        lugaresArr.push(lugar);
     }
 

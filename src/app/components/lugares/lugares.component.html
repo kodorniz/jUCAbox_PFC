@@ -1,13 +1,13 @@
 <simple-notifications [options]="options"></simple-notifications>
 <div class="box box-default">
-  <div class="box-body animated fadeIn fast">
-<div class="">
+  <div class="box-body animated fadeIn fast" style="position: relative">
+<div >
 
   <div class="row">
     <div class="col-md-9">
 
 
-      <a href="#" [routerLink]="['/crear-lugar']" class="btn btn-info " ><i class="fa fa-plus " aria-hidden="true"></i>   Añadir nuevo Lugar...</a>
+      <a *ngIf="_Auth.authenticated()" href="#" [routerLink]="['/crear-lugar']" class="btn btn-info " ><i class="fa fa-plus " aria-hidden="true"></i>   Añadir nuevo Lugar...</a>
     </div>
     <div class="col-md-3">
       <label for="termino"> Buscador de lugares </label>
@@ -18,12 +18,13 @@
       placeholder="Buscar por nombre...">
 
       <button class = "btn btn-primary btn-sm btn-block top-15" name="busquedaAvanzada" (click)="busquedaAvanzada=!busquedaAvanzada">Búsqueda avanzada</button>
+      <br>
     </div>
 
   </div>
 
-  <div [ngClass]="{'row':true,'fadeIn': busquedaAvanzada,'fadeOut': !busquedaAvanzada, 'fast':true}"  [@shrinkOut]="menuState"  *ngIf="busquedaAvanzada">
-    <div class="col-md-6">
+  <div [ngClass]="{'row':true,'fadeIn': busquedaAvanzada,'fadeOut': !busquedaAvanzada, 'fast':true}"    *ngIf="busquedaAvanzada">
+    <div class="col-md-4">
       <label for="provincia"> Buscador por provincia </label>
       <input [(ngModel)]="provincia"
       (keyup)="getLugaresNombre()"
@@ -31,7 +32,7 @@
       class = "form-control"
       placeholder="Buscar por nombre...">
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
       <label for="ciudad"> Buscador por ciudad </label>
       <input [(ngModel)]="ciudad"
       (keyup)="getLugaresNombre()"
@@ -39,9 +40,22 @@
       class = "form-control"
       placeholder="Buscar por nombre...">
     </div>
+    <div class="col-md-4">
+      <label for="ciudad"> Buscador por tipo de música </label>
+      <ng-select  id="tipoMusica"
+        [options]="tipoMusicaValores"
+        (click)="getLugaresNombre()"
+        [(ngModel)]="tipoMusica"
+        [allowClear]="true"
+        placeholder="Seleccione un tipo de música"
+          filterPlaceholder="Puede filtrar por el tipo de música"
+        >
+      </ng-select>
+    </div>
   </div>
+  <br>
 
-  <hr style="margin-bottom: 0px;">
+
   <div class = "row" *ngIf="lugares.length == 0">
     <div class="col-sm-12">
       <div class = "alert alert-danger" role="alert">
@@ -51,37 +65,71 @@
 
   </div>
   <div  *ngIf="lugares.length != 0">
-    <div class="col-sm-12 main-container">
+
+    <div class="col-sm-12 main-container" style="z-index:-2">
+
+
+
       <div class="card card-inverse-gray2 animated fadeIn fast bottom-30" *ngFor="let lugar of lugares;let i = index">
+        <div class="box box-default box-solid">
+                <div class="box-header with-border">
+                  <h2 class="box-title">{{lugar.nombre}}</h2>
 
-  <h3 class="card-header card-inverse-gray">{{lugar.nombre}}</h3>
-        <div class="row">
-          <div class="col-md-3 crop">
-          <img class="card-img-top img-fluid img-thumbnail img-min-lugares" [src]="lugar.img[0]" [alt]="lugar.nombre">
-        </div>
-        <div class="col-md-9 left-20">
+                  <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                  </div>
+                  <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <div class="row">
+                    <div class="col-md-3 crop">
+                    <img class="card-img-top img-fluid img-thumbnail img-min-lugares" [src]="lugar.img[0]" [alt]="lugar.nombre">
+                  </div>
+                  <div class="col-md-9 left-20">
 
-          <div class="card-block">
-            <div >
+                    <div class="card-block">
+                      <div >
 
-              <p class="card-text">{{lugar.descripcion}}</p>
-              <h5 class="card-title">{{lugar.provincia}} - {{lugar.ciudad}} </h5>
-            <div style="margin-top: 30px;">
-            <div  style="display: inline-block;margin-top:20px;">
-              <div class="button-bottom20 button-top20 " >
-              <a href="#" [routerLink]="['/lugar',lugar.id]" class="btn btn-success " ><i class="fa fa-eye " aria-hidden="true"></i>  Ver Lugar...</a>
-              <button (click)="addFav(lugar.id,usuarioID,lugar.nombre)" [ngClass]="{'btn-primary': !_lugaresService.getFav(lugar.id,usuarioID),'btn-danger': _lugaresService.getFav(lugar.id,usuarioID)}" class="btn" ><i class="fa fa-heart" aria-hidden="true"></i>  {{_lugaresService.literalFav(lugar.id,usuarioID)}}</button>
-              <!--<a href="#" class="btn btn-success " ><i class="fa fa-cloud-upload" aria-hidden="true"></i>  Enviar Cancion...</a>-->
-            </div>
-          </div>
-          </div>
-        </div>
+                        <p class="card-text">{{lugar.descripcion}}</p>
+                        <h5 class="card-title">{{lugar.provincia}} - {{lugar.ciudad}} </h5>
+                        <hr>
+                        <h5 class="card-title">Tipo de música: </h5>
+                        <div style="padding-bottom: 10px;">
+                        <span *ngFor="let tipoM of lugar.tipoMusica" class="card-title" style = "
+                        background-color: #e4e4e4;
+                        border: 1px solid #aaa;
+                        border-radius: 4px;
+                        cursor: default;
+                        margin-right: 5px;
+                        margin-top: 5px;
+                        padding: 0 5px;
+                        color: dimgray;
 
-      </div>
+                        ">{{tipoM.label}} </span>
+                      </div>
+                      <div style="margin-top: 30px;">
+                      <div  style="display: inline-block;margin-top:20px;">
+                        <div class="button-bottom20 button-top20 " >
+                        <a href="#" [routerLink]="['/lugar',lugar.id]" class="btn btn-success " ><i class="fa fa-eye " aria-hidden="true"></i>  Ver Lugar...</a>
+                        <button *ngIf="_Auth.authenticated()" (click)="addFav(lugar.id,usuarioID,lugar.nombre)" [ngClass]="{'btn-primary': !_lugaresService.getFav(lugar.id,usuarioID),'btn-danger': _lugaresService.getFav(lugar.id,usuarioID)}" class="btn" ><i class="fa fa-heart" aria-hidden="true"></i>  {{_lugaresService.literalFav(lugar.id,usuarioID)}}</button>
+                        <!--<a href="#" class="btn btn-success " ><i class="fa fa-cloud-upload" aria-hidden="true"></i>  Enviar Cancion...</a>-->
+                      </div>
+                    </div>
+                    </div>
+                  </div>
 
-      </div>
+                </div>
 
-    </div>
+                </div>
+
+              </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+
+
 
   </div>
   <!-- <div class = "card-columns">

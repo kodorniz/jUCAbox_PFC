@@ -2,6 +2,8 @@ import { Component, OnInit,trigger,state, transition, style, animate} from '@ang
 import { LugaresService } from '../../services/lugares.service';
 import { UserService } from '../../services/user.service';
 import { NotificationsService } from 'angular2-notifications';
+import {Auth} from '../../services/auth.service';
+import {SelectModule, IOption} from 'ng-select';
 
 @Component({
   selector: 'app-lugares',
@@ -34,7 +36,14 @@ export class LugaresComponent implements OnInit {
   busquedaAvanzada:boolean = false;
   menuState:string = 'out';
   usuarioID:string = "";
-  constructor(private _lugaresService:LugaresService, private _notificationService: NotificationsService, private _usuarioService: UserService ) {
+  tipoMusica:Array<IOption>;
+  tipoMusicaValores:Array<IOption> = [
+       {value: '0', label: 'Pop'},
+       {value: '1', label: 'Dance'},
+       {value: '2', label: 'Reggaeton'},
+       {value: '3', label: 'Rock'}
+   ];
+  constructor(private _lugaresService:LugaresService, private _notificationService: NotificationsService, private _usuarioService: UserService, private _Auth:Auth ) {
     this.usuarioID = _usuarioService.getCurrentUser();
      }
 
@@ -53,7 +62,8 @@ export class LugaresComponent implements OnInit {
   }
 
   getLugaresNombre(){
-    this.lugares = this._lugaresService.getLugaresNombre(this.termino,this.provincia,this.ciudad);
+
+    this.lugares = this._lugaresService.getLugaresNombre(this.termino,this.provincia,this.ciudad,this.tipoMusica);
 
   }
 
