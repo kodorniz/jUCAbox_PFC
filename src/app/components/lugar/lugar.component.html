@@ -1,39 +1,222 @@
-<div class="box box-default">
-  <div class="box-body">
-<div class="container main-container">
-<div class="card" style="margin-bottom:20px;" >
-  <h3 class="card-header">{{lugar.nombre}}</h3>
+<div class="box box-solid box-default">
+  <div class="box-header">
+                <h1 class="box-title">{{lugar.nombre}}</h1>
+              </div>
+  <div class="box-body" class="main-container" style="padding: 10px 10px 10px 10px;margin: 10px 10px 10px 10px;">
+    <div class="btn-group" style="padding-bottom:10px;margin:0 auto;display: flex;
+  justify-content: center;
+  align-items: center;">
 
-  <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-    <div class="carousel-inner" role="listbox">
-
-      <div *ngFor="let img of lugar.img;let i = index " [ngClass]="{'carousel-item':true,'active': i==0}"  [ngStyle]="{'background-image': 'url(' + img + ')'}">
-
-       </div>
-
+      <button type="button" [ngClass]="{'btn': true,'btn-primary': this.informacionVisible, 'btn-default': !this.informacionVisible}" (click) = "visibleInformacion()"><i class="fa fa-info" aria-hidden="true"></i> Información</button>
+      <button type="button" [ngClass]="{'btn': true,'btn-primary': this.playlistVisible, 'btn-default': !this.playlistVisible}" (click) = "visiblePlaylist()"><i class="fa fa-music" aria-hidden="true"></i> Playlist</button>
+      <button type="button" [ngClass]="{'btn': true,'btn-primary': this.cancionesTopVisible, 'btn-default': !this.cancionesTopVisible}" (click) = "visibleCancionesTop()"><i class="fa fa-arrow-circle-up" aria-hidden="true"></i> Canciones Top</button>
+      <button type="button" [ngClass]="{'btn': true,'btn-primary': this.usuarioVisible, 'btn-default': !this.usuarioVisible}" (click) = "visibleUsuario()"><i class="fa fa-star" aria-hidden="true"></i> Usuarios</button>
 
     </div>
+    <!-- INFORMACION -->
+<div  *ngIf="this.informacionVisible">
+<div class="card" style="margin-bottom:20px;" >
 
 
-    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
+<!--<div>-->
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <!-- Carousel indicators -->
+      <ol class="carousel-indicators">
+          <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+          <li data-target="#myCarousel" data-slide-to="1"></li>
+          <li data-target="#myCarousel" data-slide-to="2"></li>
+      </ol>
+      <!-- Wrapper for carousel items -->
+      <div style =" background-image: url('assets/img/background.jpg');    border-radius: 10px;">
+      <div class="carousel-inner" style="width:50%;margin:auto;box-shadow: 0 9px 0px 0px white, 0 -9px 0px 0px white, 12px 0 15px -4px rgba(31, 73, 125, 0.8), -12px 0 15px -4px rgba(31, 73, 125, 0.8);">
+        <div *ngFor="let img of lugar.img;let i = index " [ngClass]="{'item':true,'active': i==0}"  >
+
+
+        <img [src]="img" alt="First Slide" >
+
+
+
+         </div>
+
+      </div>
+    </div>
+      <!-- Carousel controls -->
+      <a class="carousel-control left" href="#myCarousel" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+      </a>
+      <a class="carousel-control right" href="#myCarousel" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+      </a>
   </div>
+
 
 
 
   <div class="card-block">
     <h4 class="card-title">{{lugar.provincia}} - <small>{{lugar.ciudad}}</small></h4>
     <p class="card-text">{{lugar.descripcion}}</p>
-    <button (click) = "volverLugares()" type="button" class="btn btn-outline-danger">Volver lugares...</button>
+    <hr>
+    <h5 class="card-title">Tipo de música: </h5>
+    <div style="padding-bottom: 10px;">
+    <span *ngFor="let tipoM of lugar.tipoMusica" class="card-title" style = "
+    background-color: #e4e4e4;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    cursor: default;
+    margin-right: 5px;
+    margin-top: 5px;
+    padding: 0 5px;
+    color: dimgray;
+
+    ">{{tipoM.label}} </span>
+
+  </div>
+
+
 
   </div>
 </div>
+
 </div>
+
+    <!-- Playlist -->
+
+    <div class="row" *ngIf="this.playlistVisible">
+        <!-- Lista de canciones enviadas -->
+        <div class="col-md-6">
+          <div style="text-align:center">
+            <h3><i class="fa fa-clock-o" aria-hidden="true"></i>
+          Pendientes de validar</h3>
+        </div>
+
+        <div class="callout callout-warning" style="text-align:center;margin-top:25px;" *ngIf="playlistSV.length == 0 ">
+
+                    <h4>No se ha enviado ninguna cancion</h4>
+
+      </div>
+    <!--  <div class="row" style="margin-top:5px;margin-bottom:5px;" *ngIf="playlistSV.length > 0 ">
+        <div class="col-md-8" style="text-align:right">
+
+        </div>
+        <div class="col-md-4">
+          Ordenar por:
+          <select>
+              <option value="fecha">Fecha petición</option>
+              <option value="peticion">Número de peticiones</option>
+            </select>
+        </div>
+      </div>-->
+          <div class="table-responsive  main-container" *ngIf="playlistSV.length > 0 ">
+
+              <table class=" table" width="100%">
+              <thead class="thead-inverse">
+              <tr>
+
+
+
+                  <th>Preview</th>
+                  <th>Aceptar</th>
+                  <th>Rechazar</th>
+                  <th>Canción</th>
+                  <th>Peticiones</th>
+                  <th>Última Petición</th>
+              </tr>
+              </thead>
+                <tbody>
+                  <tr *ngFor="let cancion of playlistSV">
+
+                    <!-- <td style = "padding-top: 10px;padding-bottom: 10px;padding-right: 4px;padding-left: 0px"><img [src]="cancion.album | keys:'images':'0' | sinfoto " class="img-fluid roundrect img-100" alt=""></td> -->
+
+                    <td>
+                        <!-- <audio controls>
+                          <source [src]="cancion.preview_url">
+                        </audio> -->
+
+                        <button class="btn btn-primary"  *ngIf="cancion.cancion.preview_url != null && getActualCancion() != cancion.cancion" (click)="sendCancion(cancion.cancion)"><i class="fa fa-play"><span class = "hide"> Play</span></i></button>
+                        <button class="btn btn-primary"  *ngIf="cancion.cancion.preview_url == null && getActualCancion() != cancion.canciion" (click)="sendCancion(cancion.cancion)" disabled="true" title="No disponible para reproduccion de 30 segundos">                  <i class="fa fa-ban text-error"></i>
+                          <span class = "hide"> Play</span></button>
+                        <button class="btn btn-danger" *ngIf="getActualCancion() == cancion.cancion" (click)="stopCancion()"><i class="fa fa-stop"><span class = "hide"> Stop</span></i></button>
+                    </td>
+
+                    <td>
+                      <button class="btn btn-success" (click)="aceptarCancion(cancion)"><i class="fa fa-check" ><span class = "hide"> Aceptar</span></i></button>
+                    </td>
+                    <td>
+                      <button class="btn btn-danger" (click)="rechazarCancion(cancion)"><i class="fa fa-times" ><span class = "hide"> Rechazar</span></i></button>
+                    </td>
+
+                    <td>{{cancion.cancion.name}} - {{cancion.cancion.album.artists[0] | keys:"name"}}</td>
+                    <td>5</td>
+                    <td><span class="time">{{cancion.FechaEnvio | dateLog}}</span></td>
+                  </tr>
+
+                </tbody>
+              </table>
+          </div>
+        </div>
+        <!-- Lista de canciones aceptadas -->
+        <div class="col-md-6">
+          <div style="text-align:center">
+            <h3><i class="fa fa-spotify" style="color:#00c100" aria-hidden="true"></i>
+            En lista de spotify</h3>
+        </div>
+        <div class="callout callout-warning" style="text-align:center;margin-top:25px;" *ngIf="playlistSpoti.length == 0 ">
+                    <h4>No hay ninguna canción en la lista de Spotify</h4>
+
+      </div>
+          <div class="table-responsive  main-container" style = "    border-color: #5edc70;" *ngIf="playlistSpoti.length > 0 ">
+
+              <table class=" table" width="100%">
+              <thead class="thead-inverse">
+              <tr>
+
+
+
+                  <th>Preview</th>
+                  <th>Aceptar</th>
+                  <th>Rechazar</th>
+                  <th>Canción</th>
+                  <th>Peticiones</th>
+                  <th>Ultima Petición</th>
+              </tr>
+              </thead>
+                <tbody>
+                  <tr *ngFor="let cancion of playlistSV;let i = index ">
+
+                    <!-- <td style = "padding-top: 10px;padding-bottom: 10px;padding-right: 4px;padding-left: 0px"><img [src]="cancion.album | keys:'images':'0' | sinfoto " class="img-fluid roundrect img-100" alt=""></td> -->
+
+                    <td>
+                        <!-- <audio controls>
+                          <source [src]="cancion.preview_url">
+                        </audio> -->
+
+                        <button class="btn btn-primary"  *ngIf="cancion.cancion.preview_url != null && getActualCancion() != cancion.cancion" (click)="sendCancion(cancion.cancion)"><i class="fa fa-play"><span class = "hide"> Play</span></i></button>
+                        <button class="btn btn-primary"  *ngIf="cancion.cancion.preview_url == null && getActualCancion() != cancion.canciion" (click)="sendCancion(cancion.cancion)" disabled="true" title="No disponible para reproduccion de 30 segundos">                  <i class="fa fa-ban text-error"></i>
+                          <span class = "hide"> Play</span></button>
+                        <button class="btn btn-danger" *ngIf="getActualCancion() == cancion.cancion" (click)="stopCancion()"><i class="fa fa-stop"><span class = "hide"> Stop</span></i></button>
+                    </td>
+
+                    <td>
+                      <button class="btn btn-success" (click)="aceptarCancion(cancion)"><i class="fa fa-check" ><span class = "hide"> Aceptar</span></i></button>
+                    </td>
+                    <td>
+                      <button class="btn btn-danger" (click)="rechazarCancion(cancion)"><i class="fa fa-times" ><span class = "hide"> Rechazar</span></i></button>
+                    </td>
+
+                    <td>{{cancion.cancion.name}} - {{cancion.cancion.album.artists[0] | keys:"name"}}</td>
+                    <td>5</td>
+                    <td>27/05/2017 11:22</td>
+                  </tr>
+
+                </tbody>
+              </table>
+          </div>
+        </div>
+    </div>
+
+<div>
+<button (click) = "volverLugares()" type="button" class="btn btn-outline-danger">Volver lugares...</button>
+</div>
+
 </div>
 </div>
