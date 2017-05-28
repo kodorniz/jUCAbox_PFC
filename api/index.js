@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var app = require('./app');
 
 
-var port = process.env.PORT || 3701;
+var port = process.env.PORT || 3706;
 mongoose.connect('mongodb://localhost:27017/jucabox',(err,res)=>{
 
   if(err){

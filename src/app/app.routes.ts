@@ -9,12 +9,14 @@ import { UsuarioComponent } from './components/usuario/usuario.component';
 import {AuthGuardService} from './services/auth-guard.service';
 import {AmigoDetalleComponent} from './components/amigo-detalle/amigo-detalle.component';
 import {CrearlugarComponent} from './components/crearlugar/crearlugar.component';
+import {CallbackSpotifyComponent} from './components/callback-spotify/callback-spotify.component';
 
 const APP_ROUTES: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'buscar', component: SearchComponent },
   { path: 'artista/:id', component: ArtistaComponent },
   { path: 'lugares', component: LugaresComponent },
+  { path: 'callback', component: CallbackSpotifyComponent },
   { path: 'amigo-detalle', component: AmigoDetalleComponent , canActivate:[ AuthGuardService ] },
   {
 

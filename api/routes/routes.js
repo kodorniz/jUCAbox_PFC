@@ -8,8 +8,11 @@ var api = express.Router();
 
 
 
-//api.get('/spotifyToken',spotifyToken.getToken);
-api.get('/prueba',spotifyToken.getToken);
-//api.post('/prueba2',spotifyToken.getToken);
+
+api.get('/getUrlSpotify',function(req,res){
+
+  res.status(200).send({url: spotifyToken.getUrl()});
+});
+
 
 module.exports = api;

@@ -9,7 +9,7 @@ import { ToasterModule } from 'angular2-toaster/angular2-toaster';
 import { environment } from '../environments/environment';
 import { TranslateModule, TranslateLoader, TranslateStaticLoader } from 'ng2-translate';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
-
+import { Ng2HandyOauthModule } from 'ng2-handy-oauth';
 
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -95,6 +95,7 @@ import { LOCALE_ID } from '@angular/core';
 import { AmigoDetalleComponent } from './components/amigo-detalle/amigo-detalle.component';
 import { PlaylistService } from './services/playlist.service';
 import { CrearlugarComponent } from './components/crearlugar/crearlugar.component';
+import { CallbackSpotifyComponent } from './components/callback-spotify/callback-spotify.component';
 
 
 let widgets = [
@@ -149,7 +150,8 @@ let services = [
     SinfotoAvatarPipe,
     DateLogPipe,
     AmigoDetalleComponent,
-    CrearlugarComponent
+    CrearlugarComponent,
+    CallbackSpotifyComponent
   ],
   imports: [
     BrowserModule,
@@ -161,6 +163,14 @@ let services = [
     BootstrapModalModule,
     SelectModule,
     ReactiveFormsModule,
+    Ng2HandyOauthModule.forRoot({
+      providers: {
+        spotify: {
+          clientId: 'da017c536e314c94ab23b3505ad0fc85',
+          redirectUrl: 'http://localhost:4200/callback'
+        }
+      }
+    }),
     ...modules
   ],
   providers:
@@ -171,7 +181,7 @@ let services = [
     LogService,
     ArtistasService,
     FriendsService,
-    FriendDetailService,
+
     PlaylistService,
     {
       provide: AuthHttp,

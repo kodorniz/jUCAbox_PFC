@@ -18,6 +18,7 @@ export class UserService {
     public currentUser: ReplaySubject<User> = new ReplaySubject<User>( 1 );
     public Usuario:User;
     public thing:any;
+    public token:any;
 
     public UsuarioReal:any[]=
       [{
@@ -47,6 +48,13 @@ export class UserService {
       // TODO
     }
 
+    public setToken(token){
+      this.token = token;
+    }
+
+    public getToken(){
+      return this.token;
+    }
     public setCurrentUser( user: User ) {
       this.currentUser.next( user );
     }

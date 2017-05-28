@@ -30,6 +30,17 @@ language: "es"
 
     // Add callback for lock `authenticated` event
     this.lock.on("authenticated", (authResult) => {
+      
+      if(authResult.idToken===undefined){
+
+      }
+      else{
+      /*if(this.userServ.getToken()===undefined){
+        console.log("OK");
+        localStorage.removeItem('id_token');
+      }else{console.log("NOK");
+        localStorage.setItem('id_token', this.userServ.getToken());
+      }*/
       localStorage.setItem('id_token', authResult.idToken);
 
       // Fetch profile information
@@ -45,7 +56,10 @@ language: "es"
         let user = new User(profile);
         this.setCurrentUser( user );
       });
-    });
+    }
+
+  }
+  );
   }
 
  public getProfile():Object{

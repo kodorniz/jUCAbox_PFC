@@ -34,6 +34,18 @@
 				<!-- Tasks Menu -->
 				<!-- <li class="dropdown tasks-menu tasksBox"></li> -->
 				<!-- User Account Menu -->
+        <li *ngIf="auth.authenticated() && !_jucaboxservice.getToken()" style="cursor: pointer;">
+            <a (click)="_jucaboxservice.loginSpotify()" [href]="" class="toggle-sidebar-right">
+                  <i class="fa fa-spotify" style="    color: #00d200;"></i> Login Spotify
+            </a>
+        </li>
+        <!--<a (click)="result()"> PRUEBA</a>-->
+        <li *ngIf="auth.authenticated() && _jucaboxservice.getToken()" style="cursor: pointer;">
+            <a (click)="_jucaboxservice.loginSpotify()" [href]="" class="toggle-sidebar-right">
+                  <i class="fa fa-spotify" style="    color: #00d200;"></i> Refrescar Token Spotify
+            </a>
+        </li>
+
 				<li class="dropdown user user-menu userBox" *ngIf="auth.authenticated()"></li>
 				<li *ngIf="!auth.authenticated()" style="cursor: pointer;"><a (click)="auth.login()" [href]=""
 					class="toggle-sidebar-right"><i class="fa fa-user"></i></a></li>
