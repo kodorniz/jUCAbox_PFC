@@ -18,13 +18,13 @@ import { UserService } from './user.service';
 
 @Injectable()
 export class JucaboxService {
-  pais:any = "US";
+  //pais:any = "US";
   artistas:any[]=[];
   canciones:any[]=[];
   albumes:any[]=[];
   playlists:any[]=[];
   public url: string;
-
+  token:any;
   urlBusqueda:string = "https://api.spotify.com/v1/search";
   urlBusquedaArtista:string = "https://api.spotify.com/v1/artists/"
 
@@ -32,7 +32,14 @@ export class JucaboxService {
   constructor(private userServ: UserService,private http:Http,     private oauthProvidersController: HandyOauthProvidersController,
         private oauthConfigServ: HandyOauthConfigProvidersService,
         private storageServ: HandyOauthStorageService) {
-      this.url = GLOBAL.url;
+      //this.url = GLOBAL.url;
+       this.getPublic().subscribe(
+        data => {
+
+          localStorage.setItem('id_token_spotify_public','"' + data.access_token + '"');
+        }
+      );
+
   }
 
 
@@ -45,9 +52,23 @@ export class JucaboxService {
 
   }
 
+  public getPublic(){
+    return this.http
+        .get('/api/getUrlSpotify')
+        .map(res =>res.json());
+  }
 
   public getToken(){
     let locals =  localStorage.getItem('id_token_spotify');
+
+    if(locals){
+
+      return locals.substring(1, locals.length-1);
+    }
+  }
+
+  public getTokenPublic(){
+    let locals =  localStorage.getItem('id_token_spotify_public');
 
     if(locals){
 
@@ -64,19 +85,21 @@ export class JucaboxService {
     }
   }
 
-  pruebaGet(){
-    return this.http.get(this.url)
-                    .map(res => res.json());
-  }
-
-
 
   getArtistas(nombre:string,tipo:string='&type=track,artist,playlist,album'){
+    let authToken = this.getTokenPublic();
+
+
+    let headers = new Headers();
+    headers.append('Authorization', `Bearer ${authToken}`);
+
+    //let options = new RequestOptions({ headers: headers });
+
 
     let query = "?q=*" + nombre + '*' + tipo;
     let url = this.urlBusqueda + query;
 
-    return this.http.get(url)
+    return this.http.get(url,{ headers })
             .map( res =>{
               //  console.log(res.json().artists.items);
               this.playlists=[];
@@ -103,10 +126,17 @@ export class JucaboxService {
   }
 
   getCanciones(nombre:string,artista:string){
+
+    let authToken = this.getTokenPublic();
+
+
+    let headers = new Headers();
+    headers.append('Authorization', `Bearer ${authToken}`);
+
     let query = "?q=" + nombre + "&type=track";
     let url = this.urlBusqueda + query;
     this.canciones = [];
-    return this.http.get(url)
+    return this.http.get(url,{headers})
             .map( res =>{
               //  console.log(res.json().artists.items);
                 //this.canciones = res.json().tracks.items;
@@ -125,10 +155,16 @@ export class JucaboxService {
   }
 
   getArtista(id:any){
+    let authToken = this.getTokenPublic();
+
+
+    let headers = new Headers();
+    headers.append('Authorization', `Bearer ${authToken}`);
+
     let query =  id;
     let url = this.urlBusquedaArtista + query;
 
-    return this.http.get(url)
+    return this.http.get(url,{headers})
             .map( res =>{
               //  console.log(res.json());
               //  this.artistas =  res.json().artists.items;
@@ -149,10 +185,16 @@ export class JucaboxService {
 
 
   getArtistaTop(id:any){
-    let query =  id + "/top-tracks?country=" + this.pais;
+    let authToken = this.getTokenPublic();
+
+
+    let headers = new Headers();
+    headers.append('Authorization', `Bearer ${authToken}`);
+    //let query =  id + "/top-tracks?country=" + this.pais;
+    let query =  id + "/top-tracks"
     let url = this.urlBusquedaArtista + query;
 
-    return this.http.get(url)
+    return this.http.get(url,{headers})
             .map( res =>{
                 console.log(res.json());
               //  this.artistas =  res.json().artists.items;
@@ -161,20 +203,130 @@ export class JucaboxService {
             })
   }
 
-  public createPlaylist(){
+  getPlaylistsUser(){
+    let authToken = this.getToken();
+    let id = this.getUserSpotify();
+
+    let headers = new Headers();
+    headers.append('Authorization', `Bearer ${authToken}`);
+    //let query =  id + "/top-tracks?country=" + this.pais;
+    let query =  id + "/top-tracks"
+    let url = 'https://api.spotify.com/v1/users/' + id + '/playlists?limit=50';
+
+    return this.http.get(url,{headers})
+            .map( res =>{
+                console.log(res.json());
+              //  this.artistas =  res.json().artists.items;
+                return res.json();
+
+            })
+  }
+
+  getTracksPlaylists(idPlaylist:any){
+    let authToken = this.getToken();
+    let id = this.getUserSpotify();
+
+    let headers = new Headers();
+    headers.append('Authorization', `Bearer ${authToken}`);
+    //let query =  id + "/top-tracks?country=" + this.pais;
+    let query =  id + "/top-tracks"
+    let url = 'https://api.spotify.com/v1/users/' + id + '/playlists/' + idPlaylist + '/tracks';
+
+    return this.http.get(url,{headers})
+            .map( res =>{
+                console.log(res.json());
+              //  this.artistas =  res.json().artists.items;
+                return res.json();
+
+            })
+  }
+
+  public addTrackPlaylist(idPlaylist:any,track:any){
 
   let authToken = this.getToken();
-
 
   let headers = new Headers({ 'Accept': 'application/json' });
   headers.append('Authorization', `Bearer ${authToken}`);
 
   let options = new RequestOptions({ headers: headers });
+  let objeto = {"uris": [track]};
 
   return this.http
-    .post('https://api.spotify.com/v1/users/' + this.getUserSpotify() + '/playlists','{"description":"Newplaylistdescription","public":false,"name":"NewPlaylistDesdAngular"}',options)
+    .post('https://api.spotify.com/v1/users/' + this.getUserSpotify() + '/playlists/'  + idPlaylist + '/tracks',objeto,options)
     .map(res => {
+      console.log(res);
+      return res.json();
+    }
+  ).catch(this.handleError);
 
+  }
+
+  public changePositionTrackPlaylist(idPlaylist:any,posicion:any,sentido:any){
+
+  let authToken = this.getToken();
+
+  let headers = new Headers({ 'Accept': 'application/json' });
+  headers.append('Authorization', `Bearer ${authToken}`);
+
+  let options = new RequestOptions({ headers: headers });
+  let objeto:any;
+
+  if(sentido == 'U'){
+
+    objeto = {"range_start": posicion-1, "insert_before": posicion-2};
+  }
+  if(sentido == 'D'){
+
+    objeto = {"range_start": posicion-1, "insert_before": posicion+1};
+  }
+
+  console.log(objeto);
+  return this.http
+    .put('https://api.spotify.com/v1/users/' + this.getUserSpotify() + '/playlists/'  + idPlaylist + '/tracks',objeto,options)
+    .map(res => {
+      console.log(res);
+      return res.json();
+    }
+  ).catch(this.handleError);
+
+  }
+
+
+  public deleteTrackPlaylist(idPlaylist:any,track:any,posicion?:any){
+
+  let authToken = this.getToken();
+  if (!posicion)
+      posicion = 0;
+
+  let headers = new Headers({ 'Accept': 'application/json' });
+  headers.append('Authorization', `Bearer ${authToken}`);
+  let objeto = {"tracks": [{"positions": [ posicion ],"uri": track }]};
+  let options = new RequestOptions({ headers: headers , body: objeto});
+
+
+  return this.http
+    .delete(  'https://api.spotify.com/v1/users/' + this.getUserSpotify() + '/playlists/'  + idPlaylist + '/tracks',options)
+    .map(res => {
+      console.log(res);
+      return res.json();
+    }
+  ).catch(this.handleError);
+
+  }
+
+  public createPlaylist(name:string,descripcion:string){
+
+  let authToken = this.getToken();
+
+  let headers = new Headers({ 'Accept': 'application/json' });
+  headers.append('Authorization', `Bearer ${authToken}`);
+
+  let options = new RequestOptions({ headers: headers });
+  let objeto = '{"description":"'+ descripcion +'","public":false,"name":"' + name + '"}';
+  return this.http
+    .post('https://api.spotify.com/v1/users/' + this.getUserSpotify() + '/playlists',objeto,options)
+    .map(res => {
+      console.log(res);
       return res.json();
     }
   ).catch(this.handleError);

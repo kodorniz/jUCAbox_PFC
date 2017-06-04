@@ -2,7 +2,8 @@
 
 var express = require('express');
 
-var spotifyToken = require('../spotify');
+//var spotifyToken = require('../spotify');
+var spotifyCredentials = require('../spotifyCredentials');
 
 var api = express.Router();
 
@@ -10,8 +11,15 @@ var api = express.Router();
 
 
 api.get('/getUrlSpotify',function(req,res){
-
-  res.status(200).send({url: spotifyToken.getUrl()});
+  spotifyCredentials.getToken(function(err, body) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(body);
+      res.status(200).send(body);
+    }
+  });
+  //res.status(200).send(spotifyCredentials.getToken());
 });
 
 

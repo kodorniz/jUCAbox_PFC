@@ -16,19 +16,25 @@ export class AppHeaderComponent {
     // TODO
   }
 
-  public createPlayList(idLugar:string){
-    let prueba = this._jucaboxservice.createPlaylist().subscribe(data=>{
-      //insertar playlist Lugar
-    }
-    );
-  }
+ prueba(){
+   /* Mover cancion */
+   this._jucaboxservice.changePositionTrackPlaylist('5b3QIrdoDsavKCNUeUPk7k',5,'D').subscribe(data=> console.log('data',data));
+   /* Eliminar CANCION A PLAYLIST*/
+   //this._jucaboxservice.deleteTrackPlaylist("33lBfi9WMlWQ8wki0c01Yz","spotify:track:3hGfeFrcJ437S6djv5Kq2T").subscribe(data=> console.log('data',data));
+   /* AÑADIR CANCION A PLAYLIST*/
+   //this._jucaboxservice.addTrackPlaylist("33lBfi9WMlWQ8wki0c01Yz","spotify:track:3hGfeFrcJ437S6djv5Kq2T").subscribe(data=> console.log('data',data));
+   /* OBTENER CANCIONES PLAYLIST */
+   //this._jucaboxservice.getTracksPlaylists("33lBfi9WMlWQ8wki0c01Yz").subscribe(data=> console.log('data',data));
 
-  public result(){
-    let prueba = this._jucaboxservice.createPlaylist().subscribe(data=>{
-      //insertar playlist Lugar
-    }
-    );
-  }
+   /* OBTENER PLAYLISTS USUARIO*/
+   //this._jucaboxservice.getPlaylistsUser().subscribe(data=> console.log('data',data));
+
+   /* CREAR PLAYLIST */
+   //this._jucaboxservice.createPlaylist('pruebaJucaabox','Esta es la playlist de prueba').subscribe(data=> console.log('data',data));
+ }
+
+
+
 
 
 }
