@@ -53,7 +53,8 @@
 
 
   <div class="card-block">
-    <h4 class="card-title">{{lugar.provincia}} - <small>{{lugar.ciudad}}</small></h4>
+    <h4 class="card-title">{{lugar.provincia}} - <small>{{lugar.ciudad}} <small>({{lugar.direccion}})</small></small></h4>
+    <iframe [src]="Cdireccion() | domseguro:'https://www.google.com/maps/embed/v1/place?key=AIzaSyBwnLPDBXY73nzl4ukbL3cGoeSu6nVSQl8&q='" width="100%" height="300" frameborder="1"  allowtransparency="true"></iframe>
     <p class="card-text">{{lugar.descripcion}}</p>
     <hr>
     <h5 class="card-title">Tipo de música: </h5>
@@ -81,7 +82,32 @@
 
     <!-- Playlist -->
 
+    <div class="row" *ngIf="this.playlistVisible" style="margin-top:15px;">
+<div class="col-md-6">
+</div>
+      <div class="col-xs-3" style="margin-bottom:15px;">
+      <ng-select  id="lugar"
+        [options]="playlistsJBcmb"
+        placeholder="Seleccione una playlist"
+        [allowClear]="true"
+          name="playlist"
+          filterPlaceholder="Filtre por nombre"
+          notFoundMsg="Sin resultado..."
+          [(ngModel)]="playlistSeleccionada"
+          (ngModelChange)="getplaylistSeleccionada()"
+          #playlist="ngModel"
+        >
+      </ng-select>
+    </div>
+      <div class="col-xs-3">
+        <div style="text-align:right">
+        <button class="btn btn-info"><i class="fa fa-plus"></i> Añadir nueva playlist</button>
+      </div>
+      </div>
+
+  </div>
     <div class="row" *ngIf="this.playlistVisible">
+
         <!-- Lista de canciones enviadas -->
         <div class="col-md-6">
           <div style="text-align:center">
@@ -139,10 +165,11 @@
                     </td>
 
                     <td>
-                      <button class="btn btn-success" (click)="aceptarCancion(cancion)"><i class="fa fa-check" ><span class = "hide"> Aceptar</span></i></button>
+
+                      <button class="btn btn-success" (click)="aceptarCancion(cancion.cancion.id)"><i class="fa fa-check" ><span class = "hide"> Aceptar</span></i></button>
                     </td>
                     <td>
-                      <button class="btn btn-danger" (click)="rechazarCancion(cancion)"><i class="fa fa-times" ><span class = "hide"> Rechazar</span></i></button>
+                      <button class="btn btn-danger" (click)="rechazarCancion(cancion.cancion.id)"><i class="fa fa-times" ><span class = "hide"> Rechazar</span></i></button>
                     </td>
 
                     <td>{{cancion.cancion.name}} - {{cancion.cancion.album.artists[0] | keys:"name"}}</td>
@@ -156,10 +183,12 @@
         </div>
         <!-- Lista de canciones aceptadas -->
         <div class="col-md-6">
+
           <div style="text-align:center">
             <h3><i class="fa fa-spotify" style="color:#00c100" aria-hidden="true"></i>
-            En lista de spotify</h3>
+                En lista de spotify</h3>
         </div>
+
         <div class="callout callout-warning" style="text-align:center;margin-top:25px;" *ngIf="playlistSpoti.length == 0 ">
                     <h4>No hay ninguna canción en la lista de Spotify</h4>
 
@@ -172,28 +201,25 @@
 
 
 
-                  <th>Preview</th>
-                  <th>Aceptar</th>
-                  <th>Rechazar</th>
+
                   <th>Canción</th>
-                  <th>Peticiones</th>
-                  <th>Ultima Petición</th>
+                  <th>Ordenar</th>
               </tr>
               </thead>
                 <tbody>
-                  <tr *ngFor="let cancion of playlistSV;let i = index ">
+                  <tr *ngFor="let cancion of playlistSpoti;let i = index;let last_ = last ">
 
                     <!-- <td style = "padding-top: 10px;padding-bottom: 10px;padding-right: 4px;padding-left: 0px"><img [src]="cancion.album | keys:'images':'0' | sinfoto " class="img-fluid roundrect img-100" alt=""></td> -->
 
-                    <td>
+
                         <!-- <audio controls>
                           <source [src]="cancion.preview_url">
                         </audio> -->
 
-                        <button class="btn btn-primary"  *ngIf="cancion.cancion.preview_url != null && getActualCancion() != cancion.cancion" (click)="sendCancion(cancion.cancion)"><i class="fa fa-play"><span class = "hide"> Play</span></i></button>
-                        <button class="btn btn-primary"  *ngIf="cancion.cancion.preview_url == null && getActualCancion() != cancion.canciion" (click)="sendCancion(cancion.cancion)" disabled="true" title="No disponible para reproduccion de 30 segundos">                  <i class="fa fa-ban text-error"></i>
+                    <!--    <button class="btn btn-primary"  *ngIf="cancion.track.preview_url != null && getActualCancion() != cancion.track" (click)="sendCancion(cancion.track)"><i class="fa fa-play"><span class = "hide"> Play</span></i></button>
+                        <button class="btn btn-primary"  *ngIf="cancion.track.preview_url == null && getActualCancion() != cancion.track" (click)="sendCancion(cancion.track)" disabled="true" title="No disponible para reproduccion de 30 segundos">                  <i class="fa fa-ban text-error"></i>
                           <span class = "hide"> Play</span></button>
-                        <button class="btn btn-danger" *ngIf="getActualCancion() == cancion.cancion" (click)="stopCancion()"><i class="fa fa-stop"><span class = "hide"> Stop</span></i></button>
+                        <button class="btn btn-danger" *ngIf="getActualCancion() == cancion.track" (click)="stopCancion()"><i class="fa fa-stop"><span class = "hide"> Stop</span></i></button>
                     </td>
 
                     <td>
@@ -201,11 +227,13 @@
                     </td>
                     <td>
                       <button class="btn btn-danger" (click)="rechazarCancion(cancion)"><i class="fa fa-times" ><span class = "hide"> Rechazar</span></i></button>
-                    </td>
+                    </td>-->
 
-                    <td>{{cancion.cancion.name}} - {{cancion.cancion.album.artists[0] | keys:"name"}}</td>
-                    <td>5</td>
-                    <td>27/05/2017 11:22</td>
+                    <td>{{cancion.track.name}} - {{cancion.track.album.artists[0] | keys:"name"}}</td>
+                    <td>
+
+                      <button class="btn btn-primary" *ngIf="i!=0" (click)="reordenarUp(cancion,i)"><i class="fa fa-arrow-up" ></i></button>
+                    <button class="btn btn-primary" *ngIf="!last_" (click)="reordenarDown(cancion,i)"><i class="fa fa-arrow-down" ></i></button></td>
                   </tr>
 
                 </tbody>

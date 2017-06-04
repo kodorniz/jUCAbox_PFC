@@ -18,7 +18,7 @@ export class AppHeaderComponent {
 
  prueba(){
    /* Mover cancion */
-   this._jucaboxservice.changePositionTrackPlaylist('5b3QIrdoDsavKCNUeUPk7k',5,'D').subscribe(data=> console.log('data',data));
+   //this._jucaboxservice.changePositionTrackPlaylist('5b3QIrdoDsavKCNUeUPk7k',5,'D').subscribe(data=> console.log('data',data));
    /* Eliminar CANCION A PLAYLIST*/
    //this._jucaboxservice.deleteTrackPlaylist("33lBfi9WMlWQ8wki0c01Yz","spotify:track:3hGfeFrcJ437S6djv5Kq2T").subscribe(data=> console.log('data',data));
    /* AÑADIR CANCION A PLAYLIST*/

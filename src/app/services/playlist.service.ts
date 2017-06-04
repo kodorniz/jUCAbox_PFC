@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { JucaboxService } from '../services/jucabox.service';
 
 @Injectable()
 export class PlaylistService {
@@ -6,8 +7,16 @@ export class PlaylistService {
   playListLugar:any[]=[{
     lugarID:"1",
     //Aqui poner el codigo spotify
-    playlistID:"codigoSpoti",
-    DescripcionPL:"desc playList"
+    playlistID:"33lBfi9WMlWQ8wki0c01Yz",
+    namePlaylist:"pruebaJucabox",
+    usuarioID:"kodorniz"
+  },
+  {
+    lugarID:"1",
+    //Aqui poner el codigo spotify
+    playlistID:"33lBfi9WMlWQ8wki0c01Yz",
+    namePlaylist:"pruebaJucabox2",
+    usuarioID:"kodorniz"
   }];
 
   playListLugarSV:any[]=[{
@@ -30,7 +39,7 @@ export class PlaylistService {
     playList: "codigoSpoti"
   }]
 
-  constructor() { }
+  constructor(private _jucaboxService:JucaboxService) { }
 
   enviarCancion(cancion:any,lugarID:string,userID:string){
     let today = new Date();
@@ -59,6 +68,20 @@ export class PlaylistService {
     return cancionesLugar.sort(function(a,b) {
     return new Date(b.FechaEnvio).getTime() - new Date(a.FechaEnvio).getTime()
     });
+  }
+
+  GetPlaylistsSP(){
+      return this._jucaboxService.getPlaylistsUser();
+
+  }
+
+  GetPlaylistsJB(lugarID:string){
+      return this.playListLugar.filter(
+        function(data){
+          return data.lugarID == lugarID
+        }
+      );
+
   }
 
   validarCancion(cancionID:string,lugarID:string,playlist:any){

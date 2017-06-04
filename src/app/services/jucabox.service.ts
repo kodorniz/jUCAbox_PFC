@@ -18,7 +18,7 @@ import { UserService } from './user.service';
 
 @Injectable()
 export class JucaboxService {
-  //pais:any = "US";
+  pais:any = "US";
   artistas:any[]=[];
   canciones:any[]=[];
   albumes:any[]=[];
@@ -190,13 +190,12 @@ export class JucaboxService {
 
     let headers = new Headers();
     headers.append('Authorization', `Bearer ${authToken}`);
-    //let query =  id + "/top-tracks?country=" + this.pais;
-    let query =  id + "/top-tracks"
+    let query =  id + "/top-tracks?country=" + this.pais;
+    //let query =  id + "/top-tracks"
     let url = this.urlBusquedaArtista + query;
 
-    return this.http.get(url,{headers})
+    return this.http.get(url,{ headers })
             .map( res =>{
-                console.log(res.json());
               //  this.artistas =  res.json().artists.items;
                 return res.json().tracks;
 
@@ -215,7 +214,7 @@ export class JucaboxService {
 
     return this.http.get(url,{headers})
             .map( res =>{
-                console.log(res.json());
+
               //  this.artistas =  res.json().artists.items;
                 return res.json();
 
@@ -234,7 +233,7 @@ export class JucaboxService {
 
     return this.http.get(url,{headers})
             .map( res =>{
-                console.log(res.json());
+
               //  this.artistas =  res.json().artists.items;
                 return res.json();
 
