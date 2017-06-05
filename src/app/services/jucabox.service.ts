@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpModule, Http,RequestOptions,Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import {GLOBAL} from './global';
+
 import { Observable } from 'rxjs/Observable';
 import {
     HandyOauthStorageKeys,
@@ -13,8 +13,8 @@ import {
 }  from 'ng2-handy-oauth';
 
 import { UserService } from './user.service';
-
-
+import {GlobalService} from './global.service';
+import { Router} from '@angular/router';
 
 @Injectable()
 export class JucaboxService {
@@ -31,7 +31,7 @@ export class JucaboxService {
 
   constructor(private userServ: UserService,private http:Http,     private oauthProvidersController: HandyOauthProvidersController,
         private oauthConfigServ: HandyOauthConfigProvidersService,
-        private storageServ: HandyOauthStorageService) {
+        private storageServ: HandyOauthStorageService,private _globalService:GlobalService,private router:Router) {
       //this.url = GLOBAL.url;
        this.getPublic().subscribe(
         data => {
@@ -44,6 +44,8 @@ export class JucaboxService {
 
 
   public loginSpotify(): void {
+      this._globalService.setCallbackurl(this.router.url);
+
       let prueba =  localStorage.getItem('id_token');
       this.userServ.setToken(prueba);
       //console.log(this.userServ.getToken());
@@ -73,6 +75,14 @@ export class JucaboxService {
     if(locals){
 
       return locals.substring(1, locals.length-1);
+    }else{
+      this.getPublic().subscribe(
+       data => {
+         //return '"' + data.access_token + '"'
+         localStorage.setItem('id_token_spotify_public','"' + data.access_token + '"');
+         return localStorage.getItem('id_token_spotify_public');
+       }
+     );
     }
   }
 

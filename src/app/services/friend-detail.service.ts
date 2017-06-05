@@ -5,7 +5,9 @@ import { User } from '../models/user';
 export class FriendDetailService {
 
   friend:User;
-  constructor() { }
+  constructor() {
+
+  }
 
   public pushFriend(friend){
     this.friend=friend;

@@ -20,7 +20,7 @@ export class CrearlugarComponent implements OnInit {
   ciudad: string;
   direccion: string;
   tipoMusica: Array<IOption>;
-  
+
   tipoMusicaValores:Array<IOption> = [
        {value: '0', label: 'Pop'},
        {value: '1', label: 'Dance'},

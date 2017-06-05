@@ -128,6 +128,7 @@ export class UserService {
 
 
     public logout() {
+      
       let user = new User();
       user.connected = false;
       this.setCurrentUser( user );

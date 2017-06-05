@@ -58,6 +58,6 @@ export class FriendsService {
       }
     );
 
-    return amigos.length; 
+    return amigos.length;
   }
 }

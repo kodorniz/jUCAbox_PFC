@@ -4,7 +4,7 @@ import { LugaresService } from '../../services/lugares.service';
 import { PlaylistService } from '../../services/playlist.service';
 import { Router } from '@angular/router'
 import { JucaboxService } from '../../services/jucabox.service';
-
+declare var swal: any;
 
 @Component({
   selector: 'app-lugar',
@@ -189,8 +189,12 @@ stopCancion(){
 aceptarCancion(cancion:any){
 if(!this.playlistSeleccionada)
 {
-
- alert("no hay playlist seleccionada. 'Cambiar estilo alerta'");
+  swal(
+    'Oops...',
+    'No tiene ninguna playlist seleccionada',
+    'error'
+  )
+ //alert("no hay playlist seleccionada. 'Cambiar estilo alerta'");
 }else{
   this._jucaboxService.addTrackPlaylist(this.playlistSeleccionada,'spotify:track:' + cancion).subscribe(data=> this.getplaylistSeleccionada());
 }

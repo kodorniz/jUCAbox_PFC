@@ -1,6 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from '../../services/user.service';
+import {GlobalService} from '../../services/global.service';
 
 import {
     HandyOauthStorageKeys,
@@ -23,13 +24,13 @@ import {
 export class CallbackSpotifyComponent implements OnInit, OnDestroy {
 
   public progress: number;
-
-      constructor(private userServ: UserService,
+  public url:string='';
+      constructor(private _globalService:GlobalService, private userServ: UserService,
           private router: Router,
           private oauthProvidersController: HandyOauthProvidersController,
           private storageServ: HandyOauthStorageService
       ) {
-
+        this.url = _globalService.getCallbackurl();
       }
 
       public ngOnInit() {
@@ -52,13 +53,14 @@ export class CallbackSpotifyComponent implements OnInit, OnDestroy {
           this.oauthProvidersController.flow((res: HandyOauthMessageInterface) => {
               this.progress = res.progress;
               if (res.hasOwnProperty('response') && res.response.hasOwnProperty('cid')) {
-
-                  this.router.navigate(['/home']);
+                console.log('url',this.url);
+                  this.router.navigate([this.url]);
 
               } else if (res.hasOwnProperty('error')) {
-              
+
                   this.storageServ.remove(HandyOauthStorageKeys.DATA);
-                  this.router.navigate(['/home']);
+                  console.log('url',this.url);
+                  this.router.navigate([this.url]);
                   //this.router.navigate(['/demo', 'error', res.error.code]);
               }
           });

@@ -6,6 +6,7 @@ import { Observable, ReplaySubject } from 'rxjs/Rx';
 import { Router} from '@angular/router';
 import { User } from '../models/user';
 
+
 // Avoid name not found warnings
 declare var Auth0Lock: any;
 
@@ -16,6 +17,10 @@ export class Auth {
   opciones:Object = {
     allowedConnections: ["Username-Password-Authentication","google-oauth2","facebook","twitter"],
 rememberLastLogin: false,
+auth: {
+                redirectUrl: window.location.origin + '/home',
+                responseType: 'token'
+            },
 socialButtonStyle: "small",
 theme: {"logo":"https://cdn.auth0.com/website/playground/schneider.svg","primaryColor":"#3A99D8"},
 languageDictionary: {"title":"jUCAbox"},
@@ -29,8 +34,9 @@ language: "es"
   constructor( private router:Router) {
 
     // Add callback for lock `authenticated` event
+
     this.lock.on("authenticated", (authResult) => {
-      
+
       if(authResult.idToken===undefined){
 
       }
@@ -97,7 +103,10 @@ language: "es"
     this.currentUser.next( user );
   }
 
+
   public logout() {
+
+    localStorage.clear();
     let user = new User();
     user.connected = false;
     this.setCurrentUser( user );

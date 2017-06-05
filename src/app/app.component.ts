@@ -20,6 +20,9 @@ export class AppComponent {
 
     let user = new User(this.userServ.getProfile());
     this.userServ.setCurrentUser(user);
+    if(!this.userServ.authenticated()){
+      localStorage.clear();
+    }
 
 
   }

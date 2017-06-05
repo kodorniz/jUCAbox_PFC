@@ -64,6 +64,8 @@ export class UsuarioComponent implements OnInit {
     usuarioAmigo:User;
     constructor( private router: Router,overlay: Overlay, vcRef: ViewContainerRef,public modal: Modal,private _friendsService:FriendsService,private _friendDetailService:FriendDetailService,private userServ:Auth,private _userServ:UserService,  private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService,public _playlistService:PlaylistService,public _notificationService: NotificationsService) {
       //console.log(this._userServ.getTokenApi());
+
+
       overlay.defaultViewContainer = vcRef;
       this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
 

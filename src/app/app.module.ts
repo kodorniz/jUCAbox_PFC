@@ -26,6 +26,7 @@ import {APP_ROUTING} from './app.routes';
 //Servicios
 import { JucaboxService } from './services/jucabox.service';
 import { LugaresService } from './services/lugares.service';
+import { GlobalService } from './services/global.service';
 import {Auth} from './services/auth.service';
 import {AuthGuardService} from './services/auth-guard.service';
 import { UserService } from './services/user.service';
@@ -35,7 +36,7 @@ import { NotificationService } from './services/notification.service';
 import { BreadcrumbService } from './services/breadcrumb.service';
 import { AdminLTETranslateService } from './services/translate.service';
 import { LoggerService } from './services/logger.service';
-import { FriendDetailService } from './services/friend-detail.service';
+
 
 //Componentes
 import { AppComponent } from './app.component';
@@ -90,6 +91,7 @@ import { SinfotoAvatarPipe } from './pipes/sinfoto-avatar.pipe';
 import { ArtistasService } from './services/artistas.service';
 import { LogService } from './services/log.service';
 import { FriendsService } from './services/friends.service';
+import { FriendDetailService } from './services/friend-detail.service';
 import { DateLogPipe } from './pipes/date-log.pipe';
 import { LOCALE_ID } from '@angular/core';
 import { AmigoDetalleComponent } from './components/amigo-detalle/amigo-detalle.component';
@@ -162,6 +164,7 @@ let services = [
     ModalModule.forRoot(),
     BootstrapModalModule,
     SelectModule,
+
     ReactiveFormsModule,
     Ng2HandyOauthModule.forRoot({
       providers: {
@@ -181,7 +184,8 @@ let services = [
     LogService,
     ArtistasService,
     FriendsService,
-
+    FriendDetailService,
+    GlobalService,
     PlaylistService,
     {
       provide: AuthHttp,

@@ -10,6 +10,7 @@ import {Router} from '@angular/router/src/router';
 import {PlaylistService} from '../../services/playlist.service';
 import { NotificationsService } from 'angular2-notifications';
 import {LogService} from '../../services/log.service';
+declare var swal: any;
 
 @Component({
   selector: 'app-search',
@@ -47,7 +48,7 @@ export class SearchComponent implements OnInit {
   clickBoton:boolean = false;
     users:any[]=[];
   menuState:string = 'out';
-  constructor(private _jucaboxService:JucaboxService,
+  constructor( private _jucaboxService:JucaboxService,
                overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal,
               public _lugaresService:LugaresService
             ,public userServ:Auth,
@@ -57,7 +58,8 @@ export class SearchComponent implements OnInit {
 
 
               this.router.events.subscribe((event) => {
-                console.log('SI',event);
+
+                //console.log(event.url,'lugar');
                 if(event.url) {
                     this.stopCancion();
                 }
@@ -92,14 +94,19 @@ export class SearchComponent implements OnInit {
       tipo=tipo+'playlist,'
 
       if(!this.chkArtista && !this.chkCancion && !this.chkAlbum && !this.chkPlaylist){
-        this.modal.alert()
+        /*this.modal.alert()
                   .size('sm')
                   .isBlocking(true)
                   .showClose(true)
                   .keyboard(27)
                   .title('Error')
                   .body('Por favor seleccione al menos una categoria')
-                  .open();
+                  .open();*/
+                  swal(
+                    'Oops...',
+                    'Por favor seleccione al menos una categoria',
+                    'error'
+                  )
       }else{
     tipo = tipo.substring(0, tipo.length - 1);
     console.log(tipo);
