@@ -95,13 +95,14 @@
           notFoundMsg="Sin resultado..."
           [(ngModel)]="playlistSeleccionada"
           (ngModelChange)="getplaylistSeleccionada()"
+          (click)="recargarPL()"
           #playlist="ngModel"
         >
       </ng-select>
     </div>
       <div class="col-xs-3">
         <div style="text-align:right">
-        <button class="btn btn-info"><i class="fa fa-plus"></i> Añadir nueva playlist</button>
+        <button class="btn btn-info" (click)="crearPlaylist() "><i class="fa fa-plus"></i> Añadir nueva playlist</button>
       </div>
       </div>
 

@@ -56,7 +56,7 @@ import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
 
 import { AdditionalWindow } from './components/artista/enviarCancion.component';
 
-
+import { AdditionalWindowPL } from './components/lugar/crearPlaylist.component';
 export function createTranslateLoader( http: Http ) {
     return new TranslateStaticLoader( http, '../public/assets/i18n', '.json' );
 }
@@ -146,6 +146,7 @@ let services = [
     TruncatePipe,
     UsuarioComponent,
         AdditionalWindow,
+        AdditionalWindowPL,
     ...widgets,
     ...pages,
     UsuarioComponent,
@@ -195,6 +196,6 @@ let services = [
     { provide: LOCALE_ID, useValue: "es-ES" },
     ...services ],
   bootstrap: [AppComponent],
-  entryComponents: [ AdditionalWindow ]
+  entryComponents: [ AdditionalWindow,AdditionalWindowPL ]
 })
 export class AppModule { }

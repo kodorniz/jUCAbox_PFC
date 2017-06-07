@@ -84,6 +84,22 @@ export class PlaylistService {
 
   }
 
+  addPlaylistsJB(lugarID:string,    playlistID:string,
+      namePlaylist:string,
+      usuarioID:string){
+        console.log('antes',this.playListLugar);
+       this.playListLugar.push(
+      {
+        lugarID:lugarID,
+        //Aqui poner el codigo spotify
+        playlistID:playlistID,
+        namePlaylist:namePlaylist,
+        usuarioID:usuarioID
+      }
+      );
+      console.log('despues',this.playListLugar);
+  }
+
   validarCancion(cancionID:string,lugarID:string,playlist:any){
       let cancionesLugar:any[] = this.playListLugarSV.filter(
         function(data){

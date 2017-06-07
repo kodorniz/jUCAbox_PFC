@@ -25,7 +25,7 @@ export class enviarCancion extends BSModalContext {
 
   private Usuario:User;
 
-  constructor(public Cancion:any,public _lugaresService:LugaresService,  private userServ:Auth,public _playlistService:PlaylistService,public _notificationService: NotificationsService,public _logService:LogService) {
+  constructor(public Cancion:any,public _lugaresService:LugaresService,  private userServ:Auth,public _playlistService:PlaylistService,public _notificationService?: NotificationsService,public _logService?:LogService) {
       super();
 
       this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);

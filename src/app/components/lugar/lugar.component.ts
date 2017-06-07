@@ -1,14 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, OnInit,ViewContainerRef,trigger,state, transition, style, animate  } from '@angular/core';
 import { ActivatedRoute } from '@angular/router'
 import { LugaresService } from '../../services/lugares.service';
 import { PlaylistService } from '../../services/playlist.service';
 import { Router } from '@angular/router'
 import { JucaboxService } from '../../services/jucabox.service';
+import { AdditionalWindowPL, crearPlaylist } from './crearPlaylist.component';
+import { Overlay } from 'angular2-modal';
+import { Modal } from 'angular2-modal/plugins/bootstrap';
+import {Auth} from '../../services/auth.service';
+
 declare var swal: any;
 
 @Component({
   selector: 'app-lugar',
-  templateUrl: './lugar.component.html'
+  templateUrl: './lugar.component.html',
+  animations: [
+    trigger('shrinkOut', [
+    state('in', style({height: 0})),
+    transition('* => void', [
+      style({height: '*'}),
+      animate(250, style({height: 0,opacity:'0'}))
+    ]),
+    state('out', style({ height: '*'})),
+    transition('void => *', [
+      style({height: 0}),
+      animate(250, style({height: '*',opacity:'1'}))
+    ]),
+
+
+    ])
+    ]
 })
 export class LugarComponent {
 
@@ -30,18 +51,21 @@ export class LugarComponent {
   playlistsJB:any[]=[];
   playlistSeleccionada:any;
   playlistsJBcmb:any[]=[];
+  menuState:string = 'out';
+  id_:any;
 
 
-
-
-constructor(private _jucaboxService:JucaboxService,
+constructor(
+ overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal,
+  private _jucaboxService:JucaboxService,
+  public userServ:Auth,
             private activatedRoute:ActivatedRoute,
             private _lugaresService: LugaresService,
             private router:Router,
             private _playlistService: PlaylistService
 
               ) {
-
+                overlay.defaultViewContainer = vcRef;
                 this.router.events.subscribe((event) => {
 
                   if(event.url) {
@@ -52,13 +76,9 @@ constructor(private _jucaboxService:JucaboxService,
 
     this.lugar = this._lugaresService.getLugar(params['id']);
     this.playlistSV = this._playlistService.getCancionesSV(params['id'],"up","fecha");
-    this.playlistsJB = this._playlistService.GetPlaylistsJB(params['id']);
+    this.id_ = params['id'];
 
-    for(let i=0;i<this.playlistsJB.length;i++){
-
-          this.playlistsJBcmb.push({value: this.playlistsJB[i]['playlistID'],label: this.playlistsJB[i]['namePlaylist']})
-
-    }
+    this.recargarPL();
 
   })
 
@@ -80,6 +100,15 @@ constructor(private _jucaboxService:JucaboxService,
 
  }
 
+ public options = {
+     position: ["bottom", "left"],
+     timeOut: 5000,
+     lastOnBottom: true
+ }
+   toggleMenu() {
+     // 1-line if statement that toggles the value:
+     this.menuState = this.menuState === 'out' ? 'in' : 'out';
+   }
 
 reordenarUp(cancion:any,index:any){
 
@@ -91,6 +120,16 @@ reordenarDown(cancion:any,index:any){
   this._jucaboxService.changePositionTrackPlaylist(this.playlistSeleccionada,index+1,'D').subscribe(data=> this.getplaylistSeleccionada());
 }
 
+recargarPL(){
+
+this.playlistsJB = this._playlistService.GetPlaylistsJB(this.id_ );
+this.playlistsJBcmb=[];
+  for(let i=0;i<this.playlistsJB.length;i++){
+
+        this.playlistsJBcmb.push({value: this.playlistsJB[i]['playlistID'],label: this.playlistsJB[i]['namePlaylist']})
+
+  }
+}
 getplaylistSeleccionada(){
 
 if(!this.playlistSeleccionada){
@@ -202,6 +241,13 @@ if(!this.playlistSeleccionada)
 
 rechazarCancion(cancion:any){
 
+}
+
+crearPlaylist() {
+
+this.modal
+.open(AdditionalWindowPL, {context: new crearPlaylist(this.lugar,this.userServ,this._jucaboxService,this._playlistService)} );
+//.open(AdditionalWindow, {context: new enviarCancion('',this._lugaresService,this.userServ,this._playlistService)} );
 }
 
 }
