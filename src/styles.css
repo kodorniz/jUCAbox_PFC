@@ -30,7 +30,44 @@
   right: 0;
   text-align: center;
 }
+.footerPL {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+}
 
+/*PLAYER*/
+
+.player{
+
+
+}
+
+.player .album-image{
+  float:left;
+  height: 60px;
+  overflow: hidden;
+}
+
+.closeButton
+{
+  display:block;
+  position:absolute;
+  top:-10px;
+  right:-10px;
+  width:27px;
+  height:27px;
+  background:url('http://cdn-sg1.pgimgs.com/images/pg/close-button.png') no-repeat center center;
+}
+
+.player .album-image img{
+  height: 100%;
+}
+.listado:hover{
+  background-color: #f1f1f1;
+}
 div.show-image button {
     opacity:0;
 

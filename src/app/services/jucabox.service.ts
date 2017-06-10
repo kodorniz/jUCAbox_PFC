@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpModule, Http,RequestOptions,Headers } from '@angular/http';
+import { HttpModule, Http,RequestOptions,Headers,URLSearchParams } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
@@ -231,6 +231,25 @@ export class JucaboxService {
             })
   }
 
+  getDevicesUser(){
+    let authToken = this.getToken();
+    let id = this.getUserSpotify();
+
+    let headers = new Headers();
+    headers.append('Authorization', `Bearer ${authToken}`);
+    //let query =  id + "/top-tracks?country=" + this.pais;
+
+    let url = 'https://api.spotify.com/v1/me/player/devices';
+
+    return this.http.get(url,{headers})
+            .map( res =>{
+
+              //  this.artistas =  res.json().artists.items;
+                return res.json();
+
+            })
+  }
+
   getTracksPlaylists(idPlaylist:any){
     let authToken = this.getToken();
     let id = this.getUserSpotify();
@@ -240,6 +259,25 @@ export class JucaboxService {
     //let query =  id + "/top-tracks?country=" + this.pais;
     let query =  id + "/top-tracks"
     let url = 'https://api.spotify.com/v1/users/' + id + '/playlists/' + idPlaylist + '/tracks';
+
+    return this.http.get(url,{headers})
+            .map( res =>{
+
+              //  this.artistas =  res.json().artists.items;
+                return res.json();
+
+            })
+  }
+
+  getTrackPlaylists(idPlaylist:any,position:any){
+    let authToken = this.getToken();
+    let id = this.getUserSpotify();
+
+    let headers = new Headers();
+    headers.append('Authorization', `Bearer ${authToken}`);
+    //let query =  id + "/top-tracks?country=" + this.pais;
+    let query =  id + "/top-tracks"
+    let url = 'https://api.spotify.com/v1/users/' + id + '/playlists/' + idPlaylist + '/tracks?limit=1&offset=' + position;
 
     return this.http.get(url,{headers})
             .map( res =>{
@@ -300,6 +338,67 @@ export class JucaboxService {
 
   }
 
+  public pauseSongDevice(idDevice:any){
+
+    let authToken = this.getToken();
+
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', `Bearer ${authToken}`);
+
+
+    let options = new RequestOptions({ headers: headers  });
+
+    let objeto:any={};
+
+
+
+
+
+
+    return this.http
+      .put('	https://api.spotify.com/v1/me/player/pause?device_id=' + idDevice,objeto,options)
+      .map(res => {
+        console.log(res);
+        return res.json();
+      }
+    ).catch(this.handleError);
+
+  }
+
+
+  public playSongDevice(idDevice:any,uri:any,posicion:string){
+
+  let authToken = this.getToken();
+
+  let headers = new Headers({ 'Accept': 'application/json' });
+  headers.append('Authorization', `Bearer ${authToken}`);
+
+
+  let options = new RequestOptions({ headers: headers  });
+
+  let objeto:any;
+
+
+    objeto = {
+        "context_uri": "spotify:user:" + this.getUserSpotify() + ":playlist:"  + uri,
+        "offset": {
+            "position": posicion
+          }
+    }
+
+    console.log('objeto',objeto);
+
+
+
+  return this.http
+    .put('	https://api.spotify.com/v1/me/player/play?device_id=' + idDevice,objeto,options)
+    .map(res => {
+      console.log(res);
+      return res.json();
+    }
+  ).catch(this.handleError);
+
+  }
 
   public deleteTrackPlaylist(idPlaylist:any,track:any,posicion?:any){
 

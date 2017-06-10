@@ -4,6 +4,7 @@ import { LugaresService } from '../../services/lugares.service';
 import { PlaylistService } from '../../services/playlist.service';
 import { Router } from '@angular/router'
 import { JucaboxService } from '../../services/jucabox.service';
+import { PlayerService } from '../../services/player.service';
 import { AdditionalWindowPL, crearPlaylist } from './crearPlaylist.component';
 import { Overlay } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
@@ -53,9 +54,18 @@ export class LugarComponent {
   playlistsJBcmb:any[]=[];
   menuState:string = 'out';
   id_:any;
+  devices_:any[]=[];
+  lengthPLSeleccionada:any=0;
+  deviceSeleccionado:any="";
+  cancionRep:any={
+    name:"",
+    images:"",
+    uri:"",
+    artista:"",
+    index:""
+  };
 
-
-constructor(
+constructor(public _playerService:PlayerService,
  overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal,
   private _jucaboxService:JucaboxService,
   public userServ:Auth,
@@ -79,7 +89,7 @@ constructor(
     this.id_ = params['id'];
 
     this.recargarPL();
-
+    this.recargarDevices();
   })
 
 
@@ -115,6 +125,11 @@ reordenarUp(cancion:any,index:any){
   this._jucaboxService.changePositionTrackPlaylist(this.playlistSeleccionada,index+1,'U').subscribe(data=> this.getplaylistSeleccionada());
 }
 
+deleteSong(cancion:any,index:any){
+
+  this._jucaboxService.deleteTrackPlaylist(this.playlistSeleccionada,cancion,index).subscribe(data=> this.getplaylistSeleccionada());
+}
+
 reordenarDown(cancion:any,index:any){
 
   this._jucaboxService.changePositionTrackPlaylist(this.playlistSeleccionada,index+1,'D').subscribe(data=> this.getplaylistSeleccionada());
@@ -124,11 +139,49 @@ recargarPL(){
 
 this.playlistsJB = this._playlistService.GetPlaylistsJB(this.id_ );
 this.playlistsJBcmb=[];
+
   for(let i=0;i<this.playlistsJB.length;i++){
 
         this.playlistsJBcmb.push({value: this.playlistsJB[i]['playlistID'],label: this.playlistsJB[i]['namePlaylist']})
 
   }
+
+}
+
+selectedRow(item:any,index:any){
+  if(!this.deviceSeleccionado)
+  swal(
+    'Oops...',
+    'No tiene ningún dispositivo seleccionado',
+    'error'
+  )
+  else{
+
+  this._playerService.setCancionRep(item,index);
+  this._playerService.setDevice(this.deviceSeleccionado);
+  this._playerService.setPlaylist(this.playlistSeleccionada);
+  this._playerService.setLengthPL(this.lengthPLSeleccionada);
+
+  }
+}
+
+
+
+recargarDevices(){
+
+  this._jucaboxService.getDevicesUser().subscribe(data=>
+    {
+        this.devices_ =[];
+        for(let i=0;i<data.devices.length;i++){
+
+                  this.devices_.push({value: data.devices[i].id,label: data.devices[i].name});
+        }
+        console.log(this.devices_);
+
+    }
+
+  );
+
 }
 getplaylistSeleccionada(){
 
@@ -140,6 +193,7 @@ if(!this.playlistSeleccionada){
   this._jucaboxService.getTracksPlaylists(this.playlistSeleccionada).subscribe(
     data => {
        this.playlistSpoti = data.items;
+       this.lengthPLSeleccionada = data.total;
 
     }
   );
@@ -235,7 +289,11 @@ if(!this.playlistSeleccionada)
   )
  //alert("no hay playlist seleccionada. 'Cambiar estilo alerta'");
 }else{
-  this._jucaboxService.addTrackPlaylist(this.playlistSeleccionada,'spotify:track:' + cancion).subscribe(data=> this.getplaylistSeleccionada());
+  this._jucaboxService.addTrackPlaylist(this.playlistSeleccionada,'spotify:track:' + cancion).subscribe(data=> {
+    this.getplaylistSeleccionada();
+    this._playerService.setLengthPL(this._playerService.getLengthPL()+1);
+  }
+  );
 }
 }
 

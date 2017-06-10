@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { PlayerService } from '../../services/player.service';
 
 @Component( {
     selector: 'app-footer',
@@ -7,7 +8,9 @@ import { Component, Input } from '@angular/core';
 })
 export class AppFooterComponent {
 
-    constructor() {
-      // TODO
+
+    constructor(public _playerService:PlayerService) {
+
     }
+
 }

@@ -19,6 +19,7 @@ export class PlaylistService {
     usuarioID:"kodorniz"
   }];
 
+//Canciones pendientes de validar
   playListLugarSV:any[]=[{
     lugarID: "1",
     userID: "google-oauth2|113690553810319532231",
@@ -30,6 +31,7 @@ export class PlaylistService {
 
   playListLugarV:any[]=[];
 
+//Canciones enviadas por el usuario
   playListLugarUser:any[]=[{
     lugarID: "1",
     userID: "google-oauth2|113690553810319532231",

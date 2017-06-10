@@ -107,6 +107,26 @@
       </div>
 
   </div>
+  <div class="row" *ngIf="this.playlistVisible" style="margin-top:15px;">
+    <div class="col-md-6">
+    </div>
+  <div class="col-xs-3" style="margin-bottom:15px;">
+  <ng-select  id="device"
+    [options]="devices_"
+    placeholder="Seleccione un dispositivo"
+    [allowClear]="true"
+      name="device"
+      filterPlaceholder="Filtre por nombre"
+      notFoundMsg="Sin resultado..."
+      [(ngModel)]="deviceSeleccionado"
+      (click)="recargarDevices()"
+      #devices="ngModel"
+    >
+  </ng-select>
+</div>
+</div>
+
+
     <div class="row" *ngIf="this.playlistVisible">
 
         <!-- Lista de canciones enviadas -->
@@ -194,7 +214,7 @@
                     <h4>No hay ninguna canción en la lista de Spotify</h4>
 
       </div>
-          <div class="table-responsive  main-container" style = "    border-color: #5edc70;" *ngIf="playlistSpoti.length > 0 ">
+          <div class="table-responsive  main-container" style = " user-select: none;   border-color: #5edc70;" *ngIf="playlistSpoti.length > 0 ">
 
               <table class=" table" width="100%">
               <thead class="thead-inverse">
@@ -204,11 +224,13 @@
 
 
                   <th>Canción</th>
+                  <th>Eliminar</th>
                   <th>Ordenar</th>
+
               </tr>
               </thead>
                 <tbody>
-                  <tr *ngFor="let cancion of playlistSpoti;let i = index;let last_ = last ">
+                  <tr class="listado" *ngFor="let cancion of playlistSpoti;let i = index;let last_ = last " style="cursor:pointer" (dblclick)="selectedRow(cancion,i)">
 
                     <!-- <td style = "padding-top: 10px;padding-bottom: 10px;padding-right: 4px;padding-left: 0px"><img [src]="cancion.album | keys:'images':'0' | sinfoto " class="img-fluid roundrect img-100" alt=""></td> -->
 
@@ -231,10 +253,12 @@
                     </td>-->
 
                     <td>{{cancion.track.name}} - {{cancion.track.album.artists[0] | keys:"name"}}</td>
+                    <td><button class="btn btn-danger" (click)="deleteSong(cancion.track.uri,i)"><i class="fa fa-times" ></i></button></td>
                     <td>
 
                       <button class="btn btn-primary" *ngIf="i!=0" (click)="reordenarUp(cancion,i)"><i class="fa fa-arrow-up" ></i></button>
-                    <button class="btn btn-primary" *ngIf="!last_" (click)="reordenarDown(cancion,i)"><i class="fa fa-arrow-down" ></i></button></td>
+                      <button class="btn btn-primary" *ngIf="!last_" (click)="reordenarDown(cancion,i)"><i class="fa fa-arrow-down" ></i></button></td>
+
                   </tr>
 
                 </tbody>

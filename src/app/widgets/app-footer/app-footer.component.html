@@ -1,8 +1,75 @@
 <!-- Main Footer -->
-<!-- <footer class="main-footer"> -->
-	<!-- To the right -->
-	<!-- <div class="pull-right hidden-xs">jUCAbox Proyecto fin de carrera</div> -->
-	<!-- Default to the left -->
-	<!-- <strong>Copyright &copy; 2017 <a href="#" routerLink="/"> UCA PFC</a>.
+<!-- <footer class="main-footer">
+	 To the right
+	 <div class="pull-right hidden-xs">jUCAbox Proyecto fin de carrera</div>
+	 Default to the left
+	 <strong>Copyright &copy; 2017 <a href="#" routerLink="/"> UCA PFC</a>.
 	</strong>
-</footer> -->
+
+  <div class="row player" style="color:white;z-index:10000" *ngIf=" this.cancionRep.name !='' ">
+    <div class="col-xs-1 album-image">
+      <img  style="    border: 1px solid #ccc!important;"  [src]="cancionRep.images | sinfoto">
+    </div>
+
+  <div class="col-xs-1">
+    <i class="fa fa-play fa-2x"  style="cursor:pointer" aria-hidden="true" (click)="playSongDevice(deviceSeleccionado,playlistSeleccionada,cancionRep.index)"></i>
+  </div>
+  <div class="col-xs-1" >
+    <i class="fa fa-stop fa-2x"  style="cursor:pointer" aria-hidden="true"></i>
+  </div>
+  <div class="col-xs-1" >
+      <i class="fa fa-fast-backward fa-2x"  style="cursor:pointer" aria-hidden="true"></i>
+
+
+  </div>
+  <div class="col-xs-1">
+    <i class="fa fa-fast-forward fa-2x"  style="cursor:pointer" aria-hidden="true"></i>
+    </div>
+  <div class="col-xs-2">
+    {{cancionRep.artista}}
+  </div>
+  <div class="col-xs-5">
+    {{cancionRep.name}}
+  </div>
+
+
+
+
+  </div>
+</footer>-->
+<footer class="main-footer" *ngIf="this._playerService.getCancionRep().name">
+  <div class="clearfix"></div>
+
+  <div class="player" style="color:black">
+    <div class="col-xs-1 album-image">
+      <img  style="    border: 1px solid #ccc!important;"  [src]="_playerService.getCancionRep().images | sinfoto">
+    </div>
+
+  <div class="col-xs-3">
+    <i class="fa fa-play-circle fa-2x"  style="cursor:pointer;    padding-right:10px;" aria-hidden="true" (click)="_playerService.playSongDevice()"></i>
+    <i class="fa fa-pause-circle fa-2x"  style="border-right: 1px white solid; cursor:pointer;    padding-right:10px;" aria-hidden="true" (click)="_playerService.pauseSongDevice()"></i>
+
+    <i class="fa fa-fast-backward fa-2x"  style="cursor:pointer;    padding-right:10px;padding-left:10px" (click)="_playerService.prevSongPL()" aria-hidden="true"></i>
+    <i class="fa fa-fast-forward fa-2x"  style="cursor:pointer;    padding-right:10px;" aria-hidden="true" (click)="_playerService.nextSongPL()"></i>
+  </div>
+
+  <div class="col-xs-2">
+    <strong>Artista:</strong>
+    <br>
+    {{_playerService.getCancionRep().artista}}
+  </div>
+  <div class="col-xs-5">
+    <strong>Cancion:</strong>
+    <br>
+    {{_playerService.getCancionRep().name}}
+  </div>
+
+  <div class="col-xs-1" style="text-align: right;">
+    <strong><i class="fa fa-times" style="cursor:pointer" (click)="_playerService.close()"></i></strong>
+  </div>
+
+
+
+
+  </div>
+</footer>

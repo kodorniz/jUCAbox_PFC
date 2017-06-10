@@ -25,6 +25,7 @@ import {APP_ROUTING} from './app.routes';
 
 //Servicios
 import { JucaboxService } from './services/jucabox.service';
+import { PlayerService } from './services/player.service';
 import { LugaresService } from './services/lugares.service';
 import { GlobalService } from './services/global.service';
 import {Auth} from './services/auth.service';
@@ -179,6 +180,7 @@ let services = [
   ],
   providers:
   [ JucaboxService,
+    PlayerService,
     LugaresService,
     Auth,
     AuthGuardService,

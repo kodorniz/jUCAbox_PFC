@@ -15,10 +15,6 @@ app.use(bodyParser.json());
 
 app.use('/api',routes);
 
-/*
-
-*/
-
 
 
 module.exports =
