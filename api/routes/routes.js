@@ -3,7 +3,7 @@
 var express = require('express');
 
 //var spotifyToken = require('../spotify');
-var spotifyCredentials = require('../spotifyCredentials');
+var spotifyCredentials = require('../controllers/spotifyCredentials');
 
 var api = express.Router();
 
