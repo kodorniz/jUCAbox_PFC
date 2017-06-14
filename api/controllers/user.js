@@ -84,6 +84,7 @@ function uploadImage(req,res){
     var file_split = file_path.split('\\');
     var file_name = file_split[file_split.length-1];
     var ext_split = file_name.split('\.');
+    var file_et = ext_split[1];
 
     if(file_et == 'png' || file_et == 'jpg' || file_et == 'bmp'){
         User.findByIdAndUpdate(userId,{avatarUrl: file_name},(err,userUpdated)=>{

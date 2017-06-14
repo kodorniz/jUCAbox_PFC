@@ -12,4 +12,4 @@ var LugaresSchema = Schema({
 });
 
 
-module.exports = mongoose.model('Lugares',LugaresSchema);
+module.exports = mongoose.model('Lugar',LugaresSchema);

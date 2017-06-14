@@ -20,3 +20,10 @@ api.get('get-image-user/:imageFile',[md_auth.ensureAuth,md_upload],UserControlle
 api.post('/get-users/:page?',UserController.getUsers);
 api.delete('/delete-user/:id',UserController.deleteUser);
 module.exports = api;
+
+
+
+
+
+//token valido
+//eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OTQxNzVmNDNiMWMzZjExZDQxZjZjNTUiLCJpYXQiOjE0OTc0NjIyNjAsImV4cCI6MTUwMDA1NDI2MH0.OT2K1iAIaP7Q2bS5iaCAPfcbYm4XyPNzAnMZRNs2RPk
