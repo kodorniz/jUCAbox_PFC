@@ -2,6 +2,7 @@
 
 var User = require('../models/user');
 var jwt = require('../services/jwt');
+var moment = require('moment');
 var mongoosePaginate = require('mongoose-pagination');
 var fs = require('fs');
 var path = require('path');
@@ -14,19 +15,26 @@ function saveUser(req,res){
   //parametros de la peticion
   var params = req.body;
 
-  user.firstname = params.name;
-  //....
+  var fecha = moment(params.creationDate,'DD/MM/YYYY');
 
-  //Si existe
-  console.log(params.name);
-  if(!params.name){
-        res.status(500).send({message:'Sin nombre'});
-  }else{
+  console.log(fecha);
+  user.UserID =  params.UserID;
+  user.firstname = params.fristname;
+  user.lastname = params.lastname;
+  user.email = params.email;
+  user.avatarUrl = params.avatarUrl;
+  user.creationDate = fecha;
+  user.preferredLang = params.preferredLang;
+  user.clientID = params.clientID;
+  user.GlobalClientID = params.GlobalClientID;
+  user.ciudad = params.ciudad;
+  user.provincia = params.provincia;
+  user.pais = params.pais;
+  user.nickName = params.nickName;
 
-
-  //si todo va bien
   user.save((err,userStored)=>{
       if(err){
+        console.log(err);
         res.status(500).send({message:'Error al guardar el usuario'});
       }else{
         if(!userStored){
@@ -38,7 +46,7 @@ function saveUser(req,res){
 
   });
 
-  }
+
 
 }
 
@@ -164,6 +172,8 @@ function getUsers(req,res){
   })
 }
 
+
+// Dar de baja
 function deleteUser(req,res){
   var userId = req.params.id;
 

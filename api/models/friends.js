@@ -2,9 +2,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var FriendsSchema = Schema({
-  friendID: String,
-  userID: String
+  friendID: { type:Schema.ObjectId, ref:'User'},
+  userID: { type:Schema.ObjectId, ref:'User'}
 });
 
 
-module.exports = mongoose.model('Friends',FriendsSchema);
+module.exports = mongoose.model('Friend',FriendsSchema);

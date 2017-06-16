@@ -11,7 +11,6 @@ var UserSchema = Schema({
   avatarUrl: String,
   creationDate: Date,
   preferredLang: String,
-  connected: String,
   clientID: String,
   GlobalClientID: String,
   ciudad: String,

@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var LugaresFavSchema = Schema({
   lugarID: { type:Schema.ObjectId, ref:'Lugares'},
-  userID: String
+  userID: { type:Schema.ObjectId, ref:'User'}
 });
 
 

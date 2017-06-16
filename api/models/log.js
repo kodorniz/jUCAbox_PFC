@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var LogSchema = Schema({
-  userID: String,
+  userID: { type:Schema.ObjectId, ref:'User'},
   tipoMensaje: String,
   objetoMensaje: String,
   verboMensaje: String,

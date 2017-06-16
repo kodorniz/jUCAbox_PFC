@@ -3,7 +3,7 @@
 var express = require('express');
 
 //var spotifyToken = require('../spotify');
-var LugarController = require('../controllers/lugares');
+var LogController = require('../controllers/log');
 
 var api = express.Router();
 var md_auth = require('../middleware/authenticate');
@@ -12,15 +12,9 @@ var resolve = __dirname
 
 var md_upload = multipart({ uploadDir: resolve + '/../uploads/lugar' });
 
-api.post('/addLugar',md_auth.ensureAuth,LugarController.saveLugar);
-api.put('/updateLugar/:id',md_auth.ensureAuth,LugarController.updateLugar);
-api.put('/updateLugarTM/:id',md_auth.ensureAuth,LugarController.updateTipoMusica);
-api.get('/getLugar/:id',md_auth.ensureAuth,LugarController.getLugar);
-api.get('/getLugar',md_auth.ensureAuth,LugarController.getLugares);
-api.post('/upload-image-lugar/:id',[md_auth.ensureAuth,md_upload],LugarController.uploadImage);
-api.post('/delete-image-lugar/:id',[md_auth.ensureAuth,md_upload],LugarController.deleteImageFile);
-api.get('/get-image-lugar/:imageFile',LugarController.getImageFile);
-api.delete('/deleteLugar/:id',md_auth.ensureAuth,LugarController.deleteLugar);
+api.post('/addLog',md_auth.ensureAuth,LogController.saveLog);
+api.get('/getLog/:id',md_auth.ensureAuth,LogController.getLog);
+
 /*api.post('/register',UserController.saveUser);
 api.put('/update-user/:id',md_auth.ensureAuth,UserController.updateUser);
 

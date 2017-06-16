@@ -20,7 +20,7 @@ function saveLugar(req,res){
   lugar.img = [];
   lugar.provincia = params.provincia;
   lugar.ciudad = params.ciudad;
-  lugar.direccion = params.direccio;
+  lugar.direccion = params.direccion;
   //lugar.tipoMusica = params.tipoMusica;
 
   lugar.save((err,lugarStored)=>{
@@ -62,8 +62,10 @@ function updateTipoMusica(req,res){
   var valores = req.body;
 
 for(var val in req.body){
+  //var pars = JSON.parse(valores[val]);
 
-    tipoMusica.push(valores[val]);
+
+    tipoMusica.push(JSON.parse(valores[val]));
 
 
 
@@ -248,7 +250,7 @@ function deleteLugar(req,res){
     if(err){
         res.status(500).send({message:'Error en la petición'});
     }else{
-      if(!userRemove){
+      if(!lugarRemove){
         res.status(404).send({message:'No existe el usuario'});
       }else{
           res.status(200).send({message:'Lugar eliminado'});

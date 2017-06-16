@@ -5,9 +5,9 @@ var Schema = mongoose.Schema;
 
 var ArtistaSchema = Schema({
   artistaID: String,
-  userID: String
+  userID: { type:Schema.ObjectId, ref:'User'}
 });
 
 
 
-module.exports = mongoose.model('Artista',ArtistaSchema);
+module.exports = mongoose.model('ArtistaFav',ArtistaSchema);

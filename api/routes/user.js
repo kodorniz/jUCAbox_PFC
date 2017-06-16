@@ -13,12 +13,12 @@ var resolve = __dirname
 var md_upload = multipart({ uploadDir: resolve + '/../uploads/user' });
 
 
-api.post('/register',UserController.saveUser);
-api.put('/update-user/:id',md_auth.ensureAuth,UserController.updateUser);
+api.post('/addUser',UserController.saveUser);
+api.put('/updateUser/:id',md_auth.ensureAuth,UserController.updateUser);
 api.post('/upload-image-user/:id',[md_auth.ensureAuth,md_upload],UserController.uploadImage);
 api.get('get-image-user/:imageFile',[md_auth.ensureAuth,md_upload],UserController.getImageFile);
-api.post('/get-users/:page?',UserController.getUsers);
-api.delete('/delete-user/:id',UserController.deleteUser);
+api.post('/getUsers/:page?',UserController.getUsers);
+api.delete('/deleteUser/:id',UserController.deleteUser);
 module.exports = api;
 
 
