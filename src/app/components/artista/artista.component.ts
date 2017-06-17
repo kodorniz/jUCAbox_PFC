@@ -152,7 +152,7 @@ addFav(artistaID:string,userID:string,nombreArtista:string){
     {
         this._artistasService.addFav(artistaID,userID);
         this._notificationService.success( nombreArtista,"Añadido a favoritos correctamente");
-        this._logService.addLog(this.usuarioID,"Artista","Artista añadido a favoritos",nombreArtista,"Se ha añadido a " + nombreArtista + " a sus artistas preferidos.","/artista/"+artistaID);
+        this._logService.addLog(localStorage.getItem('userJB'),"Artista","Artista añadido a favoritos",nombreArtista,"Se ha añadido a " + nombreArtista + " a sus artistas preferidos.","/artista/"+artistaID);
 
     }else{
       this._artistasService.removeFav(artistaID,userID);

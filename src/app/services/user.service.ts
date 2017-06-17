@@ -35,7 +35,8 @@ export class UserService {
       ciudad: '',
       provincia: '',
       pais: '',
-      nickName: ''
+      nickName: '',
+      _id:''
     }];
 
 
@@ -64,71 +65,30 @@ export class UserService {
           return this.Usuario.getUserID();
     }
 
+    public getUserInf(userID:string){
+      return this._http
+          .get('/api/getUserByID/' + userID)
+          .map(res =>res.json());
+    }
+
 
     public completeUser(Usuario:User){
-      let UsuarioMod:any[];
-      let UsuarioEnc:User;
-
-      UsuarioMod = this.UsuarioReal.filter(
-        function(data){
-
-          return data['userID'] == Usuario.userID;
-        }
-      );
-
-      UsuarioEnc=UsuarioMod[0];
 
 
-      if (UsuarioEnc){
-      if(UsuarioEnc['firstname']=='')
-            UsuarioEnc['firstname'] = Usuario.firstname;
+      return this._http
+          .get('/api/getUserByID/' + Usuario.userID)
+          .map(res =>{
 
-      if(UsuarioEnc['lastname']=='')
-            UsuarioEnc['lastname'] = Usuario.lastname;
+            return res.json()
+          });
 
-      if(UsuarioEnc['email']=='')
-            UsuarioEnc['email'] = Usuario.email;
 
-      if(UsuarioEnc['avatarUrl']=='')
-            UsuarioEnc['avatarUrl'] = Usuario.avatarUrl;
 
-      if(UsuarioEnc['creationDate']=='')
-            UsuarioEnc['creationDate'] = Usuario.creationDate;
-
-      if(UsuarioEnc['preferredLang']=='')
-            UsuarioEnc['preferredLang'] = Usuario.preferredLang;
-
-      if(UsuarioEnc['connected']==null)
-            UsuarioEnc['connected'] = Usuario.connected;
-
-      if(UsuarioEnc['clientID']=='')
-            UsuarioEnc['clientID'] = Usuario.clientID;
-
-      if(UsuarioEnc['GlobalClientID']=='')
-            UsuarioEnc['GlobalClientID'] = Usuario.GlobalClientID;
-
-      if(UsuarioEnc['ciudad']=='')
-            UsuarioEnc['ciudad'] = Usuario.ciudad;
-
-      if(UsuarioEnc['provincia']=='')
-           UsuarioEnc['provincia'] = Usuario.provincia;
-
-      if(UsuarioEnc['pais']=='')
-          UsuarioEnc['pais'] = Usuario.pais;
-
-      if(UsuarioEnc['nickName']=='')
-          UsuarioEnc['nickName'] = Usuario.nickName;
-        }else{
-
-          UsuarioEnc = Usuario;
-        }
-
-        return UsuarioEnc;
     }
 
 
     public logout() {
-      
+
       let user = new User();
       user.connected = false;
       this.setCurrentUser( user );

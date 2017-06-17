@@ -75,7 +75,7 @@
 <!-- timeline de usuario -->
 <div *ngIf="visHistorialAcciones">
 <ul class="timeline" >
-<ng-container *ngFor="let dates_ of logService.getLogDates(Usuario.userID)">
+<ng-container *ngFor="let dates_ of logService.getLogDates(Usuario._id)">
     <!-- timeline time label -->
 
     <li class="time-label">
@@ -88,7 +88,7 @@
 
     <!-- timeline item -->
 
-    <li *ngFor="let logEvent of logService.getLog(Usuario.userID,dates_)">
+    <li *ngFor="let logEvent of logService.getLog(Usuario._id,dates_)">
         <!-- timeline icon -->
         <i [className]="logService.iconType(logEvent.tipoMensaje)"></i>
         <div class="timeline-item">
@@ -134,35 +134,37 @@
 
 </ul>
 <!-- crear paginado -->
-<div class="btn-group" role="group" *ngIf="logService.getLogMax(Usuario.userID)!=1">
-    <button type="button" class="btn" [ngClass]="{'disabled': logService.paginaActual == 1}" (click)="logService.firstPage(Usuario.userID)" [disabled]="logService.paginaActual == 1" ><i class="fa fa-angle-double-left"></i></button>
-    <button type="button" class="btn" [ngClass]="{'disabled': logService.paginaActual == 1}" (click)="logService.previousPage(Usuario.userID)" [disabled]="logService.paginaActual == 1" ><i class="fa fa-angle-left"></i></button>
-    <ng-container *ngFor="let numberPage of logService.getLogCount(Usuario.userID); let i = index">
-    <button type="button" [ngClass]="{'btn-primary': logService.paginaActual==i+1}" class="btn" (click)="logService.CambiaPagina(numberPage,Usuario.userID)">{{numberPage}}</button>
+<div class="btn-group" role="group" *ngIf="logService.getLogMax(Usuario._id)!=1">
+    <button type="button" class="btn" [ngClass]="{'disabled': logService.paginaActual == 1}" (click)="logService.firstPage(Usuario._id)" [disabled]="logService.paginaActual == 1" ><i class="fa fa-angle-double-left"></i></button>
+    <button type="button" class="btn" [ngClass]="{'disabled': logService.paginaActual == 1}" (click)="logService.previousPage(Usuario._id)" [disabled]="logService.paginaActual == 1" ><i class="fa fa-angle-left"></i></button>
+    <ng-container *ngFor="let numberPage of logService.getLogCount(Usuario._id); let i = index">
+    <button type="button" [ngClass]="{'btn-primary': logService.paginaActual==i+1}" class="btn" (click)="logService.CambiaPagina(numberPage,Usuario._id)">{{numberPage}}</button>
     </ng-container>
-    <button type="button" class="btn" [ngClass]="{'disabled': logService.getLogMax(Usuario.userID) == logService.paginaActual}" (click)="logService.nextPage(Usuario.userID)" [disabled]="logService.getLogMax(Usuario.userID) == logService.paginaActual" ><i class="fa fa-angle-right"></i></button>
-    <button type="button" class="btn" [ngClass]="{'disabled': logService.getLogMax(Usuario.userID) == logService.paginaActual}" (click)="logService.lastPage(Usuario.userID)"  [disabled]="logService.getLogMax(Usuario.userID) == logService.paginaActual"><i class="fa fa-angle-double-right"></i></button>
+    <button type="button" class="btn" [ngClass]="{'disabled': logService.getLogMax(Usuario._id) == logService.paginaActual}" (click)="logService.nextPage(Usuario._id)" [disabled]="logService.getLogMax(Usuario._id) == logService.paginaActual" ><i class="fa fa-angle-right"></i></button>
+    <button type="button" class="btn" [ngClass]="{'disabled': logService.getLogMax(Usuario._id) == logService.paginaActual}" (click)="logService.lastPage(Usuario._id)"  [disabled]="logService.getLogMax(Usuario._id) == logService.paginaActual"><i class="fa fa-angle-double-right"></i></button>
   </div>
 </div>
 <!-- amigos -->
 <div  *ngIf="amigos.length != 0 && visAmigos">
+
   <div class="box box-warning animated fadeIn fast" *ngFor="let amigo of amigos;let i = index">
+
         <div class="box-header with-border">
-          <h3 class="box-title">{{amigo.nickname}}</h3>
+          <h3 class="box-title">{{amigo.nickName}}</h3>
         </div><!-- /.box-header -->
         <div class="box-body">
           <div class="row">
             <div class="col-md-2">
-              <img class="profile-user-img img-responsive img-circle" [src]="amigo.picture" alt="User profile picture">
+              <img class="profile-user-img img-responsive img-circle" [src]="amigo.avatarUrl" alt="User profile picture">
               <br>
 
-              <div class="text-center"><button type="button" class="btn btn-primary " name="button" (click)="navigateFriend(amigo.user_id)"><i class="fa fa-user"></i> Ver perfil </button></div>
+              <div class="text-center"><button type="button" class="btn btn-primary " name="button" (click)="navigateFriend(amigo.userID)"><i class="fa fa-user"></i> Ver perfil </button></div>
             </div>
             <div class="col-md-10">
               <br>
               <div class="input-group">
       <div class="input-group-addon"><i class="fa fa-info"></i> Nombre</div>
-      <input type="text" class="form-control" id="exampleInputAmount" placeholder="Sin Nombre" value ={{amigo.name}} disabled style="text-align: right;">
+      <input type="text" class="form-control" id="exampleInputAmount" placeholder="Sin Nombre" value ={{getNombre(amigo)}} disabled style="text-align: right;">
 
     </div>
     <br>
@@ -173,9 +175,7 @@
     </div>
     <br>
               <div class="input-group">
-      <div class="input-group-addon"><i class="fa fa-sign-in"></i>  Registrado con</div>
-      <input type="text" class="form-control" id="exampleInputAmount" placeholder="Sin Email" value ="{{amigo.identities[0] |keys:'provider' }}" disabled style="text-align: right;">
-      <div class="input-group-addon"><i [className]="iconTypeLogin(amigo.identities[0].provider)"></i></div>
+
     </div>
 
             </div>

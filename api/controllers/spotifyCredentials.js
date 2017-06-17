@@ -18,6 +18,7 @@ var opts = {
 ////////////////////////////////////////////////7
 
 function getToken(callback) {
+
   request(opts, function (err, res, body) {
     if (err || res.statusCode !== 200) {
       return callback(err || {statusCode: response.statusCode});

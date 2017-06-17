@@ -296,7 +296,8 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
 
     lugarNombre=this.context._lugaresService.getLugar(lugar_).nombre;
 
-    this.context._logService.addLog(this.context.usuarioID,"Cancion","Canción enviada a la lista de " + lugarNombre,this.context.Cancion.artists[0].name,"Canción " +  this.context.Cancion.name + " enviada","/artista/"+this.context.Cancion.artists[0].id,this.context.Cancion);
+    this.context._logService.addLog(localStorage.getItem('userJB'),"Cancion","Canción enviada a la lista de " + lugarNombre,this.context.Cancion.artists[0].name,"Canción " +  this.context.Cancion.name + " enviada","/artista/"+this.context.Cancion.artists[0].id,this.context.Cancion)
+    .subscribe();
 
   }else{
     if (forma.controls['lugar']['errors']) {

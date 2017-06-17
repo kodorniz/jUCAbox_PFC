@@ -4,7 +4,7 @@ import { User } from '../models/user';
 @Injectable()
 export class FriendDetailService {
 
-  friend:User;
+  friend:any;
   constructor() {
 
   }

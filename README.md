@@ -2,6 +2,9 @@
 
 PFC Universidad de Cádiz
 
+BUSCAR AMIGOS
+
+
 TODO:
   - Crear Lugar (añadir fecha fin) y Administrar Lugar
   - ver botones de enviar si usuario es administrador

@@ -24,7 +24,9 @@ function saveLog(req,res){
   //parametros de la peticion
   var params = req.body;
 
+  console.log('params',params);
 
+  console.log('params.cancion',params.cancion);
   log.userID =  params.userID;
   log.tipoMensaje = params.tipoMensaje;
   log.objetoMensaje = params.objetoMensaje;
@@ -32,7 +34,7 @@ function saveLog(req,res){
   log.mensaje = params.mensaje;
   log.FechaLog = new Date();
   log.url = params.url;
-  log.cancion =  JSON.parse(params.cancion);
+  log.cancion =  params.cancion;
 
 
 
@@ -69,7 +71,7 @@ function getLog(req,res){
         res.status(404).send({message:'no existe el log'});
       }else{
 
-        console.log('cancion:', log[0].cancion.album);
+
         res.status(200).send({log: log,total_items: total});
       }
 

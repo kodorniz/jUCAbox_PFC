@@ -5,7 +5,7 @@ import { tokenNotExpired } from 'angular2-jwt';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
 import { Router} from '@angular/router';
 import { User } from '../models/user';
-
+import { HttpModule, Http,RequestOptions,Headers,URLSearchParams } from '@angular/http';
 
 // Avoid name not found warnings
 declare var Auth0Lock: any;
@@ -31,7 +31,7 @@ language: "es"
   lock = new Auth0Lock('hlSMxuCIadkL65wfSKVktQCaOf9ugoy4', 'sergioruiz.eu.auth0.com',this.opciones);
   userProfile: Object;
 
-  constructor( private router:Router) {
+  constructor( private router:Router, private http:Http) {
 
     // Add callback for lock `authenticated` event
 
@@ -60,12 +60,70 @@ language: "es"
         localStorage.setItem('profile', JSON.stringify(profile));
         this.userProfile = profile;
         let user = new User(profile);
+        //comprobar
+
+        this.addUser(user.userID,user);
         this.setCurrentUser( user );
       });
     }
 
   }
   );
+  }
+
+  public existUser(userID){
+    return this.http
+        .get('/api/getUserByID/' + userID)
+        .map(res =>res.json());
+  }
+
+  public addUser(userID:string,user:any){
+
+
+    this.existUser(userID).subscribe(data =>{
+
+      if(data.user.length==0){
+
+        let headers = new Headers({ 'Accept': 'application/json' });
+
+        let options = new RequestOptions({ headers: headers });
+        let objeto =
+        {
+          "userID": userID
+          ,"firstname": user.firstname
+          ,"lastname": user.lastname
+          ,"email": user.email
+          ,"avatarUrl": user.avatarUrl
+          ,"creationDate": user.creationDate
+          ,"preferredLang": user.preferredLang
+          ,"clientID": user.clientID
+          ,"GlobalClientID": user.GlobalClientID
+          ,"ciudad": user.ciudad
+          ,"provincia": user.provincia
+          ,"pais": user.pais
+          ,"nickName": user.nickName
+
+        };
+        console.log('objeto',objeto);
+        return this.http
+          .post('/api/addUser',objeto,options)
+          .map(res => {
+            console.log(res.json());
+            localStorage.setItem('tokenJB',res.json().token);
+            localStorage.setItem('userJB',res.json().user._id);
+            return res.json();
+          }
+        ).subscribe();
+      }else{
+      
+        localStorage.setItem('tokenJB',data.token);
+        localStorage.setItem('userJB',data.user[0]._id);
+
+      }
+    });
+
+
+
   }
 
  public getProfile():Object{

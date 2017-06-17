@@ -8,7 +8,7 @@ export class DateLogPipe implements PipeTransform {
   private     datePipe: DatePipe = new DatePipe('es-ES');
   transform(value: any, args?: any): any {
 
-    console.log(value);
+    value = new Date(value);
     var today:any = new Date();
 
     var diffMs = ( today - value);

@@ -54,6 +54,34 @@ function addFriend(req,res){
 
   });
 
+  Friend.find({friendID:   friend.userID,userID: friend.friendID},(err,friendExist)=>{
+    if(err){
+        res.status(500).send({message:'Error en la petición'});
+    }else{
+      if(friendExist.length==0 || !friendExist){
+        friend.save((err,friendStored)=>{
+            if(err){
+              console.log(err);
+              res.status(500).send({message:'Error al guardar el amigo'});
+            }else{
+              if(!friendStored){
+                    res.status(300).send({message:'No se ha guardado el amigo'});
+              }else{
+                    res.status(200).send({friend:friendStored});
+              }
+            }
+
+        });
+      }else{
+        console.log(friendExist.length);
+          res.status(400).send({message:'amigo ya existe'});
+      }
+
+
+    }
+
+
+  });
 
 
 }
@@ -70,9 +98,9 @@ function getFriends(req,res){
 }
 
 
-  var itemsPerPage = 10;
+  var itemsPerPage = 1000;
 
-  Friend.find({userID: userID}).paginate(page,itemsPerPage,function(err,friends,total){
+  Friend.find({userID: userID}).paginate(page,itemsPerPage).populate('friendID').exec(function(err,friends,total){
     if(err){
         res.status(500).send({message:'Error en la petición'});
     }else{
@@ -94,6 +122,24 @@ var params = req.body;
   var userID = params.userID;
 
   Friend.find({friendID: friendID,userID: userID},(err,friendRemove)=>{
+    if(err){
+
+        res.status(500).send({message:'Error en la petición'});
+    }else{
+      if(!friendRemove){
+        res.status(404).send({message:'No existe el amigo'});
+      }else{
+
+          res.status(200).send({message:'amigo eliminado'});
+      }
+
+
+    }
+
+
+  }).remove().exec();
+
+  Friend.find({friendID: userID,userID: friendID},(err,friendRemove)=>{
     if(err){
 
         res.status(500).send({message:'Error en la petición'});

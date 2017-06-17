@@ -10,6 +10,11 @@ var lugar_routes = require('./routes/lugares');
 var friend_routes = require('./routes/friends');
 var artista_fav_routes = require('./routes/artistaFav');
 var log_routes = require('./routes/log');
+var lugares_fav_routes = require('./routes/lugaresFav');
+var lugares_admin_routes = require('./routes/lugaresAdmin');
+var playlistLugar_routes = require('./routes/playListLugar');
+var playlistLugarSV_routes = require('./routes/playListLugarSV');
+var token_lugares_routes = require('./routes/tokenLugares');
 
 var app = express();
 
@@ -23,6 +28,11 @@ app.use('/api',lugar_routes);
 app.use('/api',friend_routes);
 app.use('/api',artista_fav_routes);
 app.use('/api',log_routes);
+app.use('/api',lugares_fav_routes);
+app.use('/api',lugares_admin_routes);
+app.use('/api',playlistLugar_routes);
+app.use('/api',playlistLugarSV_routes);
+app.use('/api',token_lugares_routes);
 
 module.exports =
   app

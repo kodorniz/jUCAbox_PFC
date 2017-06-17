@@ -56,7 +56,7 @@ export class AmigoDetalleComponent implements OnInit {
   cancion:any;
   visiblePlay:boolean = false;
   users:any[]=[];
-  amigos:any[]=[];
+  amigos:any;
   prueba:any;
   usuarioAmigo:User;
   constructor( private router: Router,overlay: Overlay, vcRef: ViewContainerRef,public modal: Modal,private _friendsService:FriendsService,private _friendDetailService:FriendDetailService,private userServ:Auth,private _userServ:UserService,  private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService,public _playlistService:PlaylistService,public _notificationService: NotificationsService,public _logService:LogService) {
@@ -66,7 +66,13 @@ export class AmigoDetalleComponent implements OnInit {
     overlay.defaultViewContainer = vcRef;
     this.Usuario = new User(_friendDetailService.getFriend());
 
-    this.Usuario = _userServ.completeUser(this.Usuario);
+
+    _userServ.completeUser(this.Usuario).subscribe(data=>{
+      this.Usuario = data.user[0];
+      console.log('usario',this.Usuario);
+
+    });
+  //  this.Usuario = _userServ.completeUser(this.Usuario);
 
      this._userServ.getUsers().subscribe(
         data =>{
@@ -115,7 +121,7 @@ export class AmigoDetalleComponent implements OnInit {
   }
   ngAfterViewChecked() {
 
-  this.amigos = this._friendsService.getFriendsUser(this.Usuario.userID,this.users);
+  this.amigos = this._friendsService.getFriendsUser(this.Usuario.userID);
 
   }
   navigateLog(url:any){

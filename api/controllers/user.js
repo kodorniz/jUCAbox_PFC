@@ -15,15 +15,15 @@ function saveUser(req,res){
   //parametros de la peticion
   var params = req.body;
 
-  var fecha = moment(params.creationDate,'DD/MM/YYYY');
+  //var fecha = moment(params.creationDate,'DD/MM/YYYY');
 
-  console.log(fecha);
-  user.UserID =  params.UserID;
-  user.firstname = params.fristname;
+
+  user.userID =  params.userID;
+  user.firstname = params.firstname;
   user.lastname = params.lastname;
   user.email = params.email;
   user.avatarUrl = params.avatarUrl;
-  user.creationDate = fecha;
+  user.creationDate = params.creationDate;
   user.preferredLang = params.preferredLang;
   user.clientID = params.clientID;
   user.GlobalClientID = params.GlobalClientID;
@@ -32,10 +32,14 @@ function saveUser(req,res){
   user.pais = params.pais;
   user.nickName = params.nickName;
 
+
+
+
+
   user.save((err,userStored)=>{
       if(err){
         console.log(err);
-        res.status(500).send({message:'Error al guardar el usuario'});
+        res.status(500).send({message:'Error al guardar el usuario',err:err});
       }else{
         if(!userStored){
               res.status(300).send({message:'No se ha guardado el usuario'});
@@ -49,6 +53,8 @@ function saveUser(req,res){
 
 
 }
+
+
 
 function updateUser(req,res){
   var userId = req.params.id;
@@ -149,6 +155,24 @@ function getUser(req,res){
   })
 }
 
+function getUserByID(req,res){
+  var userId = req.params.id;
+  User.find({userID: userId},(err,user)=>{
+    if(err){
+      res.status(500).send({message:'Error en la petición'});
+    }else{
+      if(!user){
+        res.status(404).send({message:'no existe el usuario'});
+      }else{
+        res.status(200).send({user: user,token: jwt.createToken(user)});
+      }
+
+    }
+
+
+  })
+}
+
 function getUsers(req,res){
   if(req.params.page){
   var page = req.params.page;
@@ -225,6 +249,7 @@ module.exports = {
   getImageFile,
   getUser,
   getUsers,
-  deleteUser
+  deleteUser,
+  getUserByID
 
 };

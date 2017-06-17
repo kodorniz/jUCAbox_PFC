@@ -17,7 +17,8 @@ api.post('/addUser',UserController.saveUser);
 api.put('/updateUser/:id',md_auth.ensureAuth,UserController.updateUser);
 api.post('/upload-image-user/:id',[md_auth.ensureAuth,md_upload],UserController.uploadImage);
 api.get('get-image-user/:imageFile',[md_auth.ensureAuth,md_upload],UserController.getImageFile);
-api.post('/getUsers/:page?',UserController.getUsers);
+api.get('/getUsers/:page?',UserController.getUsers);
+api.get('/getUserByID/:id',UserController.getUserByID);
 api.delete('/deleteUser/:id',UserController.deleteUser);
 module.exports = api;
 

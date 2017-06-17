@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-
+import { HttpModule, Http,RequestOptions,Headers,URLSearchParams } from '@angular/http';
 
 @Injectable()
 export class FriendsService {
 
 
-  constructor() {
+  constructor(private http:Http) {
 
 
   }
@@ -27,29 +27,26 @@ export class FriendsService {
     userID: "auth0|59074faa5d4f881ecedb23de"
   }];
 
+  public getFriendsUser(userID:string){
+    let authToken = localStorage.getItem('tokenJB');
 
-  public getFriendsUser(userID:string,users:any[]){
-    //console.log(this.users);
-    let amigos:any[] =  this.friends.filter(
-      function(data){
-        return data.userID == userID;
-      }
-    );
 
-    let amigosDatos:any[]=[];
+    let headers = new Headers();
+    headers.append('Authorization', authToken);
 
-    for (let i=0;i<users.length;i++){
+    let query =  userID;
+    let url = '/api/getFriends/' + userID;
 
-      for (let j=0;j<amigos.length;j++){
+    return this.http.get(url,{headers})
+            .map( res =>{
+              //  console.log(res.json());
+              //  this.artistas =  res.json().artists.items;
 
-        if(amigos[j]['friendID'] == users[i]['user_id']){
-          //console.log(amigos[j]);
-          amigosDatos.push(users[i]);
-        }
-      }
-    }
-    return amigosDatos;
+                return res.json();
+
+            })
   }
+  
 
   public countFriends(userID:string){
     let amigos:any[] =  this.friends.filter(

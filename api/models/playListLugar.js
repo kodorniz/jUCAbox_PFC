@@ -1,13 +1,13 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var LugaresAdminSchema = Schema({
+var playListLugar = Schema({
   lugarID: { type:Schema.ObjectId, ref:'Lugares'},
   playlistID: String,
   namePlaylist: String,
-  usuarioID: { type:Schema.ObjectId, ref:'User'}
+  userID: { type:Schema.ObjectId, ref:'User'}
 
 });
 
 
-module.exports = mongoose.model('LugaresAdmin',LugaresAdminSchema);
+module.exports = mongoose.model('playListLugar',playListLugar);

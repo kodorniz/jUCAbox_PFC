@@ -17,6 +17,7 @@ import { AdditionalWindow, enviarCancion } from '../artista/enviarCancion.compon
 import { NotificationsService } from 'angular2-notifications';
 import {PlaylistService} from '../../services/playlist.service';
 
+
 @Component({
   selector: 'app-usuario',
   templateUrl: './usuario.component.html',
@@ -51,7 +52,7 @@ export class UsuarioComponent implements OnInit {
     //perfil: Object;
     menuState:string = 'out';
     forma: FormGroup;
-    private Usuario:User;
+    private Usuario:any;
     mostrarboton:boolean = false;
     private lugares:any[] = [];
     private artistas:any[] = [];
@@ -61,7 +62,7 @@ export class UsuarioComponent implements OnInit {
     users:any[]=[];
     amigos:any[]=[];
     prueba:any;
-    usuarioAmigo:User;
+    usuarioAmigo:any;
     constructor( private router: Router,overlay: Overlay, vcRef: ViewContainerRef,public modal: Modal,private _friendsService:FriendsService,private _friendDetailService:FriendDetailService,private userServ:Auth,private _userServ:UserService,  private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService,public _playlistService:PlaylistService,public _notificationService: NotificationsService) {
       //console.log(this._userServ.getTokenApi());
 
@@ -70,8 +71,16 @@ export class UsuarioComponent implements OnInit {
       this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
 
       //this.log = logService.getTotalLog(this.Usuario.GlobalClientID);
-      this.Usuario = _userServ.completeUser(this.Usuario);
-      console.log(this.Usuario);
+       _userServ.completeUser(this.Usuario).subscribe(data=>{
+         this.Usuario = data.user[0];
+         
+         logService.getLogInit(this.Usuario._id);
+
+         this.lugares = _lugaresService.getLugaresFav(this.Usuario.userID);
+         this.artistas = _artistasService.getArtistasFav(this.Usuario.userID);
+
+       });
+
        this._userServ.getUsers().subscribe(
           data =>{
              let users = data.json();
@@ -79,12 +88,22 @@ export class UsuarioComponent implements OnInit {
           }
         );
 
+        this._friendsService.getFriendsUser(localStorage.getItem('userJB')).subscribe(data=>{
+
+
+          for(let i=0;i<data.friends.length;i++){
+
+            this.amigos.push(data.friends[i].friendID);
+          }
+
+
+        });
+
 
       //console.log(this._userServ.getTokenApi());
       //console.log('sale getokenAPI');
-      logService.getLogInit(this.Usuario.userID);
-      this.lugares = _lugaresService.getLugaresFav(this.Usuario.userID);
-      this.artistas = _artistasService.getArtistasFav(this.Usuario.userID);
+
+
 
       this.forma = new FormGroup({
       'nombre': new FormControl(this.Usuario.firstname,[Validators.required,Validators.minLength(3)]),
@@ -114,10 +133,15 @@ export class UsuarioComponent implements OnInit {
     }
 
   ngOnInit() {
-    console.log('init');
+
+
+
   }
   ngAfterViewChecked() {
-    this.amigos = this._friendsService.getFriendsUser(this.Usuario.userID,this.users);
+
+
+
+
 
   }
   navigateLog(url:any){
@@ -152,17 +176,34 @@ export class UsuarioComponent implements OnInit {
     console.log(this.cancion);
     return this.cancion;
   }
-  navigateFriend(userID:string){
 
+  getNombre(amigo:any){
+
+    if(!amigo.firstname ){
+      return null;
+    }else{
+    return amigo.firstname + ' ' + amigo.lastname;
+  }
+  }
+
+
+
+
+  navigateFriend(userID:string){
 
     this.usuarioAmigo = this.amigos.filter(
       function(data){
-        return data.user_id == userID;
+
+        return data.userID == userID;
       }
     )[0];
 
-    this._friendDetailService.pushFriend(this._userServ.completeUser(this.usuarioAmigo));
+
+
+    this._friendDetailService.pushFriend(this._userServ.completeUser(this.usuarioAmigo))
     this.router.navigateByUrl('/amigo-detalle');
+
+
   }
 
   verAmigos(){

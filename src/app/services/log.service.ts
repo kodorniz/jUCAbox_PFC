@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { HttpModule, Http,RequestOptions,Headers,URLSearchParams } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class LogService {
@@ -46,7 +48,7 @@ export class LogService {
   private paginaActual:number = 1;
   private limitePaginas:number = 2;
   //Fechas:any[]=[];
-  constructor() {
+  constructor(private http:Http) {
 
   //  this.Fechas = this.getLogDates();
    }
@@ -67,8 +69,30 @@ export class LogService {
      }
    }
 
+   public getLogN(userID:string){
+     let authToken = localStorage.getItem('tokenJB');
+
+
+     let headers = new Headers();
+     headers.append('Authorization', authToken);
+
+     let query =  userID;
+     let url = '/api/getLog/' + userID;
+
+     return this.http.get(url,{headers})
+             .map( res =>{
+               //  console.log(res.json());
+               //  this.artistas =  res.json().artists.items;
+
+                 return res.json();
+
+             }).catch(this.handleError);
+   }
+
   addLog(userID:string, tipoMensaje:string, mensaje:string,objetoMensaje:string,verboMensaje:string,url_:string,previewUrl?:string){
-    let today = new Date();
+
+
+    /*let today = new Date();
     console.log('LOG COMPLETO ANTES',this.Log);
     if(previewUrl){
       this.Log.unshift({userID:userID,
@@ -91,26 +115,73 @@ export class LogService {
                    url:url_
   });
   }
-    console.log('LOG COMPLETO DESPUES',this.Log);
+    console.log('LOG COMPLETO DESPUES',this.Log);*/
+
+    let authToken = localStorage.getItem('tokenJB');
+
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', authToken);
+
+    let options = new RequestOptions({ headers: headers });
+    let objeto;
+
+    if(previewUrl){
+      objeto = {userID:userID,
+                     tipoMensaje: tipoMensaje,
+                     objetoMensaje: objetoMensaje,
+                     verboMensaje:verboMensaje,
+                     mensaje: mensaje,
+
+                     url:url_,
+                     cancion: previewUrl}
+    }else{
+
+    objeto = {userID:userID,
+                   tipoMensaje: tipoMensaje,
+                   objetoMensaje: objetoMensaje,
+                   verboMensaje:verboMensaje,
+                   mensaje: mensaje,
+
+                   url:url_}
+}
+
+    return this.http
+      .post('/api/addLog',objeto,options)
+      .map(res => {
+        console.log(res);
+        return res.json();
+      }
+    ).catch(this.handleError);
+
+
+
+
+
   }
 
-  getLogInit(userID:string){
+  getLogInit(userID:any){
+
     let objetoFinal:any[]=[];
     let numeroVueltas:number = 0;
-    console.log("getLogInit");
-    let objeto =  this.Log.filter(
-      function(data){
-        return data.userID == userID
-      }
-    );
 
-    numeroVueltas=this.getVueltas(objeto.length,this.paginaActual,this.limitePaginas);
 
-    for(let i = 0;i<numeroVueltas;i++){
-      objetoFinal.push(objeto[i+((this.paginaActual-1)*this.limitePaginas)]);
-    }
+    this.getLogN(userID).subscribe(
+        data=>{
 
-    this.initLog = objetoFinal;
+         let objeto = data.log;
+         numeroVueltas=this.getVueltas(objeto.length,this.paginaActual,this.limitePaginas);
+
+         for(let i = 0;i<numeroVueltas;i++){
+           objetoFinal.push(objeto[i+((this.paginaActual-1)*this.limitePaginas)]);
+         }
+
+         this.initLog = objetoFinal;
+       }
+    )
+
+
+
+
 
   }
 
@@ -136,6 +207,7 @@ export class LogService {
     // for(let i = 0;i<numeroVueltas;i++){
     //   objetoFinal.push(objeto[i+((this.paginaActual-1)*this.limitePaginas)]);
     // }
+
     return objeto;
   }
 
@@ -225,5 +297,20 @@ getVueltas(total:number,paginaActual:number,limitePaginas:number):any{
         this.CambiaPagina(this.getLogMax(userID),userID);
 
     }
+
+    private handleError (error: Response | any) {
+        // In a real world app, you might use a remote logging infrastructure
+        console.log(Response);
+        let errMsg: string;
+        if (error instanceof Response) {
+          const body = error.json() || '';
+          const err = body['error'] || JSON.stringify(body);
+          errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+        } else {
+          errMsg = error.message ? error.message : error.toString();
+        }
+        console.error(errMsg);
+        return Observable.throw(errMsg);
+      }
 
 }
