@@ -10,24 +10,31 @@ export class FriendsService {
 
   }
 
-  private friends:any[]=[{
-    friendID: "twitter|153942704",
-    userID: "google-oauth2|113690553810319532231"
-  },
-  {
-    friendID: "auth0|59074faa5d4f881ecedb23de",
-    userID: "google-oauth2|113690553810319532231"
-  },
-  {
-    friendID: "google-oauth2|113690553810319532231" ,
-    userID: "twitter|153942704"
-  },
-  {
-    friendID: "google-oauth2|113690553810319532231",
-    userID: "auth0|59074faa5d4f881ecedb23de"
-  }];
+  private friends:any[]=[];
 
   public getFriendsUser(userID:string){
+    if(userID != undefined){
+    let authToken = localStorage.getItem('tokenJB');
+
+
+    let headers = new Headers();
+    headers.append('Authorization', authToken);
+
+    let query =  userID;
+    let url = '/api/getFriends/' + userID;
+
+    return this.http.get(url,{headers})
+            .map( res =>{
+              //  console.log(res.json());
+              //  this.artistas =  res.json().artists.items;
+
+                return res.json();
+
+            })
+    }
+  }
+
+  /*public countFriendsDB(userID:string){
     let authToken = localStorage.getItem('tokenJB');
 
 
@@ -46,15 +53,17 @@ export class FriendsService {
 
             })
   }
-  
+
 
   public countFriends(userID:string){
-    let amigos:any[] =  this.friends.filter(
-      function(data){
-        return data.userID == userID;
+    if(userID != undefined){
+      this.countFriendsDB(userID).subscribe(
+      data=> {
+        return data.friends.length;
       }
-    );
-
-    return amigos.length;
+    )
   }
+
+    return 0;
+  }*/
 }

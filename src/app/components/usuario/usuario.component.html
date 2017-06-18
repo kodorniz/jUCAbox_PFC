@@ -28,6 +28,7 @@
 <div class="col-md-3">
   <div class="box box-default">
     <div class="box-body">
+
                   <div class="box-body box-profile">
                     <img class="profile-user-img img-responsive img-circle" [src]="Usuario.avatarUrl | sinfotoAvatar " alt="User profile picture">
 
@@ -37,13 +38,14 @@
 
                     <ul class="list-group list-group-unbordered">
                       <li class="list-group-item">
-                        <b>Amigos</b> <a class="pull-right">{{_friendsService.countFriends(Usuario.userID)}}</a>
+                        <b>Amigos</b> <a class="pull-right">{{amigos.length}}</a>
                       </li>
                       <li class="list-group-item">
-                        <b>Lugares Favoritos</b> <a class="pull-right">{{_lugaresService.countLugaresFav(Usuario.userID)}}</a>
+                        <b>Lugares Favoritos</b> <a class="pull-right">{{_lugaresService.countLugaresFav(Usuario._id)}}</a>
                       </li>
                       <li class="list-group-item">
-                        <b>Artistas Favoritos</b> <a class="pull-right">{{_artistasService.countArtistasFav(Usuario.userID)}}</a>
+
+                        <b>Artistas Favoritos</b> <a class="pull-right">{{artistas.length}}</a>
                       </li>
                     </ul>
 
@@ -78,6 +80,7 @@
 <ng-container *ngFor="let dates_ of logService.getLogDates(Usuario._id)">
     <!-- timeline time label -->
 
+
     <li class="time-label">
         <span class="bg-red">
             {{dates_ | date:'longDate' }}
@@ -90,6 +93,7 @@
 
     <li *ngFor="let logEvent of logService.getLog(Usuario._id,dates_)">
         <!-- timeline icon -->
+
         <i [className]="logService.iconType(logEvent.tipoMensaje)"></i>
         <div class="timeline-item">
             <span class="time"><i class="fa fa-clock-o"></i> {{logEvent.FechaLog | dateLog}}</span>
@@ -145,32 +149,39 @@
   </div>
 </div>
 <!-- amigos -->
+<div  *ngIf="amigos.length == 0 && visAmigos">
+  <div class="callout callout-info animated fadeIn fast">
+      <h4>Oops!</h4>
+
+      <p>Actualmente no tiene ningún amigo</p>
+    </div>
+</div>
 <div  *ngIf="amigos.length != 0 && visAmigos">
 
   <div class="box box-warning animated fadeIn fast" *ngFor="let amigo of amigos;let i = index">
 
         <div class="box-header with-border">
-          <h3 class="box-title">{{amigo.nickName}}</h3>
+          <h3 class="box-title">{{amigo.friendID.nickName}}</h3>
         </div><!-- /.box-header -->
         <div class="box-body">
           <div class="row">
             <div class="col-md-2">
-              <img class="profile-user-img img-responsive img-circle" [src]="amigo.avatarUrl" alt="User profile picture">
+              <img class="profile-user-img img-responsive img-circle" [src]="amigo.friendID.avatarUrl" alt="User profile picture">
               <br>
 
-              <div class="text-center"><button type="button" class="btn btn-primary " name="button" (click)="navigateFriend(amigo.userID)"><i class="fa fa-user"></i> Ver perfil </button></div>
+              <div class="text-center"><button type="button" class="btn btn-primary " name="button" (click)="navigateFriend(amigo.friendID.userID)"><i class="fa fa-user"></i> Ver perfil </button></div>
             </div>
             <div class="col-md-10">
               <br>
               <div class="input-group">
       <div class="input-group-addon"><i class="fa fa-info"></i> Nombre</div>
-      <input type="text" class="form-control" id="exampleInputAmount" placeholder="Sin Nombre" value ={{getNombre(amigo)}} disabled style="text-align: right;">
+      <input type="text" class="form-control" id="exampleInputAmount" placeholder="Sin Nombre" value ={{getNombre(amigo.friendID)}} disabled style="text-align: right;">
 
     </div>
     <br>
               <div class="input-group">
       <div class="input-group-addon"><i class="fa fa-envelope"></i>  Email</div>
-      <input type="text" class="form-control" id="exampleInputAmount" placeholder="Sin Email" value ={{amigo.email}} disabled style="text-align: right;">
+      <input type="text" class="form-control" id="exampleInputAmount" placeholder="Sin Email" value ={{amigo.friendID.email}} disabled style="text-align: right;">
 
     </div>
     <br>
@@ -188,6 +199,13 @@
 
 </div>
 <!-- artistas favoritos -->
+<div  *ngIf="artistas.length == 0 && visArtistasFavoritos">
+  <div class="callout callout-info animated fadeIn fast">
+      <h4>Oops!</h4>
+
+      <p>Actualmente no tiene ningún artista favorito</p>
+    </div>
+</div>
 <div  *ngIf="artistas.length != 0 && visArtistasFavoritos">
 <div class="col-sm-12 left-20">
   <div class="box box-info animated fadeIn fast" *ngFor="let artista of artistas;let i = index">
@@ -210,7 +228,7 @@
                           </p>
 
                             <button [routerLink]="['/artista',artista.id]" class="btn btn-primary"  style="float:right;margin:5px;" ><i class="fa fa-music" aria-hidden="true"></i>  Ver canciones TOP</button>
-                            <button (click)="_artistasService.removeFav(artista.id,Usuario.userID)" class="btn btn-danger"  style="float:right;margin:5px;" ><i class="fa fa-remove" aria-hidden="true"></i>  Eliminar artista favorito</button>
+                            <button (click)="removeFav(artista.id,Usuario._id,artista.name)" class="btn btn-danger"  style="float:right;margin:5px;" ><i class="fa fa-remove" aria-hidden="true"></i>  Eliminar artista favorito</button>
 
                         </div>
                   </div><!-- /.box-body -->
@@ -220,6 +238,13 @@
 </div>
 
 <!-- lugares favoritos -->
+<div  *ngIf="lugares.length == 0 && visLugaresFavoritos">
+  <div class="callout callout-info animated fadeIn fast">
+      <h4>Oops!</h4>
+
+      <p>Actualmente no tiene ningún lugar favorito</p>
+    </div>
+</div>
 <div  *ngIf="lugares.length != 0 && visLugaresFavoritos">
 
 

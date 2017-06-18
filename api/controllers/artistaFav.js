@@ -84,6 +84,34 @@ function getArtistasFav(req,res){
   })
 }
 
+function getArtistaFavID(req,res){
+
+  var userID = req.params.id;
+  var artistaID = req.params.artistaID;
+
+
+  if(req.params.page){
+  var page = req.params.page;
+}else{
+    var page = 1;
+}
+
+
+  var itemsPerPage = 10;
+
+  ArtistaFav.find({userID: userID,artistaID: artistaID}).paginate(page,itemsPerPage,function(err,artistasFav,total){
+    if(err){
+        res.status(500).send({message:'Error en la petición'});
+    }else{
+      if(!artistasFav){
+        res.status(404).send({message:'no existen artistasFav'});
+      }else{
+        res.status(200).send({artistasFav: artistasFav,total_items: total});
+      }
+    }
+  })
+}
+
 
 function deleteArtistaFav(req,res){
 //  var friendId = req.params.id;
@@ -118,6 +146,7 @@ module.exports = {
 
   addArtistaFav,
   getArtistasFav,
-  deleteArtistaFav
+  deleteArtistaFav,
+  getArtistaFavID
 
 };

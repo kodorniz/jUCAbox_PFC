@@ -14,6 +14,7 @@ var md_upload = multipart({ uploadDir: resolve + '/../uploads/lugar' });
 
 api.post('/addArtistaFav',md_auth.ensureAuth,ArtistaFavController.addArtistaFav);
 api.get('/getArtistasFav/:id',md_auth.ensureAuth,ArtistaFavController.getArtistasFav);
+api.get('/getArtistaFav/:id/:artistaID',md_auth.ensureAuth,ArtistaFavController.getArtistaFavID);
 api.delete('/deleteArtistaFav',md_auth.ensureAuth,ArtistaFavController.deleteArtistaFav);
 /*api.post('/register',UserController.saveUser);
 api.put('/update-user/:id',md_auth.ensureAuth,UserController.updateUser);

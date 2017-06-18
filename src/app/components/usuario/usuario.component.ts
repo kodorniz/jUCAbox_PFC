@@ -16,6 +16,7 @@ import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { AdditionalWindow, enviarCancion } from '../artista/enviarCancion.component';
 import { NotificationsService } from 'angular2-notifications';
 import {PlaylistService} from '../../services/playlist.service';
+import { JucaboxService } from '../../services/jucabox.service';
 
 
 @Component({
@@ -54,8 +55,8 @@ export class UsuarioComponent implements OnInit {
     forma: FormGroup;
     private Usuario:any;
     mostrarboton:boolean = false;
-    private lugares:any[] = [];
-    private artistas:any[] = [];
+    lugares:any[] = [];
+    artistas:any[] = [];
     audio = new Audio();
     cancion:any;
     visiblePlay:boolean = false;
@@ -63,7 +64,7 @@ export class UsuarioComponent implements OnInit {
     amigos:any[]=[];
     prueba:any;
     usuarioAmigo:any;
-    constructor( private router: Router,overlay: Overlay, vcRef: ViewContainerRef,public modal: Modal,private _friendsService:FriendsService,private _friendDetailService:FriendDetailService,private userServ:Auth,private _userServ:UserService,  private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService,public _playlistService:PlaylistService,public _notificationService: NotificationsService) {
+    constructor( private _jucaboxService: JucaboxService,private router: Router,overlay: Overlay, vcRef: ViewContainerRef,public modal: Modal,private _friendsService:FriendsService,private _friendDetailService:FriendDetailService,private userServ:Auth,private _userServ:UserService,  private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService,public _playlistService:PlaylistService,public _notificationService: NotificationsService) {
       //console.log(this._userServ.getTokenApi());
 
 
@@ -73,12 +74,39 @@ export class UsuarioComponent implements OnInit {
       //this.log = logService.getTotalLog(this.Usuario.GlobalClientID);
        _userServ.completeUser(this.Usuario).subscribe(data=>{
          this.Usuario = data.user[0];
-         
+
          logService.getLogInit(this.Usuario._id);
 
-         this.lugares = _lugaresService.getLugaresFav(this.Usuario.userID);
-         this.artistas = _artistasService.getArtistasFav(this.Usuario.userID);
+         this.lugares = _lugaresService.getLugaresFav(this.Usuario._id);
+          _artistasService.getArtistasFav(this.Usuario._id).subscribe(
+           data => {
 
+             this.artistas=[];
+             for (var _i = 0; _i < data.artistasFav.length; _i++){
+
+               if(data.artistasFav[_i].artistaID!=undefined){
+               this._jucaboxService.getArtista(data.artistasFav[_i].artistaID).subscribe(data =>{
+
+                  this.artistas.push(data);
+                });
+              }
+
+
+             }
+
+
+
+           }
+
+         );
+
+
+         _friendsService.getFriendsUser(this.Usuario._id).subscribe(
+          data => {
+            this.amigos = data.friends;
+          }
+
+        );
        });
 
        this._userServ.getUsers().subscribe(
@@ -88,16 +116,7 @@ export class UsuarioComponent implements OnInit {
           }
         );
 
-        this._friendsService.getFriendsUser(localStorage.getItem('userJB')).subscribe(data=>{
 
-
-          for(let i=0;i<data.friends.length;i++){
-
-            this.amigos.push(data.friends[i].friendID);
-          }
-
-
-        });
 
 
       //console.log(this._userServ.getTokenApi());
@@ -148,7 +167,33 @@ export class UsuarioComponent implements OnInit {
     this.router.navigateByUrl(url);
   }
 
+removeFav(artistaID:string,userID: string,nombreArtista: string){
 
+    this._artistasService.removeFav(artistaID,userID).subscribe();
+    this.logService.addLog(localStorage.getItem('userJB'),"Artista","Artista eliminado de favoritos",nombreArtista,"Se ha eliminado a " + nombreArtista + " de sus artistas preferidos.","/artista/"+artistaID).subscribe();
+
+    this._artistasService.getArtistasFav(this.Usuario._id).subscribe(
+     data => {
+
+       this.artistas=[];
+       for (var _i = 0; _i < data.artistasFav.length; _i++){
+
+
+         this._jucaboxService.getArtista(data.artistasFav[_i].artistaID).subscribe(data =>{
+
+            this.artistas.push(data);
+          });
+
+
+       }
+
+
+
+     }
+
+   );
+
+}
   iconTypeLogin(type:string){
     switch(type){
       case 'twitter':
@@ -239,6 +284,7 @@ export class UsuarioComponent implements OnInit {
   }
 
   verHistorialAcciones(){
+    this.logService.getLogInit(this.Usuario._id);
     this.visAmigos = false;
     this.visInformacionPersonal = false;
     this.visArtistasFavoritos = false;

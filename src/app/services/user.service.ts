@@ -61,8 +61,8 @@ export class UserService {
     }
 
     public getCurrentUser(){
-          this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
-          return this.Usuario.getUserID();
+          //this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
+          return localStorage.getItem('userJB');
     }
 
     public getUserInf(userID:string){

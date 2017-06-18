@@ -76,7 +76,7 @@ function getLog(req,res){
       }
 
     }
-  }).sort('FechaLog')
+  }).sort('-FechaLog')
 }
 
 

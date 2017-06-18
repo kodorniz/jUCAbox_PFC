@@ -45,6 +45,7 @@ export class ArtistaComponent implements OnInit {
   termino:string="";
   menuState:string = 'out';
   usuarioID:string = "";
+  favorito:boolean = false;
   constructor( private activatedRoute:ActivatedRoute,
                private _jucaboxService:JucaboxService,
                overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal,
@@ -57,12 +58,13 @@ export class ArtistaComponent implements OnInit {
               ) {
                   overlay.defaultViewContainer = vcRef;
                   this.usuarioID = _user.getCurrentUser();
+                  console.log(this.usuarioID);
                   this.router.events.subscribe((event) => {
-                    console.log('SI',event);
                     if(event.url) {
                         this.stopCancion();
                     }
                 });
+
 
               }
               public options = {
@@ -82,6 +84,15 @@ export class ArtistaComponent implements OnInit {
       }
     ).subscribe(id =>{
       //console.log(id);
+      this._artistasService.getFav(id,localStorage.getItem('userJB')).subscribe(data=>{
+        console.log(data);
+        if(data.total_items==0){
+          this.favorito = false;
+        }else{
+            this.favorito = true;
+        }
+
+      });
       this._jucaboxService.getArtista(id).
       subscribe( data => this.artista=data);
 //console.log(this.artista);
@@ -146,18 +157,27 @@ buscarCanciones(){
 
 }
 
-addFav(artistaID:string,userID:string,nombreArtista:string){
 
-  if(!this._artistasService.getFav(artistaID,userID))
-    {
-        this._artistasService.addFav(artistaID,userID);
-        this._notificationService.success( nombreArtista,"Añadido a favoritos correctamente");
-        this._logService.addLog(localStorage.getItem('userJB'),"Artista","Artista añadido a favoritos",nombreArtista,"Se ha añadido a " + nombreArtista + " a sus artistas preferidos.","/artista/"+artistaID);
+addFav(artistaID:any,userID:string,nombreArtista:string){
 
+  this._artistasService.getFav(artistaID,userID).subscribe(data=>{
+
+    if(data.total_items==0){
+      this._artistasService.addFav(artistaID,userID).subscribe();
+      this._notificationService.success( nombreArtista,"Añadido a favoritos correctamente");
+      this._logService.addLog(localStorage.getItem('userJB'),"Artista","Artista añadido a favoritos",nombreArtista,"Se ha añadido a " + nombreArtista + " a sus artistas preferidos.","/artista/"+artistaID).subscribe();
+      this.favorito = true;
     }else{
-      this._artistasService.removeFav(artistaID,userID);
+      this._artistasService.removeFav(artistaID,userID).subscribe();
       this._notificationService.success(nombreArtista,"Eliminado de favoritos");
+      this._logService.addLog(localStorage.getItem('userJB'),"Artista","Artista eliminado de favoritos",nombreArtista,"Se ha eliminado a " + nombreArtista + " de sus artistas preferidos.","/artista/"+artistaID).subscribe();
+
+      this.favorito = false;
     }
+
+
+  })
+
 }
   // getActualuri(){
     // return this.cancion.uri;

@@ -138,7 +138,7 @@ export class JucaboxService {
   getCanciones(nombre:string,artista:string){
 
     let authToken = this.getTokenPublic();
-
+    console.log(artista);
 
     let headers = new Headers();
     headers.append('Authorization', `Bearer ${authToken}`);
@@ -146,6 +146,7 @@ export class JucaboxService {
     let query = "?q=" + nombre + "&type=track";
     let url = this.urlBusqueda + query;
     this.canciones = [];
+    console.log(url);
     return this.http.get(url,{headers})
             .map( res =>{
               //  console.log(res.json().artists.items);

@@ -1,67 +1,159 @@
 import { Injectable } from '@angular/core';
 import { JucaboxService } from '../services/jucabox.service';
-
-
+import { HttpModule, Http,RequestOptions,Headers,URLSearchParams } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
 
 @Injectable()
 export class ArtistasService {
 
-  constructor(private _jucaboxService:JucaboxService) { }
-  private artistasFav:any[]=[{
-    artistaID: "08td7MxkoHQkXnWAYD8d6Q",
-    userID: "google-oauth2|113690553810319532231"
-  },
-  {
-    artistaID: "5gOJTI4TusSENizxhcG7jB",
-    userID: "google-oauth2|113690553810319532231"
-  }];
+  constructor(private http:Http,private _jucaboxService:JucaboxService) { }
+  private artistasFav:any[]=[];
 
-  public getArtistasFav(userID: string){
-    let artistasTotal:any[]=[];
 
-    for (var _i = 0; _i < this.artistasFav.length; _i++){
-      if(this.artistasFav[_i].userID == userID){
-      this._jucaboxService.getArtista(this.artistasFav[_i].artistaID).subscribe(data =>{
+  public getArtistasFav(userID:string){
 
-         artistasTotal.push(data);
-       });
-     }
+    let authToken = localStorage.getItem('tokenJB');
 
-    }
 
-    return artistasTotal;
+    let headers = new Headers();
+    headers.append('Authorization', authToken);
+
+    let query =  userID;
+    let url = '/api/getArtistasFav/' + userID;
+
+    return this.http.get(url,{headers})
+            .map( res =>{
+              //  console.log(res.json());
+              //  this.artistas =  res.json().artists.items;
+
+                return res.json();
+
+
+
+            }).catch(this.handleError);
+
   }
-  public countArtistasFav(userID:string){
-    let count:any[] =  this.artistasFav.filter(
-      function(data){
-        return data.userID == userID;
+
+  /*public getArtistasFav(userID: string){
+    if(userID != undefined){
+    this.initArtistasFav(userID).subscribe(
+      data=>{
+        console.log(data);
+        let artistasTotal:any[]=[];
+        for (var _i = 0; _i < data.artistasFav.length; _i++){
+
+          if(data.artistaFav[_i].userID == userID){
+          this._jucaboxService.getArtista(data.artistasFav[_i].artistaID).subscribe(data =>{
+
+             artistasTotal.push(data);
+           });
+         }
+
+        }
+        return artistasTotal;
+      }
+
+    )}
+
+    return [];
+
+  }*/
+  /*public countArtistasFav(userID:string){
+    let count:any[];
+if(userID != undefined){
+    this.getArtistasFav(userID).subscribe(
+      data=>{
+        return data.artistasFav.length;
       }
     );
-
-    return count.length;
   }
+    return 0;
+  }*/
 
   getFav(id:string,userID:string){
     //return this.lugaresFav.filter(
     //  function(data){ return data.id === id && data.globalClientID === GlobalClientID }
     //)[0];
-    return this.artistasFav.filter(
-      function(data){ return data.artistaID === id && data.userID === userID }
-    )[0];
+    let authToken = localStorage.getItem('tokenJB');
+
+
+    let headers = new Headers();
+    headers.append('Authorization', authToken);
+
+    let query =  userID;
+    let url = '/api/getArtistaFav/' + userID + '/' + id;
+
+    return this.http.get(url,{headers})
+            .map( res =>{
+              //  console.log(res.json());
+              //  this.artistas =  res.json().artists.items;
+
+                return res.json();
+
+            }).catch(this.handleError);
+
 }
 
   public addFav(artistaID:string,userID:string){
 
-    this.artistasFav.push(
+    let authToken = localStorage.getItem('tokenJB');
+
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', authToken);
+
+    let options = new RequestOptions({ headers: headers });
+    let objeto = {"artistaID": artistaID, "userID": userID};
+
+    return this.http
+      .post('/api/addArtistaFav',objeto,options)
+      .map(res => {
+        return res.json();
+      }
+    ).catch(this.handleError);
+
+
+  /*  this.artistasFav.push(
       {
         artistaID: artistaID,
         userID: userID
-      });
+      });*/
 
   }
 
   public removeFav(artistaID:string,userID: string){
-    console.log("Eliminar con MONGO");
+    let authToken = localStorage.getItem('tokenJB');
+
+
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', authToken);
+    let objeto = {"artistaID": artistaID,"userID": userID };
+    let options = new RequestOptions({ headers: headers , body: objeto});
+
+
+    return this.http
+      .delete(  '/api/deleteArtistaFav',options)
+      .map(res => {
+        return res.json();
+      }
+    ).catch(this.handleError);
+
+    
   }
+
+  private handleError (error: Response | any) {
+      // In a real world app, you might use a remote logging infrastructure
+      console.log(Response);
+      let errMsg: string;
+      if (error instanceof Response) {
+        const body = error.json() || '';
+        const err = body['error'] || JSON.stringify(body);
+        errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+      } else {
+        errMsg = error.message ? error.message : error.toString();
+      }
+      console.error(errMsg);
+      return Observable.throw(errMsg);
+    }
+
 }
