@@ -7,7 +7,6 @@
     <div class="col-md-9">
 
 
-      <a *ngIf="_Auth.authenticated()" href="#" [routerLink]="['/crear-lugar']" class="btn btn-info " ><i class="fa fa-plus " aria-hidden="true"></i>   Añadir nuevo Lugar...</a>
     </div>
     <div class="col-md-3">
       <label for="termino"> Buscador de lugares </label>
@@ -22,6 +21,7 @@
     </div>
 
   </div>
+
 
   <div [ngClass]="{'row':true,'fadeIn': busquedaAvanzada,'fadeOut': !busquedaAvanzada, 'fast':true}"    *ngIf="busquedaAvanzada">
     <div class="col-md-4">
@@ -53,10 +53,35 @@
       </ng-select>
     </div>
   </div>
+<br>
+  <div class="row">
+
+    <div class="col-md-3">
+      <a *ngIf="_Auth.authenticated()" href="#" [routerLink]="['/crear-lugar']" class="btn btn-info  btn-block " ><i class="fa fa-plus " aria-hidden="true"></i>   Añadir nuevo Lugar...</a>
+
+        </div>
+        <div class="col-md-9">
+
+
+            </div>
+
+  </div>
+  <div class="row">
+
+    <div class="col-md-3">
+      <label *ngIf="_Auth.authenticated()" class="checkbox-inline"><input type="checkbox"  (click)="getLugaresNombreChk(chkAdmin)" >Administrados por mi</label>
+
+        </div>
+        <div class="col-md-9">
+
+
+            </div>
+
+  </div>
   <br>
 
 
-  <div class = "row" *ngIf="lugares.length == 0">
+    <div class = "row" *ngIf="lugares.length == 0">
     <div class="col-sm-12">
       <div class = "alert alert-danger" role="alert">
           No existen resultados con el termino: {{termino}}
@@ -72,6 +97,7 @@
 
       <div class="card card-inverse-gray2 animated fadeIn fast bottom-30" *ngFor="let lugar of lugares;let i = index">
         <div class="box box-default box-solid">
+
                 <div class="box-header with-border">
                   <h2 class="box-title">{{lugar.nombre}}</h2>
 
@@ -85,7 +111,7 @@
                 <div class="box-body">
                   <div class="row">
                     <div class="col-md-3 crop">
-                    <img class="card-img-top img-fluid img-thumbnail img-min-lugares" [src]="lugar.img[0]" [alt]="lugar.nombre">
+                    <img class="card-img-top img-fluid img-thumbnail img-min-lugares" [src]="getImage(lugar.img[0])" [alt]="lugar.nombre">
                   </div>
                   <div class="col-md-9 left-20">
 
@@ -112,8 +138,17 @@
                       <div style="margin-top: 30px;">
                       <div  style="display: inline-block;margin-top:20px;">
                         <div class="button-bottom20 button-top20 " >
-                        <a href="#" [routerLink]="['/lugar',lugar.id]" class="btn btn-success " ><i class="fa fa-eye " aria-hidden="true"></i>  Ver Lugar...</a>
-                        <button *ngIf="_Auth.authenticated()" (click)="addFav(lugar.id,usuarioID,lugar.nombre)" [ngClass]="{'btn-primary': !_lugaresService.getFav(lugar.id,usuarioID),'btn-danger': _lugaresService.getFav(lugar.id,usuarioID)}" class="btn" ><i class="fa fa-heart" aria-hidden="true"></i>  {{_lugaresService.literalFav(lugar.id,usuarioID)}}</button>
+                        <div *ngIf="lugar.userID != usuarioID">
+                        <a href="#" [routerLink]="['/lugar',lugar._id]" class="btn btn-success " ><i class="fa fa-eye " aria-hidden="true"></i>  Ver Lugar...</a>
+
+                        <button *ngIf="_Auth.authenticated() && !isFav(lugar._id)" (click)="addFav(lugar._id,usuarioID,lugar.nombre)"  class="btn btn-default" style="color:red;border-color:red;background-color: white;" ><i class="fa fa-heart" aria-hidden="true"></i>  Añadir a favoritos</button>
+                        <button *ngIf="_Auth.authenticated() && isFav(lugar._id)" (click)="addFav(lugar._id,usuarioID,lugar.nombre)" class="btn btn-danger" ><i class="fa fa-times" aria-hidden="true"></i>  Eliminar de favoritos</button>
+
+                      </div>
+
+                          <div *ngIf="lugar.userID == usuarioID">
+                              <a href="#" [routerLink]="['/lugar',lugar._id]" class="btn btn-warning " ><i class="fa fa-cogs " aria-hidden="true"></i>  Administrar...</a>
+                          </div>
                         <!--<a href="#" class="btn btn-success " ><i class="fa fa-cloud-upload" aria-hidden="true"></i>  Enviar Cancion...</a>-->
                       </div>
                     </div>

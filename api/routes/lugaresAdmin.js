@@ -14,6 +14,7 @@ var md_upload = multipart({ uploadDir: resolve + '/../uploads/lugar' });
 
 api.post('/addLugarAdmin',md_auth.ensureAuth,LugarAdminController.addLugarAdmin);
 api.get('/getLugaresAdmin/:id',md_auth.ensureAuth,LugarAdminController.getLugaresAdmin);
+api.get('/isLugaresAdmin/:id/:lugarID',md_auth.ensureAuth,LugarAdminController.isLugaresAdmin);
 api.delete('/deletLugarAdminv',md_auth.ensureAuth,LugarAdminController.deleteLugarAdmin);
 /*api.post('/register',UserController.saveUser);
 api.put('/update-user/:id',md_auth.ensureAuth,UserController.updateUser);

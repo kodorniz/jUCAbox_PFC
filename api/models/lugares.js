@@ -8,6 +8,7 @@ var LugaresSchema = Schema({
   provincia: String,
   ciudad: String,
   direccion: String,
+  userID: { type:Schema.ObjectId, ref:'User'},
   tipoMusica: [Schema.Types.Mixed]
 });
 

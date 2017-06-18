@@ -77,7 +77,10 @@ export class UsuarioComponent implements OnInit {
 
          logService.getLogInit(this.Usuario._id);
 
-         this.lugares = _lugaresService.getLugaresFav(this.Usuario._id);
+          _lugaresService.getLugaresFavP(this.Usuario._id).subscribe(data=>{
+            console.log('en usuario',data.lugares);
+            this.lugares = data.lugares;
+          });
           _artistasService.getArtistasFav(this.Usuario._id).subscribe(
            data => {
 
@@ -162,6 +165,11 @@ export class UsuarioComponent implements OnInit {
 
 
 
+  }
+
+  getImage(url:string){
+
+    return '/api/get-image-lugar/' + url;
   }
   navigateLog(url:any){
     this.router.navigateByUrl(url);

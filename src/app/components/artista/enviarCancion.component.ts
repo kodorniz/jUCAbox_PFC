@@ -31,13 +31,13 @@ export class enviarCancion extends BSModalContext {
       this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
       this.usuarioID = this.Usuario.getUserID();
 
-        for( let lugar of _lugaresService.getLugaresFav(this.Usuario.getUserID())){
+      /*  for( let lugar of _lugaresService.getLugaresFav(this.Usuario.getUserID())){
 
               this.LugaresFavS2.push({value: lugar.id,label: lugar.nombre + " - " + lugar.provincia + " - " + lugar.ciudad});
             }
             for( let lugar of _lugaresService.getLugares()){
                   this.LugaresS2.push({value: lugar.id,label: lugar.nombre + " - " + lugar.provincia + " - " + lugar.ciudad});
-          }
+          }*/
 
   }
 

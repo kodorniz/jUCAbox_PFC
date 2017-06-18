@@ -13,8 +13,8 @@ function saveLugar(req,res){
 
   var params = req.body;
 
-  console.log(params);
 
+  lugar.userID = params.userID;
   lugar.nombre = params.nombre;
   lugar.descripcion = params.descripcion;
   lugar.img = [];
@@ -35,6 +35,67 @@ function saveLugar(req,res){
       }
 
   });
+
+}
+
+//getLugaresNombre(termino:string,provincia:string,ciudad:string,tipoMusica:Array<IOption>)
+function getLugaresNombre(req,res){
+  //var lugarId = req.params.id;
+
+  var params = req.body;
+
+
+  var termino = params.termino;
+  var provincia = params.provincia;
+  var ciudad = params.ciudad;
+  var userID = params.userID;
+  var admin = params.admin;
+
+  var tipoMusica = params.tipoMusica;
+  var lugar_;
+  var objeto;
+
+
+  if(admin==true)
+
+   objeto = {userID:userID,nombre: new RegExp(termino, "i"),provincia: new RegExp(provincia, "i"),ciudad: new RegExp(ciudad, "i")};
+
+  else
+   objeto = {nombre: new RegExp(termino, "i"),provincia: new RegExp(provincia, "i"),ciudad: new RegExp(ciudad, "i")}
+
+
+
+  Lugar.find(objeto,(err,lugar)=>{
+    if(err){
+      res.status(500).send({message:'Error en la petición'});
+    }else{
+      if(!lugar){
+        res.status(404).send({message:'no existe el lugar'});
+      }else{
+        lugar_=[];
+        if(tipoMusica && tipoMusica != "undefined"){
+        for(i=0;i<lugar.length;i++){
+
+          for(j=0;j<lugar[i].tipoMusica.length;j++){
+            if(lugar[i].tipoMusica[j].value==tipoMusica || lugar[i].tipoMusica == []){
+              lugar_.push(lugar[i]);
+
+              break;
+            }
+          }
+
+        }
+      }else{
+        lugar_= lugar;
+      }
+
+        res.status(200).send({lugares: lugar_});
+      }
+
+    }
+
+
+  })
 
 }
 
@@ -230,13 +291,14 @@ function deleteImageFile(req,res){
 
 function getImageFile(req,res){
   var imageFile = req.params.imageFile;
-  var resolve = __dirname + '/../uploads/lugar/'
 
+  var path = require("path");
+  path.join(__dirname, '/../uploads/lugar/', imageFile)
 
-  fs.exists(resolve + imageFile,function(exists){
+  fs.exists(  path.join(__dirname, '/../uploads/lugar/', imageFile),function(exists){
     if(exists){
 
-      res.sendFile(resolve + imageFile);
+      res.sendFile(path.join(__dirname, '/../uploads/lugar/', imageFile));
     }else{
       res.status(404).send({message:'no existe la imagen'});
     }
@@ -419,6 +481,7 @@ module.exports = {
   getImageFile,
   deleteLugar,
   updateTipoMusica,
-  deleteImageFile
+  deleteImageFile,
+  getLugaresNombre
 
 };

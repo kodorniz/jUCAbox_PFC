@@ -15,12 +15,14 @@ exports.ensureAuth= function(req,res,next){
   var token = req.headers.authorization.replace(/['"]+/g,'');
 
   try{
-
+    console.log('EN AUTHENTICATE');
+    console.log(token);
+    console.log(jwt.decode(token,secret));
     var payload = jwt.decode(token,secret);
 
     if(payload.exp <= moment().unix()){
       return res.status(401).send({
-        message: 'El token ha expiradp'
+        message: 'El token ha expirado'
       });
     }
 

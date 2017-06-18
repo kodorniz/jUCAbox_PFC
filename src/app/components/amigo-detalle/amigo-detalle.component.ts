@@ -87,7 +87,7 @@ export class AmigoDetalleComponent implements OnInit {
 
     logService.getLogInit(this.Usuario.userID);
 
-    this.lugares = _lugaresService.getLugaresFav(this.Usuario.userID);
+    this.lugares = [];//_lugaresService.getLugaresFav(this.Usuario.userID);
     this.artistas = []; //_artistasService.getArtistasFav(this.Usuario.userID);
 
     this.forma = new FormGroup({

@@ -44,7 +44,7 @@ function addLugarFav(req,res){
 
         });
       }else{
-        console.log(lugarExist.length);
+
           res.status(400).send({message:'lugar fav ya existe'});
       }
 
@@ -58,7 +58,30 @@ function addLugarFav(req,res){
 
 }
 
+function getLugaresFavP(req,res){
 
+  var userID = req.params.id;
+  if(req.params.page){
+  var page = req.params.page;
+}else{
+    var page = 1;
+}
+
+
+  var itemsPerPage = 1000;
+
+  LugaresFav.find({userID: userID}).populate('lugarID').paginate(page,itemsPerPage,function(err,lugares,total){
+    if(err){
+        res.status(500).send({message:'Error en la petición'});
+    }else{
+      if(!lugares){
+        res.status(404).send({message:'no existen lugares'});
+      }else{
+        res.status(200).send({lugares: lugares,total_items: total});
+      }
+    }
+  })
+}
 
 function getLugaresFav(req,res){
 
@@ -70,9 +93,35 @@ function getLugaresFav(req,res){
 }
 
 
-  var itemsPerPage = 10;
+  var itemsPerPage = 1000;
 
-  LugaresAdmin.find({userID: userID}).paginate(page,itemsPerPage,function(err,lugares,total){
+  LugaresFav.find({userID: userID}).paginate(page,itemsPerPage,function(err,lugares,total){
+    if(err){
+        res.status(500).send({message:'Error en la petición'});
+    }else{
+      if(!lugares){
+        res.status(404).send({message:'no existen lugares'});
+      }else{
+        res.status(200).send({lugares: lugares,total_items: total});
+      }
+    }
+  })
+}
+
+function isLugaresFav(req,res){
+
+  var userID = req.params.id;
+  var lugarID = req.params.lugarID;
+  if(req.params.page){
+  var page = req.params.page;
+}else{
+    var page = 1;
+}
+
+
+  var itemsPerPage = 1000;
+
+  LugaresFav.find({userID: userID,lugarID: lugarID}).populate('lugarID').paginate(page,itemsPerPage,function(err,lugares,total){
     if(err){
         res.status(500).send({message:'Error en la petición'});
     }else{
@@ -89,6 +138,7 @@ function getLugaresFav(req,res){
 function deleteLugarFav(req,res){
 //  var friendId = req.params.id;
 var params = req.body;
+
 
   var lugarID = params.lugarID;
   var userID = params.userID;
@@ -121,6 +171,8 @@ module.exports = {
 
   addLugarFav,
   getLugaresFav,
-  deleteLugarFav
+  deleteLugarFav,
+  isLugaresFav,
+  getLugaresFavP
 
 };
