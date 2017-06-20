@@ -54,6 +54,8 @@ export class JucaboxService {
 
   }
 
+
+
   public getPublic(){
     return this.http
         .get('/api/getUrlSpotify')

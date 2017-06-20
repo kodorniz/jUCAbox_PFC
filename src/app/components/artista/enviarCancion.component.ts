@@ -30,16 +30,15 @@ export class enviarCancion extends BSModalContext {
 
       this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
       this.usuarioID = this.Usuario.getUserID();
+      this.LugaresFavS2 = [];
+      this.LugaresS2 =[];
 
-      /*  for( let lugar of _lugaresService.getLugaresFav(this.Usuario.getUserID())){
 
-              this.LugaresFavS2.push({value: lugar.id,label: lugar.nombre + " - " + lugar.provincia + " - " + lugar.ciudad});
-            }
-            for( let lugar of _lugaresService.getLugares()){
-                  this.LugaresS2.push({value: lugar.id,label: lugar.nombre + " - " + lugar.provincia + " - " + lugar.ciudad});
-          }*/
+
 
   }
+
+
 
 
 
@@ -86,6 +85,7 @@ export class enviarCancion extends BSModalContext {
   // Remove when solved.
   /* tslint:disable */ template: `
   <div class="box box-info">
+
             <div class="box-header with-border">
               <h3 class="box-title bottom-30">Enviar <strong>{{context.Cancion.name}}</strong> a...</h3>
               <div *ngIf="context.userServ.authenticated()"   class="row">
@@ -120,6 +120,7 @@ export class enviarCancion extends BSModalContext {
                   <label for="lugar" class="col-sm-4 control-label">Seleccione un lugar favorito</label>
                   <div class="col-sm-12">
                   <ng-select  id="lugar"
+                  [disabled]="disabled"
                     [options]="context.LugaresFavS2"
                     placeholder="Seleccione un lugar favorito"
                     [allowClear]="true"
@@ -128,6 +129,7 @@ export class enviarCancion extends BSModalContext {
                       notFoundMsg="Sin resultado..."
                       (closed)="token_ = getCookie('jucabox token ' + lugar_)"
                       [(ngModel)]="lugar_"
+
                       #lugar="ngModel"
                     required>
                   </ng-select>
@@ -224,14 +226,34 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
   tokenValido: boolean=true;
   lugarRelleno:boolean=true;
   menuState:string = 'out';
-
+  disabled = true;
   constructor(public dialog: DialogRef<enviarCancion>) {
 
-
+    this.disabled = true;
     this.context = dialog.context;
     this.wrongAnswer = true;
 
+
+    this.context._lugaresService.getLugaresFavP(localStorage.getItem('userJB')).subscribe(data=>{
+       this.context.LugaresFavS2=[];
+      for( let lugar of data.lugares){
+
+             this.context.LugaresFavS2.push({value: lugar.lugarID._id,label: lugar.lugarID.nombre + " - " + lugar.lugarID.provincia + " - " + lugar.lugarID.ciudad});
+           }
+           this.disabled = false;
+           this.context._lugaresService.getLugares().subscribe(data=>{
+             for( let lugar of data.lugares){
+                   this.context.LugaresS2.push({value: lugar._id,label: lugar.nombre + " - " + lugar.provincia + " - " + lugar.ciudad});
+           }
+         });
+
+
+    });
+
   }
+
+
+
   public options = {
       position: ["bottom", "left"],
       timeOut: 5000,
@@ -294,10 +316,18 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
 
    let lugarNombre:any ="";
 
-    lugarNombre=this.context._lugaresService.getLugar(lugar_).nombre;
+    this.context._lugaresService.getLugar(lugar_).subscribe(
 
-    this.context._logService.addLog(localStorage.getItem('userJB'),"Cancion","Canción enviada a la lista de " + lugarNombre,this.context.Cancion.artists[0].name,"Canción " +  this.context.Cancion.name + " enviada","/artista/"+this.context.Cancion.artists[0].id,this.context.Cancion)
-    .subscribe();
+      data=>{
+        lugarNombre= data.lugar.nombre;
+        this.context._logService.addLog(localStorage.getItem('userJB'),"Cancion","Canción enviada a la lista de " + lugarNombre,this.context.Cancion.artists[0].name,"Canción " +  this.context.Cancion.name + " enviada","/artista/"+this.context.Cancion.artists[0].id,this.context.Cancion)
+        .subscribe();
+      }
+
+    );
+
+
+
 
   }else{
     if (forma.controls['lugar']['errors']) {

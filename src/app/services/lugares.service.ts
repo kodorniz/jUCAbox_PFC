@@ -19,19 +19,9 @@ export class LugaresService {
     }
   ];
 
-  private lugaresAdmin:any[]=[{
-    lugarID: "1",
-    userID: "google-oauth2|113690553810319532231"
-  }];
+  private lugaresAdmin:any[]=[];
 
-  private lugaresFav:any[]=[{
-    lugarID: "1",
-    userID: "google-oauth2|113690553810319532231"
-  },
-  {
-    lugarID: "2",
-    userID: "google-oauth2|113690553810319532231"
-  }];
+  private lugaresFav:any[]=[];
 
   // TODO FECHA INICIO FECHA FIN
   private lugares:any[] = [];
@@ -373,9 +363,28 @@ export class LugaresService {
   }
 
   getLugar(id:string){
-    return this.lugares.filter(
-      function(data){ return data.id == id }
-    )[0];
+
+    let authToken = localStorage.getItem('tokenJB');
+
+
+    let headers = new Headers();
+    headers.append('Authorization', authToken);
+
+
+    let url = '/api/getLugar/' + id;
+
+    return this.http.get(url,{headers})
+            .map( res =>{
+              //  console.log(res.json());
+              //  this.artistas =  res.json().artists.items;
+
+                return res.json();
+
+
+
+            }).catch(this.handleError);
+
+
     // for(let lugar of this.lugares){
     //   if(lugar.id == id){
     //     return lugar;

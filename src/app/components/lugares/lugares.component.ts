@@ -50,7 +50,32 @@ export class LugaresComponent implements OnInit {
   constructor(private _lugaresService:LugaresService, private _notificationService: NotificationsService, private _usuarioService: UserService, private _Auth:Auth ) {
     this.usuarioID = localStorage.getItem('userJB');
     this.chkAdmin = false;
+    this._lugaresService.getLugaresNombre(this.termino,this.provincia,this.ciudad,String(this.tipoMusica),localStorage.getItem('userJB'),this.chkAdmin).subscribe(
+        data=>{
+          console.log(data.lugares);
+          this.lugares = data.lugares;
 
+        }
+      );
+
+      if(localStorage.getItem('userJB')){
+      this._lugaresService.getLugaresAdmin(localStorage.getItem('userJB')).subscribe(
+          data=>{
+
+            this.lugaresAdmin = data.lugares;
+
+          }
+        );
+      }
+      if(localStorage.getItem('userJB')){
+        this._lugaresService.getLugaresFav(localStorage.getItem('userJB')).subscribe(
+            data=>{
+
+              this.lugaresFav = data.lugares;
+
+            }
+          );
+        }
      }
 
      public options = {
@@ -64,29 +89,6 @@ export class LugaresComponent implements OnInit {
        }
   ngOnInit() {
 
-  this._lugaresService.getLugaresNombre(this.termino,this.provincia,this.ciudad,String(this.tipoMusica),localStorage.getItem('userJB'),this.chkAdmin).subscribe(
-      data=>{
-
-        this.lugares = data.lugares;
-
-      }
-    );
-
-    this._lugaresService.getLugaresAdmin(localStorage.getItem('userJB')).subscribe(
-        data=>{
-
-          this.lugaresAdmin = data.lugares;
-
-        }
-      );
-
-      this._lugaresService.getLugaresFav(localStorage.getItem('userJB')).subscribe(
-          data=>{
-
-            this.lugaresFav = data.lugares;
-
-          }
-        );
 
 
   }

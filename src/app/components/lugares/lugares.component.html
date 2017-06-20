@@ -84,7 +84,7 @@
     <div class = "row" *ngIf="lugares.length == 0">
     <div class="col-sm-12">
       <div class = "alert alert-danger" role="alert">
-          No existen resultados con el termino: {{termino}}
+          No existen resultados con los terminos de búsqueda
       </div>
     </div>
 
@@ -138,7 +138,8 @@
                       <div style="margin-top: 30px;">
                       <div  style="display: inline-block;margin-top:20px;">
                         <div class="button-bottom20 button-top20 " >
-                        <div *ngIf="lugar.userID != usuarioID">
+                        <div *ngIf="!(lugar.userID == usuarioID && usuarioID)">
+
                         <a href="#" [routerLink]="['/lugar',lugar._id]" class="btn btn-success " ><i class="fa fa-eye " aria-hidden="true"></i>  Ver Lugar...</a>
 
                         <button *ngIf="_Auth.authenticated() && !isFav(lugar._id)" (click)="addFav(lugar._id,usuarioID,lugar.nombre)"  class="btn btn-default" style="color:red;border-color:red;background-color: white;" ><i class="fa fa-heart" aria-hidden="true"></i>  Añadir a favoritos</button>
@@ -146,7 +147,8 @@
 
                       </div>
 
-                          <div *ngIf="lugar.userID == usuarioID">
+
+                          <div *ngIf="lugar.userID == usuarioID && usuarioID">
                               <a href="#" [routerLink]="['/lugar',lugar._id]" class="btn btn-warning " ><i class="fa fa-cogs " aria-hidden="true"></i>  Administrar...</a>
                           </div>
                         <!--<a href="#" class="btn btn-success " ><i class="fa fa-cloud-upload" aria-hidden="true"></i>  Enviar Cancion...</a>-->
