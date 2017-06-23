@@ -38,10 +38,11 @@ function addPlayListLugar(req,res){
       if(playlistExist.length==0 || !playlistExist){
         playlistlugar.save((err,playlistStored)=>{
             if(err){
-
+              console.log(err);
               res.status(500).send({message:'Error al guardar la playlist'});
             }else{
               if(!playlistStored){
+                console.log(err);
                     res.status(300).send({message:'No se ha guardado la playliist'});
               }else{
                     res.status(200).send({playlist:playlistStored});

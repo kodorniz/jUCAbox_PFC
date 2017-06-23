@@ -17,8 +17,8 @@ var resolve = __dirname
 
 var md_upload = multipart({ uploadDir: resolve + '/../uploads/lugar' });
 
-api.post('/addplayListLugarSV',md_auth.ensureAuth,PlayListLugarSVController.addplayListLugarSV);
-api.get('/getPlaylistLugarSV/:id',md_auth.ensureAuth,PlayListLugarSVController.getPlaylistLugarSV);
+api.post('/addplayListLugarSV',PlayListLugarSVController.addplayListLugarSV);
+api.get('/getPlaylistLugarSV/:id/:orden/:col',PlayListLugarSVController.getPlaylistLugarSV);
 api.delete('/deletePlaylistLugarSV/:id',md_auth.ensureAuth,PlayListLugarSVController.deletePlaylistLugarSV);
 
 

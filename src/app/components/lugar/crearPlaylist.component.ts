@@ -248,6 +248,8 @@ export class AdditionalWindowPL implements ModalComponent<crearPlaylist> {
 
 
     if(forma.valid){
+
+
       //crearPL
       if(playlist_){
         let namePlaylist:any = this.context.playListsUser.filter(
@@ -255,14 +257,16 @@ export class AdditionalWindowPL implements ModalComponent<crearPlaylist> {
             return data.value == playlist_
           }
         )[0].label;
-        this.context._playlistService.addPlaylistsJB(this.context.lugar.id,playlist_,namePlaylist,localStorage.getItem('id_user_spotify'));
+
+
+        this.context._playlistService.addPlaylistsJB(this.context.lugar._id,playlist_,namePlaylist,localStorage.getItem('id_user_spotify')).subscribe();
         //this.context.playlistsJBcmb.push({value: playlist_,label: namePlaylist})
       }
 
       if(nuevaPlaylist_){
 
         this.context._jucaboxService.createPlaylist(nuevaPlaylist_,nuevaPlaylist_).subscribe(data=>{
-          this.context._playlistService.addPlaylistsJB(this.context.lugar.id,data.id,nuevaPlaylist_,localStorage.getItem('id_user_spotify'));
+          this.context._playlistService.addPlaylistsJB(this.context.lugar._id,data.id,nuevaPlaylist_,localStorage.getItem('id_user_spotify')).subscribe();
         });
 
       //

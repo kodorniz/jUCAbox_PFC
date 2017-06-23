@@ -44,14 +44,8 @@ export class LugaresService {
 
     return this.http.get(url,{headers})
             .map( res =>{
-              //  console.log(res.json());
-              //  this.artistas =  res.json().artists.items;
-
                 return res.json();
-
-
-
-            }).catch(this.handleError);
+          }).catch(this.handleError);
 
   }
 
@@ -187,6 +181,8 @@ export class LugaresService {
             }).catch(this.handleError);
 
   }
+
+
 
   getLugaresFav(userID:string){
 

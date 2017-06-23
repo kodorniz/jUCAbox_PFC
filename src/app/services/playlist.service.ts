@@ -1,75 +1,93 @@
 import { Injectable } from '@angular/core';
 import { JucaboxService } from '../services/jucabox.service';
+import { HttpModule, Http,RequestOptions,Headers,URLSearchParams } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class PlaylistService {
 
-  playListLugar:any[]=[{
-    lugarID:"1",
-    //Aqui poner el codigo spotify
-    playlistID:"33lBfi9WMlWQ8wki0c01Yz",
-    namePlaylist:"pruebaJucabox",
-    usuarioID:"kodorniz"
-  },
-  {
-    lugarID:"1",
-    //Aqui poner el codigo spotify
-    playlistID:"33lBfi9WMlWQ8wki0c01Yz",
-    namePlaylist:"pruebaJucabox2",
-    usuarioID:"kodorniz"
-  }];
+  playListLugar:any[]=[];
 
 //Canciones pendientes de validar
-  playListLugarSV:any[]=[{
-    lugarID: "1",
-    userID: "google-oauth2|113690553810319532231",
-    cancion : { "album": { "album_type": "album", "artists": [ { "external_urls": { "spotify": "https://open.spotify.com/artist/5gOJTI4TusSENizxhcG7jB" }, "href": "https://api.spotify.com/v1/artists/5gOJTI4TusSENizxhcG7jB", "id": "5gOJTI4TusSENizxhcG7jB", "name": "David Bisbal", "type": "artist", "uri": "spotify:artist:5gOJTI4TusSENizxhcG7jB" } ], "available_markets": [ "CA", "MX", "US" ], "external_urls": { "spotify": "https://open.spotify.com/album/6OTUBhlBFkkFd1qu3mgjjn" }, "href": "https://api.spotify.com/v1/albums/6OTUBhlBFkkFd1qu3mgjjn", "id": "6OTUBhlBFkkFd1qu3mgjjn", "images": [ { "height": 640, "url": "https://i.scdn.co/image/f4498f8e9dede0e58d1a072ae76489e9442ef7a3", "width": 640 }, { "height": 300, "url": "https://i.scdn.co/image/4e3fa7e322f3c96a704be3eeeef18c8b2a1c3b8e", "width": 300 }, { "height": 64, "url": "https://i.scdn.co/image/2e3760ea3ac0daceb8881f3bc9b94d7444f9d054", "width": 64 } ], "name": "Corazón Latino", "type": "album", "uri": "spotify:album:6OTUBhlBFkkFd1qu3mgjjn" }, "artists": [ { "external_urls": { "spotify": "https://open.spotify.com/artist/5gOJTI4TusSENizxhcG7jB" }, "href": "https://api.spotify.com/v1/artists/5gOJTI4TusSENizxhcG7jB", "id": "5gOJTI4TusSENizxhcG7jB", "name": "David Bisbal", "type": "artist", "uri": "spotify:artist:5gOJTI4TusSENizxhcG7jB" } ], "available_markets": [ "CA", "MX", "US" ], "disc_number": 1, "duration_ms": 240600, "explicit": false, "external_ids": { "isrc": "ES6010200297" }, "external_urls": { "spotify": "https://open.spotify.com/track/1i5TNf36nNehR917w89opI" }, "href": "https://api.spotify.com/v1/tracks/1i5TNf36nNehR917w89opI", "id": "1i5TNf36nNehR917w89opI", "name": "Lloraré Las Penas", "popularity": 37, "preview_url": "https://p.scdn.co/mp3-preview/e5b76695ab2ab824b076c8d44be85b90f348fe17?cid=null", "track_number": 5, "type": "track", "uri": "spotify:track:1i5TNf36nNehR917w89opI" },
-    FechaEnvio: new Date(2017, 2, 28, 19, 20, 12)
-
-
-  }];
+  playListLugarSV:any[]=[];
 
   playListLugarV:any[]=[];
 
 //Canciones enviadas por el usuario
-  playListLugarUser:any[]=[{
-    lugarID: "1",
-    userID: "google-oauth2|113690553810319532231",
-    cancion : { "album": { "album_type": "album", "artists": [ { "external_urls": { "spotify": "https://open.spotify.com/artist/5gOJTI4TusSENizxhcG7jB" }, "href": "https://api.spotify.com/v1/artists/5gOJTI4TusSENizxhcG7jB", "id": "5gOJTI4TusSENizxhcG7jB", "name": "David Bisbal", "type": "artist", "uri": "spotify:artist:5gOJTI4TusSENizxhcG7jB" } ], "available_markets": [ "CA", "MX", "US" ], "external_urls": { "spotify": "https://open.spotify.com/album/6OTUBhlBFkkFd1qu3mgjjn" }, "href": "https://api.spotify.com/v1/albums/6OTUBhlBFkkFd1qu3mgjjn", "id": "6OTUBhlBFkkFd1qu3mgjjn", "images": [ { "height": 640, "url": "https://i.scdn.co/image/f4498f8e9dede0e58d1a072ae76489e9442ef7a3", "width": 640 }, { "height": 300, "url": "https://i.scdn.co/image/4e3fa7e322f3c96a704be3eeeef18c8b2a1c3b8e", "width": 300 }, { "height": 64, "url": "https://i.scdn.co/image/2e3760ea3ac0daceb8881f3bc9b94d7444f9d054", "width": 64 } ], "name": "Corazón Latino", "type": "album", "uri": "spotify:album:6OTUBhlBFkkFd1qu3mgjjn" }, "artists": [ { "external_urls": { "spotify": "https://open.spotify.com/artist/5gOJTI4TusSENizxhcG7jB" }, "href": "https://api.spotify.com/v1/artists/5gOJTI4TusSENizxhcG7jB", "id": "5gOJTI4TusSENizxhcG7jB", "name": "David Bisbal", "type": "artist", "uri": "spotify:artist:5gOJTI4TusSENizxhcG7jB" } ], "available_markets": [ "CA", "MX", "US" ], "disc_number": 1, "duration_ms": 240600, "explicit": false, "external_ids": { "isrc": "ES6010200297" }, "external_urls": { "spotify": "https://open.spotify.com/track/1i5TNf36nNehR917w89opI" }, "href": "https://api.spotify.com/v1/tracks/1i5TNf36nNehR917w89opI", "id": "1i5TNf36nNehR917w89opI", "name": "Lloraré Las Penas", "popularity": 37, "preview_url": "https://p.scdn.co/mp3-preview/e5b76695ab2ab824b076c8d44be85b90f348fe17?cid=null", "track_number": 5, "type": "track", "uri": "spotify:track:1i5TNf36nNehR917w89opI" },
-    FechaEnvio: new Date(2017, 2, 28, 19, 20, 12),
-    Estado: "Enviada",
-    playList: "codigoSpoti"
-  }]
 
-  constructor(private _jucaboxService:JucaboxService) { }
 
-  enviarCancion(cancion:any,lugarID:string,userID:string){
-    let today = new Date();
+  constructor(private _jucaboxService:JucaboxService, private http:Http) { }
+
+  enviarCancion(cancion:any,lugarID:string,userID?:string){
+  /*  let today = new Date();
     let cancionEnviar = {
       lugarID: lugarID,
       userID: userID,
       cancion : cancion,
       FechaEnvio:  new Date(today.getFullYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes(),today.getSeconds()),
       estado: "Enviada"
-    }
+    }*/
 
 
-    this.playListLugarSV.push(cancionEnviar);
-    this.playListLugarUser.push(cancionEnviar);
+    let authToken = localStorage.getItem('tokenJB');
+
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', authToken);
+
+    let options = new RequestOptions({ headers: headers });
+    let objeto;
+
+if(userID)
+     objeto = {
+       "lugarID": lugarID,
+       "userID": userID,
+       "cancion" : cancion,
+      // FechaEnvio:  new Date(today.getFullYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes(),today.getSeconds()),
+       "estado": "Enviada"
+     };
+else
+  objeto = {
+    "lugarID": lugarID,
+    "cancion" : cancion,
+   // FechaEnvio:  new Date(today.getFullYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes(),today.getSeconds()),
+    "estado": "Enviada"
+  };
+
+
+
+
+
+
+    return this.http
+      .post('/api/addplayListLugarSV',objeto,options)
+      .map(res => {
+
+        return res.json();
+
+      });
+
+    //this.playListLugarSV.push(cancionEnviar);
+    //this.playListLugarUser.push(cancionEnviar);
+
+
 
   }
 
   getCancionesSV(lugarID:string,orden:string,col:string){
-    let cancionesLugar:any[] = this.playListLugarSV.filter(
-      function(data){
-        return data.lugarID == lugarID
-      }
-    );
+    let authToken = localStorage.getItem('tokenJB');
 
-    //ordenar y agrupar
-    return cancionesLugar.sort(function(a,b) {
-    return new Date(b.FechaEnvio).getTime() - new Date(a.FechaEnvio).getTime()
-    });
+
+    let headers = new Headers();
+    headers.append('Authorization', authToken);
+
+
+    let url = '/api/getPlaylistLugarSV/' + lugarID +'/' + orden + '/' + col;
+
+    return this.http.get(url,{headers})
+            .map( res =>{
+                return res.json();
+          }).catch(this.handleError);
+
   }
 
   GetPlaylistsSP(){
@@ -78,73 +96,101 @@ export class PlaylistService {
   }
 
   GetPlaylistsJB(lugarID:string){
-      return this.playListLugar.filter(
-        function(data){
-          return data.lugarID == lugarID
-        }
-      );
+    let authToken = localStorage.getItem('tokenJB');
+
+        let headers = new Headers();
+        headers.append('Authorization', authToken);
+
+
+        let url = '/api/getPlaylistLugar/' + lugarID ;
+
+        return this.http.get(url,{headers})
+                .map( res =>{
+                    return res.json();
+              }).catch(this.handleError);
 
   }
 
   addPlaylistsJB(lugarID:string,    playlistID:string,
       namePlaylist:string,
       usuarioID:string){
-        console.log('antes',this.playListLugar);
-       this.playListLugar.push(
-      {
-        lugarID:lugarID,
-        //Aqui poner el codigo spotify
-        playlistID:playlistID,
-        namePlaylist:namePlaylist,
-        usuarioID:usuarioID
-      }
-      );
-      console.log('despues',this.playListLugar);
+
+
+
+        let authToken = localStorage.getItem('tokenJB');
+
+        let headers = new Headers({ 'Accept': 'application/json' });
+        headers.append('Authorization', authToken);
+
+        let options = new RequestOptions({ headers: headers });
+        let objeto;
+
+
+         objeto = {
+           "lugarID": lugarID,
+           "playlistID": playlistID,
+           "namePlaylist" : namePlaylist,
+          // FechaEnvio:  new Date(today.getFullYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes(),today.getSeconds()),
+           "userID": usuarioID
+         };
+
+
+
+         console.log('OBJECTO A GUARDAR',objeto);
+
+        return this.http
+          .post('/api/addPlayListLugar',objeto,options)
+          .map(res => {
+
+            return res.json();
+
+          });
+
   }
 
-  validarCancion(cancionID:string,lugarID:string,playlist:any){
-      let cancionesLugar:any[] = this.playListLugarSV.filter(
-        function(data){
-          return data.lugarID == lugarID
-        }
-      );
+  validarCancion(cancionID:string,lugarID:string){
+    let authToken = localStorage.getItem('tokenJB');
 
-      let cancionEnviar:any[]  = cancionesLugar.filter(
-        function(data){
-          return data.cancion.id == cancionID
-        }
-      );
 
-      let cancionValidar = cancionEnviar[0];
-      cancionValidar.playlist = playlist;
-      this.playListLugarV.push(cancionValidar);
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', authToken);
+    let objeto = {"cancionID": cancionID};
+    let options = new RequestOptions({ headers: headers , body: objeto});
+
+
+    return this.http
+      .delete(  '/api/deletePlaylistLugarSV/' + lugarID,options)
+      .map(res => {
+
+        return res.json();
+      }
+    ).catch(this.handleError);
       //TODO Enviar a lista Spotify
       //TODO borrar todas las canciones del lugar en la listaSV
       //TODO cambiar estado cancion playListLugarUser a todos los usuarios del lugar si estado es ENVIADA a ACEPTADA
   }
 
-  rechazarCancion(cancionID:string,lugarID:string,userID?:any){
-    let cancionesLugar:any[] = this.playListLugarSV.filter(
-      function(data){
-        return data.lugarID == lugarID
-      }
-    );
-
-    let cancionEnviar:any[]  = cancionesLugar.filter(
-      function(data){
-        if(userID === undefined) {
-        return data.cancion.id == cancionID;
-      }else{
-        return data.cancion.id == cancionID && data.userID == userID;
-      }
-
-      }
-    );
-
+  rechazarCancion(cancionID:string,lugarID:string){
+    this.validarCancion(cancionID,lugarID);
     //TODO borrar todas las canciones del lugar en la listaSV
     //TODO cambiar estado cancion playListLugarUser a todos los usuarios del lugar si estado es ENVIADA a RECHAZAR
 
   }
+
+  private handleError (error: Response | any) {
+      // In a real world app, you might use a remote logging infrastructure
+
+      let errMsg: string;
+      if (error instanceof Response) {
+        const body = error.json() || '';
+        const err = body['error'] || JSON.stringify(body);
+        errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+      } else {
+        errMsg = error.message ? error.message : error.toString();
+      }
+
+      return Observable.throw(errMsg);
+    }
 
 
 }

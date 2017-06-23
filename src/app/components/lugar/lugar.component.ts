@@ -65,6 +65,9 @@ export class LugarComponent {
     index:""
   };
 
+  orderby="maxDate"
+  orderOr = "-1"
+
 constructor(public _playerService:PlayerService,
  overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal,
   private _jucaboxService:JucaboxService,
@@ -89,7 +92,10 @@ constructor(public _playerService:PlayerService,
     this._lugaresService.getLugar(params['id']).subscribe(data =>
     this.lugar = data.lugar);
 
-    this.playlistSV = this._playlistService.getCancionesSV(params['id'],"up","fecha");
+    this._playlistService.getCancionesSV(params['id'],this.orderOr,this.orderby).subscribe(data=>{
+      this.playlistSV = data.playlist;
+    });
+
     this.id_ = params['id'];
 
     if(this.isLoginSpotify()){
@@ -139,6 +145,17 @@ deleteSong(cancion:any,index:any){
   this._jucaboxService.deleteTrackPlaylist(this.playlistSeleccionada,cancion,index).subscribe(data=> this.getplaylistSeleccionada());
 }
 
+orderbyCol(columna:string){
+
+  this.orderby = columna;
+  this.orderOr = String(Number(this.orderOr)*-1);
+
+  this._playlistService.getCancionesSV(this.id_,this.orderOr,this.orderby).subscribe(data=>{
+    this.playlistSV = data.playlist;
+  });
+
+}
+
 getImage(url:string){
     return '/api/get-image-lugar/' + url;
 }
@@ -150,15 +167,22 @@ reordenarDown(cancion:any,index:any){
 
 recargarPL(){
 
-this.playlistsJB = this._playlistService.GetPlaylistsJB(this.id_ );
+ this._playlistService.GetPlaylistsJB(this.id_ ).subscribe(data=>{
+   this.playlistsJB = [];
+   this.playlistsJB = data.playlist;
+   console.log('data', data.playlist);
+   this.playlistsJBcmb=[];
 
-this.playlistsJBcmb=[];
+     for(let i=0;i<this.playlistsJB.length;i++){
 
-  for(let i=0;i<this.playlistsJB.length;i++){
+           this.playlistsJBcmb.push({value: this.playlistsJB[i]['playlistID'],label: this.playlistsJB[i]['namePlaylist']})
 
-        this.playlistsJBcmb.push({value: this.playlistsJB[i]['playlistID'],label: this.playlistsJB[i]['namePlaylist']})
+     }
 
-  }
+
+ });
+
+
 
 }
 
@@ -216,11 +240,17 @@ if(!this.playlistSeleccionada){
 }
 
 public isLoginSpotify(){
-    return localStorage.getItem('id_token_spotify');
+  if (localStorage.getItem('id_token_spotify'))
+    return true;
+  else
+  return false;
 }
 
 public isAdmin(){
-  return this.lugar.userID == localStorage.getItem('userJB');
+  if(localStorage.getItem('userJB'))
+        return this.lugar.userID == localStorage.getItem('userJB');
+  else
+    return false;
 }
 
  volverLugares(){
@@ -255,8 +285,10 @@ visibleCancionesTop(){
   this.cancionesTopVisible = true;
 }
 
-getCancionesSV(orden:string){
-  //this.playlistSV = this._playlistService.getCancionesSV(this.lugar,"up","fecha");
+getCancionesSV(orden:string,col:string){
+  this._playlistService.getCancionesSV(this.lugar,orden,col).subscribe(data=>{
+    this.playlistSV = data.playlist;
+  });
 }
 
 deleteCancionSV(){
@@ -313,6 +345,10 @@ if(!this.playlistSeleccionada)
 }else{
   this._jucaboxService.addTrackPlaylist(this.playlistSeleccionada,'spotify:track:' + cancion).subscribe(data=> {
     this.getplaylistSeleccionada();
+    this._playlistService.validarCancion(cancion,this.id_).subscribe();
+    this._playlistService.getCancionesSV(this.id_,this.orderOr,this.orderby).subscribe(data=>{
+      this.playlistSV = data.playlist;
+    });
     this._playerService.setLengthPL(this._playerService.getLengthPL()+1);
   }
   );
@@ -320,7 +356,10 @@ if(!this.playlistSeleccionada)
 }
 
 rechazarCancion(cancion:any){
-
+  this._playlistService.validarCancion(cancion,this.id_).subscribe();
+  this._playlistService.getCancionesSV(this.id_,this.orderOr,this.orderby).subscribe(data=>{
+    this.playlistSV = data.playlist;
+  });
 }
 
 crearPlaylist() {

@@ -22,6 +22,7 @@ api.post('/delete-image-lugar/:id',[md_auth.ensureAuth,md_upload],LugarControlle
 api.get('/get-image-lugar/:imageFile',LugarController.getImageFile);
 api.delete('/deleteLugar/:id',md_auth.ensureAuth,LugarController.deleteLugar);
 api.post('/getLugaresNombre',LugarController.getLugaresNombre);
+api.get('/getTokenLugar/:id',md_auth.ensureAuth,LugarController.getTokenLugar);
 //getLugaresNombre
 /*api.post('/register',UserController.saveUser);
 api.put('/update-user/:id',md_auth.ensureAuth,UserController.updateUser);

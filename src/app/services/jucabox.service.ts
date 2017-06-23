@@ -18,7 +18,7 @@ import { Router} from '@angular/router';
 
 @Injectable()
 export class JucaboxService {
-  pais:any = "US";
+  pais:any = "ES";
   artistas:any[]=[];
   canciones:any[]=[];
   albumes:any[]=[];
@@ -72,7 +72,8 @@ export class JucaboxService {
   }
 
   public getTokenPublic(){
-    let locals =  localStorage.getItem('id_token_spotify_public');
+
+    let locals = localStorage.getItem('id_token_spotify_public');
 
     if(locals){
 
@@ -81,10 +82,14 @@ export class JucaboxService {
       this.getPublic().subscribe(
        data => {
          //return '"' + data.access_token + '"'
+
          localStorage.setItem('id_token_spotify_public','"' + data.access_token + '"');
          return localStorage.getItem('id_token_spotify_public');
        }
      );
+
+
+
     }
   }
 
@@ -100,6 +105,7 @@ export class JucaboxService {
 
   getArtistas(nombre:string,tipo:string='&type=track,artist,playlist,album'){
     let authToken = this.getTokenPublic();
+
 
 
     let headers = new Headers();
@@ -176,7 +182,7 @@ export class JucaboxService {
 
     let query =  id;
     let url = this.urlBusquedaArtista + query;
-
+    console.log('token',authToken);
     return this.http.get(url,{headers})
             .map( res =>{
               //  console.log(res.json());

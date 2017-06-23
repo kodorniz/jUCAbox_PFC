@@ -14,7 +14,7 @@ var lugares_fav_routes = require('./routes/lugaresFav');
 var lugares_admin_routes = require('./routes/lugaresAdmin');
 var playlistLugar_routes = require('./routes/playListLugar');
 var playlistLugarSV_routes = require('./routes/playListLugarSV');
-var token_lugares_routes = require('./routes/tokenLugares');
+
 
 var app = express();
 
@@ -32,7 +32,7 @@ app.use('/api',lugares_fav_routes);
 app.use('/api',lugares_admin_routes);
 app.use('/api',playlistLugar_routes);
 app.use('/api',playlistLugarSV_routes);
-app.use('/api',token_lugares_routes);
+
 
 module.exports =
   app

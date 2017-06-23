@@ -24,20 +24,20 @@ function addplayListLugarSV(req,res){
 
   var params = req.body;
 
-
+  console.log('USUARIO',params.userID);
 
   playListLugarSV.lugarID = params.lugarID;
   playListLugarSV.userID = params.userID;
-  playListLugarSV.cancion = JSON.parse(params.cancion);
+  playListLugarSV.cancion = params.cancion;
   playListLugarSV.FechaEnvio = new Date();
   playListLugarSV.Estado = params.Estado;
-  playListLugarSV.cancionID = JSON.parse(params.cancion).id;
+  playListLugarSV.cancionID = params.cancion.id;
   //lugar.tipoMusica = params.tipoMusica;
 
 
         playListLugarSV.save((err,playlistLugarSVStored)=>{
             if(err){
-
+              console.log(err);
               res.status(500).send({message:'Error al enviar cancion a playlist'});
             }else{
               if(!playlistLugarSVStored){
@@ -59,7 +59,9 @@ function addplayListLugarSV(req,res){
 function getPlaylistLugarSV(req,res){
 
 var idLugar = mongoose.Types.ObjectId(req.params.id);
-
+var orden = req.params.orden;
+var col = req.params.col;
+orden = Number(orden);
 var agg =
     [
 
@@ -67,6 +69,7 @@ var agg =
           lugarID: idLugar
         }
       },
+
       { $group:
             { _id: '$cancionID',
             maxDate: { $max: '$FechaEnvio'},
@@ -75,7 +78,8 @@ var agg =
             total_products: { $sum: 1 }
           }
 
-    }
+    },
+    { $sort: {[col]: orden}}
 
 
   ]
@@ -116,21 +120,24 @@ var agg =
 
 function deletePlaylistLugarSV(req,res){
 //  var friendId = req.params.id;
+var params = req.body;
 
+  var lugarID = req.params.id;
 
-  var playlistID = req.params.id;
-
-  PlayListLugarSV.findByIdAndRemove(playlistID,(err,plRemove)=>{
+  var cancionID = params.cancionID;
+  console.log({lugarID: lugarID,cancionID: cancionID});
+  PlayListLugarSV.find({lugarID: lugarID,cancionID: cancionID},(err,plRemove)=>{
     if(err){
+
         res.status(500).send({message:'Error en la petición'});
     }else{
-      if(!userRemove){
+      if(!plRemove){
         res.status(404).send({message:'No existe la cancion'});
       }else{
         res.status(200).send({cancionRemove: plRemove});
       }
     }
-  });
+  }).remove().exec();
 
 }
 

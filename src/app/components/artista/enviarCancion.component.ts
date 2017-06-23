@@ -116,7 +116,7 @@ export class enviarCancion extends BSModalContext {
                 <div>
 
                 </div>
-                <div class="form-group " *ngIf="context._lugaresService.getLugaresFav(this.getUser()).length!=0 && !this.noFavorito && context.userServ.authenticated()">
+                <div class="form-group " [ngClass]="{'has-error':  !getLugarRelleno()}" *ngIf="context._lugaresService.getLugaresFav(this.getUser()).length!=0 && !this.noFavorito && context.userServ.authenticated()">
                   <label for="lugar" class="col-sm-4 control-label">Seleccione un lugar favorito</label>
                   <div class="col-sm-12">
                   <ng-select  id="lugar"
@@ -144,7 +144,8 @@ export class enviarCancion extends BSModalContext {
                   </select>-->
                   </div>
                 </div>
-                <div class="form-group " [ngClass]="{'has-error':  !getTokenValido()}" *ngIf="!this.noFavorito && context.userServ.authenticated()">
+                <div class="form-group " [ngClass]="{'has-error':  !getTokenValido()}" *ngIf="!this.noFavorito && context.userServ.authenticated() && getToken(lugar_)">
+
                   <label for="lugar" class="col-sm-12 control-label" style="text-align:left;">Token <span *ngIf=" !getTokenValido()"> - El Token es incorrecto</span></label>
                   <div class="col-sm-12">
                   <input type="text" class="col-sm-12 form-control"
@@ -167,10 +168,11 @@ export class enviarCancion extends BSModalContext {
                   placeholder="Introduce nombre ...">
                   </div>
                 </div>-->
-                <div class="form-group" *ngIf="this.noFavorito || !context.userServ.authenticated()">
+                <div class="form-group" [ngClass]="{'has-error':  !getLugarRelleno()}" *ngIf="this.noFavorito || !context.userServ.authenticated()">
                 <label for="lugar" class="col-sm-4 control-label" style="text-align:left;">Buscar lugar</label>
                 <div class="col-sm-12">
                 <ng-select  id="lugar2"
+
                   [options]="context.LugaresS2"
                   placeholder="Seleccione un lugar"
                   [allowClear]="true"
@@ -194,8 +196,8 @@ export class enviarCancion extends BSModalContext {
                 </select>-->
                 </div>
                 </div>
-                <div class="form-group " *ngIf="this.noFavorito || !context.userServ.authenticated()">
-                  <label for="token" class="col-sm-12 control-label" style="text-align:left;">Token </label>
+                <div  class="form-group " [ngClass]="{'has-error':  !getTokenValido()}" *ngIf="(this.noFavorito || !context.userServ.authenticated()) && getToken(lugar_)">
+                  <label for="lugar" class="col-sm-12 control-label" style="text-align:left;">Token <span *ngIf=" !getTokenValido()"> - El Token es incorrecto</span></label>
                   <div class="col-sm-12">
                   <input type="text" class="col-sm-12 form-control"
                   type="text" name="token"
@@ -227,6 +229,8 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
   lugarRelleno:boolean=true;
   menuState:string = 'out';
   disabled = true;
+  disabled2 = true;
+  lugares:any[]=[];
   constructor(public dialog: DialogRef<enviarCancion>) {
 
     this.disabled = true;
@@ -234,6 +238,7 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
     this.wrongAnswer = true;
 
 
+    if(localStorage.getItem('userJB')){
     this.context._lugaresService.getLugaresFavP(localStorage.getItem('userJB')).subscribe(data=>{
        this.context.LugaresFavS2=[];
       for( let lugar of data.lugares){
@@ -241,14 +246,30 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
              this.context.LugaresFavS2.push({value: lugar.lugarID._id,label: lugar.lugarID.nombre + " - " + lugar.lugarID.provincia + " - " + lugar.lugarID.ciudad});
            }
            this.disabled = false;
+
            this.context._lugaresService.getLugares().subscribe(data=>{
+             this.lugares=[];
              for( let lugar of data.lugares){
+                this.lugares.push(lugar);
                    this.context.LugaresS2.push({value: lugar._id,label: lugar.nombre + " - " + lugar.provincia + " - " + lugar.ciudad});
            }
          });
 
 
     });
+  }else{
+
+
+    this.context._lugaresService.getLugares().subscribe(data=>{
+      this.context.LugaresS2=[];
+      this.lugares=[];
+      for( let lugar of data.lugares){
+        this.lugares.push(lugar);
+            this.context.LugaresS2.push({value: lugar._id,label: lugar.nombre + " - " + lugar.provincia + " - " + lugar.ciudad});
+    }
+    //this.disabled2 = false;
+  });
+  }
 
   }
 
@@ -276,8 +297,29 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
    getLugarRelleno(){
       return this.lugarRelleno;
     }
+
+    search(lugarID, myArray){
+
+    for (var i=0; i < myArray.length; i++) {
+
+        if (myArray[i]._id == lugarID) {
+
+            return myArray[i].token;
+        }
+    }
+  }
   getToken(id:string){
-    return this.context._lugaresService.getToken(id);
+    let token = this.search(id,this.lugares);
+    if(token)
+      return token;
+    else
+      return null;
+    //return this.search(id,this.lugares);
+
+    /*if(id)
+     this.context._lugaresService.getToken(id).subscribe(data=>{
+       return data.tokenLugar;
+     });*/
   }
   onKeyUp(value) {
     this.wrongAnswer = value != 5;
@@ -286,7 +328,7 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
   }
 
   imprimeToken(){
-    console.log(this.context.token_) ;
+    //console.log(this.context.token_) ;
   }
 
 
@@ -304,12 +346,14 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
     this.tokenValido=true;
 
     if(forma.valid){
+
     this.setCookie("jucabox token " + lugar_,token_,6);
     //Enviar Cancion al Lugar
 
-    this.context._playlistService.enviarCancion(this.context.Cancion,lugar_,this.context.usuarioID);
-
-
+          if(localStorage.getItem('userJB'))
+            this.context._playlistService.enviarCancion(this.context.Cancion,lugar_,localStorage.getItem('userJB')).subscribe();
+          else
+            this.context._playlistService.enviarCancion(this.context.Cancion,lugar_).subscribe();
 
     this.dialog.close();
     this.context._notificationService.success( this.context.Cancion.name,"Enviada a validación del local");
@@ -320,6 +364,7 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
 
       data=>{
         lugarNombre= data.lugar.nombre;
+        if(localStorage.getItem('userJB'))
         this.context._logService.addLog(localStorage.getItem('userJB'),"Cancion","Canción enviada a la lista de " + lugarNombre,this.context.Cancion.artists[0].name,"Canción " +  this.context.Cancion.name + " enviada","/artista/"+this.context.Cancion.artists[0].id,this.context.Cancion)
         .subscribe();
       }
@@ -330,6 +375,7 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
 
 
   }else{
+
     if (forma.controls['lugar']['errors']) {
 
               this.lugarRelleno=false;

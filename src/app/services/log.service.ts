@@ -108,6 +108,9 @@ export class LogService {
                    url:url_}
 }
 
+
+
+
     return this.http
       .post('/api/addLog',objeto,options)
       .map(res => {

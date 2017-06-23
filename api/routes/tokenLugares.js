@@ -13,7 +13,6 @@ var resolve = __dirname
 var md_upload = multipart({ uploadDir: resolve + '/../uploads/lugar' });
 
 api.post('/addTokenLugar',md_auth.ensureAuth,TokenLugaresController.addTokenLugar);
-api.get('/getTokenLugar/:id',md_auth.ensureAuth,TokenLugaresController.getTokenLugar);
 api.delete('/deleteTokenLugar',md_auth.ensureAuth,TokenLugaresController.deleteTokenLugar);
 /*api.post('/register',UserController.saveUser);
 api.put('/update-user/:id',md_auth.ensureAuth,UserController.updateUser);

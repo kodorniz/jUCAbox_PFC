@@ -168,8 +168,8 @@
                   <th *ngIf=" isAdmin() && isLoginSpotify()">Aceptar</th>
                   <th *ngIf=" isAdmin() && isLoginSpotify()">Rechazar</th>
                   <th>Canción</th>
-                  <th>Peticiones</th>
-                  <th>Última Petición</th>
+                  <th style="cursor: pointer" (click)="orderbyCol('total_products')">Peticiones <i *ngIf="orderby=='total_products' && orderOr=='-1'" class="fa fa-sort-asc" aria-hidden="true"></i><i *ngIf="orderby=='total_products' && orderOr=='1'" class="fa fa-sort-desc" aria-hidden="true"></i></th>
+                  <th style="cursor: pointer" (click)="orderbyCol('maxDate')">Última Petición <i *ngIf="orderby=='maxDate' && orderOr=='-1'" class="fa fa-sort-asc" aria-hidden="true"></i><i *ngIf="orderby=='maxDate' && orderOr=='1'" class="fa fa-sort-desc" aria-hidden="true"></i></th>
               </tr>
               </thead>
                 <tbody>
@@ -183,22 +183,22 @@
                         </audio> -->
 
                         <button class="btn btn-primary"  *ngIf="cancion.cancion.preview_url != null && getActualCancion() != cancion.cancion" (click)="sendCancion(cancion.cancion)"><i class="fa fa-play"><span class = "hide"> Play</span></i></button>
-                        <button class="btn btn-primary"  *ngIf="cancion.cancion.preview_url == null && getActualCancion() != cancion.canciion" (click)="sendCancion(cancion.cancion)" disabled="true" title="No disponible para reproduccion de 30 segundos">                  <i class="fa fa-ban text-error"></i>
+                        <button class="btn btn-primary"  *ngIf="cancion.cancion.preview_url == null && getActualCancion() != cancion.cancion" (click)="sendCancion(cancion.cancion)" disabled="true" title="No disponible para reproduccion de 30 segundos"><i class="fa fa-ban text-error"></i>
                           <span class = "hide"> Play</span></button>
                         <button class="btn btn-danger" *ngIf="getActualCancion() == cancion.cancion" (click)="stopCancion()"><i class="fa fa-stop"><span class = "hide"> Stop</span></i></button>
                     </td>
 
-                    <td>
+                    <td  *ngIf=" isAdmin() && isLoginSpotify()">
 
                       <button class="btn btn-success" (click)="aceptarCancion(cancion.cancion.id)"><i class="fa fa-check" ><span class = "hide"> Aceptar</span></i></button>
                     </td>
-                    <td>
-                      <button class="btn btn-danger" (click)="rechazarCancion(cancion.cancion.id)"><i class="fa fa-times" ><span class = "hide"> Rechazar</span></i></button>
+                    <td *ngIf=" isAdmin() && isLoginSpotify()">
+                      <button class="btn btn-danger"    (click)="rechazarCancion(cancion.cancion.id)"><i class="fa fa-times" ><span class = "hide"> Rechazar</span></i></button>
                     </td>
 
                     <td>{{cancion.cancion.name}} - {{cancion.cancion.album.artists[0] | keys:"name"}}</td>
-                    <td>5</td>
-                    <td><span class="time">{{cancion.FechaEnvio | dateLog}}</span></td>
+                    <td>{{cancion.total_products}}</td>
+                    <td><span class="time"><i class="fa fa-clock-o"></i> {{cancion.maxDate | dateLog}}</span></td>
                   </tr>
 
                 </tbody>
@@ -210,7 +210,7 @@
             <h3><i class="fa fa-spotify" style="color:#00c100" aria-hidden="true"></i>
               Spotify</h3>
           </div>
-          <div class="callout callout-success" style="text-align:center;margin-top:25px;    background-color: #00c100 !important;" *ngIf="playlistSV.length == 0 ">
+          <div class="callout callout-success" style="text-align:center;margin-top:25px;    background-color: #00c100 !important;" *ngIf=" !isLoginSpotify() ">
 
                       <h4>Es necesario logearse con Spotify</h4>
         </div>

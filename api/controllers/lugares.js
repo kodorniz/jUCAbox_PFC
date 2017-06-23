@@ -99,6 +99,27 @@ function getLugaresNombre(req,res){
 
 }
 
+function getTokenLugar(req,res){
+
+  var lugarID = req.params.id;
+
+  Lugar.findById(lugarID,function(err,tokenlugar){
+    if(err){
+        res.status(500).send({message:'Error en la petición'});
+    }else{
+      if(!tokenlugar){
+        res.status(200).send({message:'no existe el lugar'});
+      }else{
+        if(tokenlugar.token)
+            res.status(200).send({tokenlugar: tokenlugar.token});
+        else
+            res.status(200).send({tokenlugar: null});
+
+      }
+    }
+  })
+}
+
 function updateLugar(req,res){
   var lugarId = req.params.id;
 
@@ -482,6 +503,7 @@ module.exports = {
   deleteLugar,
   updateTipoMusica,
   deleteImageFile,
-  getLugaresNombre
+  getLugaresNombre,
+  getTokenLugar
 
 };

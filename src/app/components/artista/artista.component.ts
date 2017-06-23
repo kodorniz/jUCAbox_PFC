@@ -77,6 +77,7 @@ export class ArtistaComponent implements OnInit {
                   this.menuState = this.menuState === 'out' ? 'in' : 'out';
                 }
   ngOnInit() {
+    
     this.activatedRoute.params.map(
       parametros =>{
         return parametros['id'];
@@ -84,8 +85,9 @@ export class ArtistaComponent implements OnInit {
       }
     ).subscribe(id =>{
       //console.log(id);
+      if(localStorage.getItem('userJB')){
       this._artistasService.getFav(id,localStorage.getItem('userJB')).subscribe(data=>{
-        console.log(data);
+
         if(data.total_items==0){
           this.favorito = false;
         }else{
@@ -93,6 +95,7 @@ export class ArtistaComponent implements OnInit {
         }
 
       });
+    }
       this._jucaboxService.getArtista(id).
       subscribe( data => this.artista=data);
 //console.log(this.artista);
