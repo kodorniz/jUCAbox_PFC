@@ -194,7 +194,7 @@
 
                     <td  *ngIf=" isAdmin() && isLoginSpotify()">
 
-                      <button class="btn btn-success" (click)="aceptarCancion(cancion.cancion.id)"><i class="fa fa-check" ><span class = "hide"> Aceptar</span></i></button>
+                      <button class="btn btn-success" (click)="aceptarCancion(cancion.cancion.id,cancion.cancion)"><i class="fa fa-check" ><span class = "hide"> Aceptar</span></i></button>
                     </td>
                     <td *ngIf=" isAdmin() && isLoginSpotify()">
                       <button class="btn btn-danger"    (click)="rechazarCancion(cancion.cancion.id)"><i class="fa fa-times" ><span class = "hide"> Rechazar</span></i></button>
@@ -232,6 +232,7 @@
                     <h4>No hay ninguna canción en la lista de Spotify</h4>
 
       </div>
+
           <div class="table-responsive  main-container" style = " user-select: none;   border-color: #5edc70;" *ngIf="playlistSpoti.length > 0 ">
 
               <table class=" table" width="100%">
@@ -284,6 +285,95 @@
               </table>
           </div>
         </div>
+    </div>
+
+    <!-- CANCIONES TOP -->
+<div class="row" *ngIf="this.cancionesTopVisible ">
+    <div class="col-md-6">
+          Fecha Inicio:
+          <my-date-picker name="mydate" [options]="myDatePickerOptions"
+                          [(ngModel)]="fini" required></my-date-picker>
+
+    </div>
+
+
+  <div class="col-md-6">
+          Fecha Fin:
+          <my-date-picker name="mydate" [options]="myDatePickerOptions"
+                          [(ngModel)]="ffin" required></my-date-picker>
+
+    </div>
+
+
+
+
+</div>
+  <button *ngIf="this.cancionesTopVisible " class = "btn btn-primary  top-15" name="filtrar" style="float: right;" (click)="visibleCancionesTop()">Filtrar</button>
+    <div class="row" *ngIf="this.cancionesTopVisible ">
+
+
+      <div class="col-md-12" >
+        <div style="text-align:center">
+          <h3><i class="fa fa-star" aria-hidden="true"></i>
+        Canciones Top</h3>
+      </div>
+
+      <div class="callout callout-warning" style="text-align:center;margin-top:25px;" *ngIf="playlistSVTOP.length == 0 ">
+
+                  <h4>No hay ninguna canción</h4>
+
+    </div>
+  <!--  <div class="row" style="margin-top:5px;margin-bottom:5px;" *ngIf="playlistSV.length > 0 ">
+      <div class="col-md-8" style="text-align:right">
+
+      </div>
+      <div class="col-md-4">
+        Ordenar por:
+        <select>
+            <option value="fecha">Fecha petición</option>
+            <option value="peticion">Número de peticiones</option>
+          </select>
+      </div>
+    </div>-->
+        <div class="table-responsive  main-container" *ngIf="playlistSVTOP.length > 0 ">
+
+            <table class=" table" width="100%">
+            <thead class="thead-inverse">
+            <tr>
+
+
+
+                <th>Preview</th>
+                <th>Canción</th>
+                <th>Número de peticiones</th>
+                          </tr>
+            </thead>
+              <tbody>
+                <tr *ngFor="let cancion of playlistSVTOP">
+
+                  <!-- <td style = "padding-top: 10px;padding-bottom: 10px;padding-right: 4px;padding-left: 0px"><img [src]="cancion.album | keys:'images':'0' | sinfoto " class="img-fluid roundrect img-100" alt=""></td> -->
+
+                  <td>
+                      <!-- <audio controls>
+                        <source [src]="cancion.preview_url">
+                      </audio> -->
+
+                      <button class="btn btn-primary"  *ngIf="cancion.cancion.preview_url != null && getActualCancion() != cancion.cancion" (click)="sendCancion(cancion.cancion)"><i class="fa fa-play"><span class = "hide"> Play</span></i></button>
+                      <button class="btn btn-primary"  *ngIf="cancion.cancion.preview_url == null && getActualCancion() != cancion.cancion" (click)="sendCancion(cancion.cancion)" disabled="true" title="No disponible para reproduccion de 30 segundos"><i class="fa fa-ban text-error"></i>
+                        <span class = "hide"> Play</span></button>
+                      <button class="btn btn-danger" *ngIf="getActualCancion() == cancion.cancion" (click)="stopCancion()"><i class="fa fa-stop"><span class = "hide"> Stop</span></i></button>
+                  </td>
+
+
+
+                  <td>{{cancion.cancion.name}} - {{cancion.cancion.album.artists[0] | keys:"name"}}</td>
+                  <td>{{cancion.total_products}}</td>
+                </tr>
+
+              </tbody>
+            </table>
+        </div>
+      </div>
     </div>
 
 <div>

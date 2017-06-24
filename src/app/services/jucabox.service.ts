@@ -249,7 +249,7 @@ export class JucaboxService {
     headers.append('Authorization', `Bearer ${authToken}`);
     //let query =  id + "/top-tracks?country=" + this.pais;
 
-    let url = 'https://api.spotify.com/v1/me/player/currently-playing';
+    let url = 'https://api.spotify.com/v1/me/player/';
 
     return this.http.get(url,{headers})
             .map( res =>{
@@ -417,10 +417,10 @@ export class JucaboxService {
 
     console.log('objeto',objeto);
 
-
+    console.log('posicion',posicion);
 
   return this.http
-    .put('	https://api.spotify.com/v1/me/player/play?device_id=' + idDevice,objeto,options)
+    .put('https://api.spotify.com/v1/me/player/play?device_id=' + idDevice,objeto,options)
     .map(res => {
       console.log(res);
       return res.json();

@@ -10,6 +10,7 @@ import { Overlay } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 import {Auth} from '../../services/auth.service';
 import { Observable } from 'rxjs/Observable';
+import {IMyDpOptions} from 'mydatepicker';
 
 declare var swal: any;
 
@@ -43,6 +44,7 @@ export class LugarComponent {
   editar = false;
   //canciones sin validar
   playlistSV:any[]=[];
+  playlistSVTOP:any[]=[];
   //cancion de la lista de spotify
   playlistSpoti:any=[];
   audio = new Audio();
@@ -67,6 +69,13 @@ export class LugarComponent {
     index:""
   };
 
+  private myDatePickerOptions: IMyDpOptions = {
+    // other options...
+    dateFormat: 'dd/mm/yyyy',
+  };
+
+  public fini: Object = { date: { year: new Date().getFullYear(), month: new Date().getMonth(), day: new Date().getDate()} };
+  public ffin: Object = { date: { year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()} };
   orderby="maxDate"
   orderOr = "-1"
   public filesToUpload: Array<File>;
@@ -137,7 +146,9 @@ if(this.isLoginSpotify()){
             this.playlistSV = data.playlist;
           });
 
-        }, 5000);
+            this.deviceSeleccionado=this._playerService.getDevice();
+
+        }, 1000);
    }
 
  public options = {
@@ -203,7 +214,7 @@ recargarPL(){
  this._playlistService.GetPlaylistsJB(this.id_ ).subscribe(data=>{
    this.playlistsJB = [];
    this.playlistsJB = data.playlist;
-   console.log('data', data.playlist);
+
    this.playlistsJBcmb=[];
 
      for(let i=0;i<this.playlistsJB.length;i++){
@@ -230,6 +241,7 @@ selectedRow(item:any,index:any){
   )
   else{
 
+
   this._playerService.setCancionRep(item,index);
   this._playerService.setDevice(this.deviceSeleccionado);
   this._playerService.setPlaylist(this.playlistSeleccionada);
@@ -254,7 +266,7 @@ recargarDevices(){
 
                   this.devices_.push({value: data.devices[i].id,label: data.devices[i].name});
         }
-        console.log(this.devices_);
+
 
     }
 
@@ -267,7 +279,7 @@ if(!this.playlistSeleccionada){
 
   this.playlistSpoti = [];
 }else{
-
+  this._playerService.setPlaylist(this.playlistSeleccionada);
   this._jucaboxService.getTracksPlaylists(this.playlistSeleccionada).subscribe(
     data => {
        this.playlistSpoti = data.items;
@@ -322,11 +334,15 @@ visibleUsuario(){
 }
 
 visibleCancionesTop(){
-  this.informacionVisible = false;
-  this.playlistVisible = false;
-  this.usuarioVisible = false;
-  this.cancionesTopVisible = true;
-  this.editar = false;
+  this._playlistService.getCancionesSVTOP(this.id_,this.fini,this.ffin).subscribe(data=>{
+    this.playlistSVTOP = data.playlist;
+    this.informacionVisible = false;
+    this.playlistVisible = false;
+    this.usuarioVisible = false;
+    this.cancionesTopVisible = true;
+    this.editar = false;
+  });
+
 }
 
 visibleEditar(){
@@ -387,7 +403,7 @@ stopCancion(){
   this.cancion = null;
 }
 
-aceptarCancion(cancion:any){
+aceptarCancion(cancion:any,cancionCompleta:any){
 if(!this.playlistSeleccionada)
 {
   swal(
@@ -399,9 +415,16 @@ if(!this.playlistSeleccionada)
 }else{
   this._jucaboxService.addTrackPlaylist(this.playlistSeleccionada,'spotify:track:' + cancion).subscribe(data=> {
     this.getplaylistSeleccionada();
+
+    this._playlistService.validarCancionTOP(cancionCompleta,this.id_,localStorage.getItem('userJB')).subscribe();
+
     this._playlistService.validarCancion(cancion,this.id_).subscribe();
     this._playlistService.getCancionesSV(this.id_,this.orderOr,this.orderby).subscribe(data=>{
       this.playlistSV = data.playlist;
+    });
+
+    this._playlistService.getCancionesSVTOP(this.id_,this.fini,this.ffin).subscribe(data=>{
+      this.playlistSVTOP = data.playlist;
     });
     this._playerService.setLengthPL(this._playerService.getLengthPL()+1);
   }

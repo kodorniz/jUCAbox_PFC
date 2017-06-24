@@ -99,7 +99,7 @@ import { AmigoDetalleComponent } from './components/amigo-detalle/amigo-detalle.
 import { PlaylistService } from './services/playlist.service';
 import { CrearlugarComponent } from './components/crearlugar/crearlugar.component';
 import { CallbackSpotifyComponent } from './components/callback-spotify/callback-spotify.component';
-
+import { MyDatePickerModule } from 'mydatepicker';
 
 let widgets = [
     AppComponent,
@@ -166,6 +166,7 @@ let services = [
     ModalModule.forRoot(),
     BootstrapModalModule,
     SelectModule,
+MyDatePickerModule,
 
     ReactiveFormsModule,
     Ng2HandyOauthModule.forRoot({

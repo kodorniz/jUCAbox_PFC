@@ -22,19 +22,46 @@ export class AppFooterComponent {
 
 
                data=>{
+                 if(this._playerService.getPlaylist()){
+                        this._jucaboxService.getTracksPlaylists(this._playerService.getPlaylist()).subscribe(
+                          data2=>{
+                            let position;
 
-                 
-                  let cancionRep ={
-                   name: data.item.name,
-                   images: data.item.album.images,
-                   uri: data.item.uri,
-                   artista: data.item.artists[0].name
-                 }
-                 //console.log('cancion',cancionRep);
+                            for(let i=0;i<data2.total;i++){
+                              if(data2.items[i].track.uri ==data.item.uri){
+                                position=i;
+                              }
+                            }
 
-                  this._playerService.setCancionRepSP(cancionRep);
+                            console.log('posicion',position);
+                            let cancionRep ={
+                             name: data.item.name,
+                             images: data.item.album.images,
+                             uri: data.item.uri,
+                             artista: data.item.artists[0].name,
+                             index: position
+                            }
+                            //console.log('cancion',cancionRep);
+
+                            this._playerService.setDevice(data.device.id);
+
+                            this._playerService.setCancionRepSP(cancionRep);
+                          }
+
+                        )
+                      }else{
+
+                      }
+
+
+
+
+
+
+
+                }
                 //  console.log(  'ahora sonando',this._playerService.getCancionRep());
-               }
+
 
              )
 

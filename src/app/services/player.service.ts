@@ -42,7 +42,10 @@ export class PlayerService {
   }
 
 
+
+
   setCancionRep(cancion:any,index:any){
+
     this.cancionRep={
       name:cancion.track.name,
       images:cancion.track.album.images,
@@ -58,7 +61,8 @@ export class PlayerService {
       name:cancion.name,
       images:cancion.images,
       uri:cancion.uri,
-      artista:cancion.artista
+      artista:cancion.artista,
+    index:cancion.index
     }
     ;
   }
@@ -90,7 +94,7 @@ export class PlayerService {
   playSongDevice(){
 
 
-      //this.setDevice(device);
+
 
       this._jucaboxService.playSongDevice(this.deviceSeleccionado,this.playlistSeleccionada,this.cancionRep.index).subscribe();
   //  }
@@ -106,7 +110,7 @@ export class PlayerService {
 
   nextSongPL(){
     let index_ = this.cancionRep.index;
-
+    console.log('nextSongPL',this.cancionRep);
     if(this.cancionRep.index+1==this.lengthPLSeleccionada)
           this._jucaboxService.getTrackPlaylists(this.playlistSeleccionada,0).subscribe(data=>{
             this.cancionRep={

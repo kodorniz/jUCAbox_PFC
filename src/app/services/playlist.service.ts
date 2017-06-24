@@ -96,6 +96,38 @@ else
 
   }
 
+  getCancionesSVTOP(lugarID:string,fini:object,ffin:object){
+    let authToken = localStorage.getItem('tokenJB');
+
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', authToken);
+
+    let options = new RequestOptions({ headers: headers });
+    let objeto;
+
+
+  objeto = {
+    "lugarID": lugarID,
+    "fini" : fini['date']['day'] + '/' + fini['date']['month'] + '/' + fini['date']['year'],
+   // FechaEnvio:  new Date(today.getFullYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes(),today.getSeconds()),
+    "ffin": ffin['date']['day'] + '/' + ffin['date']['month'] + '/' + ffin['date']['year']
+  };
+
+
+
+
+
+
+    return this.http
+      .post('/api/getPlaylistLugarSVTOP',objeto,options)
+      .map(res => {
+
+        return res.json();
+
+      });
+
+  }
+
   GetPlaylistsSP(){
       return this._jucaboxService.getPlaylistsUser();
 
@@ -174,6 +206,46 @@ else
       //TODO Enviar a lista Spotify
       //TODO borrar todas las canciones del lugar en la listaSV
       //TODO cambiar estado cancion playListLugarUser a todos los usuarios del lugar si estado es ENVIADA a ACEPTADA
+  }
+
+  validarCancionTOP(cancion:any,lugarID:string,userID?:string){
+    let authToken = localStorage.getItem('tokenJB');
+
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', authToken);
+
+    let options = new RequestOptions({ headers: headers });
+    let objeto;
+
+  if(userID)
+     objeto = {
+       "lugarID": lugarID,
+       "userID": userID,
+       "cancion" : cancion,
+      // FechaEnvio:  new Date(today.getFullYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes(),today.getSeconds()),
+       "estado": "Enviada"
+     };
+  else
+  objeto = {
+    "lugarID": lugarID,
+    "cancion" : cancion,
+   // FechaEnvio:  new Date(today.getFullYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes(),today.getSeconds()),
+    "estado": "Enviada"
+  };
+
+
+
+
+
+
+    return this.http
+      .post('/api/addplayListLugarSVTOP',objeto,options)
+      .map(res => {
+
+        return res.json();
+
+      });
+
   }
 
   rechazarCancion(cancionID:string,lugarID:string){

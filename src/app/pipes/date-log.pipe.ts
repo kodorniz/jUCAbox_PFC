@@ -14,7 +14,7 @@ export class DateLogPipe implements PipeTransform {
     var diffMs = ( today - value);
 
     var diffSeconds = Math.round(Math.abs((today.getTime() - value.getTime())/1000));  //Math.round(((diffMs % 86400000) % 3600000) % 60000 / 60000);
-    console.log("diferencia segundos",diffSeconds)
+
     var diffMinutes = Math.round(((diffMs % 86400000) % 3600000) / 60000);
     var diffHours = Math.floor((diffMs % 86400000) / 3600000);
     let nuevaFecha = new Date(value);
