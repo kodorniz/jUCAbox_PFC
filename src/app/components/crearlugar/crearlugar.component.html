@@ -32,7 +32,7 @@
           </div>
 </div> -->
   <div style="padding-right: 30px;">
-            <div class="form-group" >
+            <div class="form-group" [ngClass]="{'has-error':  !nombreRelleno()}" >
                 <label for="nombre" class="col-sm-3 control-label">Nombre</label>
                 <div class="col-sm-9">
                     <input type="text" id="nombre" placeholder="Nombre" class="form-control"
@@ -40,27 +40,27 @@
                     formControlName = "nombre">
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" [ngClass]="{'has-error':  !emailRelleno()}">
                 <label for="email" class="col-sm-3 control-label">Email</label>
                 <div class="col-sm-9">
                     <input type="email" id="email" placeholder="email" class="form-control"
                     formControlName = "email">
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" [ngClass]="{'has-error':  !ProvinciaRelleno()}">
                 <label for="provincia" class="col-sm-3 control-label">Provincia</label>
                 <div class="col-sm-9">
                     <input type="text" id="provincia" placeholder="Provincia" class="form-control" formControlName = "provincia">
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" [ngClass]="{'has-error':  !CiudadRelleno()}">
                 <label for="ciudad" class="col-sm-3 control-label">Ciudad</label>
                 <div class="col-sm-9">
                     <input type="ciudad" id="ciudad" placeholder="Ciudad" class="form-control" formControlName = "ciudad">
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" >
                 <label for="direccion" class="col-sm-3 control-label">Dirección</label>
                 <div class="col-sm-9">
                     <input type="text" id="direccion" placeholder="Dirección" class="form-control" formControlName = "direccion">
@@ -92,10 +92,23 @@
 
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" [ngClass]="{'has-error':  !descripcionRelleno()}">
                 <label for="descripcion" class="col-sm-3 control-label">Descripción</label>
                 <div class="col-sm-9">
                     <textarea id="descripcion" placeholder="Descripcion" class="form-control" formControlName = "descripcion"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="token" class="col-sm-3 control-label">Token</label>
+                <div class="col-sm-9">
+                    <textarea id="token" placeholder="Añada un token, si no necesita déjelo vacío..." class="form-control" formControlName = "token"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="imagen" class="col-sm-3 control-label">Añadir Imagen</label>
+                <div class="col-sm-9">
+                    <input type="file" placeholder="Subir imagen..." (change)="fileChangeEvent($event)" />
                 </div>
             </div>
 
@@ -111,6 +124,7 @@
                     <button type="submit" class="btn btn-primary btn-block">Guardar cambios</button>
                 </div>
             </div>
+            
     </div>
         </form>
       </div>

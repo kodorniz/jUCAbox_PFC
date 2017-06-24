@@ -3,6 +3,7 @@ import { HttpModule, Http,RequestOptions,Headers,URLSearchParams } from '@angula
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
+
 import { Observable } from 'rxjs/Observable';
 import {
     HandyOauthStorageKeys,
@@ -230,6 +231,25 @@ export class JucaboxService {
     //let query =  id + "/top-tracks?country=" + this.pais;
     let query =  id + "/top-tracks"
     let url = 'https://api.spotify.com/v1/users/' + id + '/playlists?limit=50';
+
+    return this.http.get(url,{headers})
+            .map( res =>{
+
+              //  this.artistas =  res.json().artists.items;
+                return res.json();
+
+            })
+  }
+
+  getStatusPlayer(){
+    let authToken = this.getToken();
+    let id = this.getUserSpotify();
+
+    let headers = new Headers();
+    headers.append('Authorization', `Bearer ${authToken}`);
+    //let query =  id + "/top-tracks?country=" + this.pais;
+
+    let url = 'https://api.spotify.com/v1/me/player/currently-playing';
 
     return this.http.get(url,{headers})
             .map( res =>{

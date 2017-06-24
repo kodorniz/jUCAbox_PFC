@@ -1,3 +1,4 @@
+
 <div class="box box-solid box-default">
   <div class="box-header">
                 <h1 class="box-title">{{lugar.nombre}}</h1>
@@ -11,6 +12,7 @@
       <button type="button" [ngClass]="{'btn': true,'btn-primary': this.playlistVisible, 'btn-default': !this.playlistVisible}" (click) = "visiblePlaylist()"><i class="fa fa-music" aria-hidden="true"></i> Playlist</button>
       <button type="button" [ngClass]="{'btn': true,'btn-primary': this.cancionesTopVisible, 'btn-default': !this.cancionesTopVisible}" (click) = "visibleCancionesTop()"><i class="fa fa-arrow-circle-up" aria-hidden="true"></i> Canciones Top</button>
       <button type="button" [ngClass]="{'btn': true,'btn-primary': this.usuarioVisible, 'btn-default': !this.usuarioVisible}" (click) = "visibleUsuario()"><i class="fa fa-star" aria-hidden="true"></i> Usuarios</button>
+      <button *ngIf="isAdmin()" type="button" [ngClass]="{'btn': true,'btn-primary': this.editar, 'btn-default': !this.editar}" (click) = "visibleEditar()"><i class="fa fa-edit" aria-hidden="true"></i> Editar Información</button>
 
     </div>
     <!-- INFORMACION -->
@@ -55,7 +57,7 @@
 
 
   <div class="card-block">
-    <h4 class="card-title">{{lugar.provincia}} - <small>{{lugar.ciudad}} <small>({{lugar.direccion}})</small></small></h4>
+    <h4 class="card-title">{{lugar.provincia}} - <small>{{lugar.ciudad}} <small *ngIf="lugar.direccion!='' && lugar.direccion">({{lugar.direccion}})</small></small></h4>
     <iframe [src]="Cdireccion() | domseguro:'https://www.google.com/maps/embed/v1/place?key=AIzaSyBwnLPDBXY73nzl4ukbL3cGoeSu6nVSQl8&q='" width="100%" height="300" frameborder="1"  allowtransparency="true"></iframe>
     <p class="card-text">{{lugar.descripcion}}</p>
     <hr>
@@ -85,10 +87,10 @@
     <!-- Playlist -->
 
 
-    <div *ngIf="this.playlistVisible && isAdmin() && isLoginSpotify()" style="margin-top:15px;">
+<div *ngIf="this.playlistVisible && isAdmin() && isLoginSpotify()" style="margin-top:15px;">
 <div class="col-md-6">
 </div>
-      <div class="col-xs-3" style="margin-bottom:15px;">
+      <div class="col-md-3" style="margin-bottom:15px;">
       <ng-select  id="lugar"
         [options]="playlistsJBcmb"
         placeholder="Seleccione una playlist"
@@ -103,17 +105,18 @@
         >
       </ng-select>
     </div>
-      <div class="col-xs-3">
+      <div class="col-md-3">
         <div style="text-align:right">
         <button class="btn btn-info" (click)="crearPlaylist() "><i class="fa fa-plus"></i> Añadir nueva playlist</button>
       </div>
       </div>
 
   </div>
-  <div class="row" *ngIf="this.playlistVisible  && isAdmin() && isLoginSpotify()" style="margin-top:15px;">
+
+  <div *ngIf="this.playlistVisible  && isAdmin() && isLoginSpotify()" style="margin-top:15px;">
     <div class="col-md-6">
     </div>
-  <div class="col-xs-3" style="margin-bottom:15px;">
+  <div class="col-md-6" style="margin-bottom:15px;">
   <ng-select  id="device"
     [options]="devices_"
     placeholder="Seleccione un dispositivo"
@@ -128,6 +131,7 @@
   </ng-select>
 </div>
 </div>
+
 
 
     <div class="row" *ngIf="this.playlistVisible ">
@@ -244,7 +248,8 @@
               </tr>
               </thead>
                 <tbody>
-                  <tr class="listado" *ngFor="let cancion of playlistSpoti;let i = index;let last_ = last " style="cursor:pointer" (dblclick)="selectedRow(cancion,i)">
+
+                  <tr [ngClass]="{'listado': true,'seleccionadaSong': cancion.track.uri==_playerService.getCancionRep().uri}"  *ngFor="let cancion of playlistSpoti;let i = index;let last_ = last " style="cursor:pointer" (dblclick)="selectedRow(cancion,i)">
 
                     <!-- <td style = "padding-top: 10px;padding-bottom: 10px;padding-right: 4px;padding-left: 0px"><img [src]="cancion.album | keys:'images':'0' | sinfoto " class="img-fluid roundrect img-100" alt=""></td> -->
 
@@ -282,7 +287,8 @@
     </div>
 
 <div>
-<button (click) = "volverLugares()" type="button" class="btn btn-outline-danger">Volver lugares...</button>
+<button (click) = "volverLugares()" type="button" class="btn btn-outline-danger"><i class="fa fa-arrow-left" ></i> Volver lugares...</button>
+<button *ngIf="isAdmin()" (click) = "eliminarLugar()" type="button" class="btn btn-danger" style="float: right;"><i class="fa fa-times" ></i> Eliminar lugar</button>
 </div>
 
 </div>

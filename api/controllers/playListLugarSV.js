@@ -24,7 +24,7 @@ function addplayListLugarSV(req,res){
 
   var params = req.body;
 
-  console.log('USUARIO',params.userID);
+
 
   playListLugarSV.lugarID = params.lugarID;
   playListLugarSV.userID = params.userID;
@@ -35,7 +35,7 @@ function addplayListLugarSV(req,res){
   //lugar.tipoMusica = params.tipoMusica;
 
 
-        playListLugarSV.save((err,playlistLugarSVStored)=>{
+      playListLugarSV.save((err,playlistLugarSVStored)=>{
             if(err){
               console.log(err);
               res.status(500).send({message:'Error al enviar cancion a playlist'});
@@ -43,11 +43,13 @@ function addplayListLugarSV(req,res){
               if(!playlistLugarSVStored){
                     res.status(300).send({message:'No se enviado la cancion a la playlist'});
               }else{
+
                     res.status(200).send({playlist:playlistLugarSVStored});
               }
             }
 
         });
+
 
 
 

@@ -18,6 +18,9 @@ export class PlayerService {
   lengthPLSeleccionada:any=0;
   constructor(  private _jucaboxService:JucaboxService) { }
 
+
+
+
   setDevice(device:any){
     this.deviceSeleccionado=device;
   }
@@ -49,7 +52,20 @@ export class PlayerService {
     }
     ;
   }
+
+  setCancionRepSP(cancion:any){
+    this.cancionRep={
+      name:cancion.name,
+      images:cancion.images,
+      uri:cancion.uri,
+      artista:cancion.artista
+    }
+    ;
+  }
+
+
   getCancionRep(){
+
     return this.cancionRep;
   }
 
@@ -68,7 +84,7 @@ export class PlayerService {
     };
     this.playlistSeleccionada="";
     this.lengthPLSeleccionada=0;
-    
+
   }
 
   playSongDevice(){
@@ -80,6 +96,8 @@ export class PlayerService {
   //  }
 
   }
+
+
 
   pauseSongDevice(){
     this._jucaboxService.pauseSongDevice(this.deviceSeleccionado).subscribe();

@@ -68,6 +68,10 @@
 .listado:hover{
   background-color: #f1f1f1;
 }
+
+.seleccionadaSong{
+  background-color: #b1b1b1;
+}
 div.show-image button {
     opacity:0;
 

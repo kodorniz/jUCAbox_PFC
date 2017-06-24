@@ -3,6 +3,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {SelectModule, IOption} from 'ng-select';
 import { LugaresService } from '../../services/lugares.service';
 import { DomseguroPipe } from '../../pipes/domseguro.pipe';
+import {  Router } from '@angular/router';
+declare var swal: any;
 
 @Component({
   selector: 'app-crearlugar',
@@ -20,6 +22,9 @@ export class CrearlugarComponent implements OnInit {
   ciudad: string;
   direccion: string;
   tipoMusica: Array<IOption>;
+  token:string;
+  public filesToUpload: Array<File>;
+  public enviado=false;
 
   tipoMusicaValores:Array<IOption> = [
        {value: '0', label: 'Pop'},
@@ -27,7 +32,7 @@ export class CrearlugarComponent implements OnInit {
        {value: '2', label: 'Reggaeton'},
        {value: '3', label: 'Rock'}
    ];
-  constructor(private _lugaresService: LugaresService) {
+  constructor(private router: Router,private _lugaresService: LugaresService) {
 
 
     this.forma = new FormGroup({
@@ -35,9 +40,10 @@ export class CrearlugarComponent implements OnInit {
     'descripcion': new FormControl(this.descripcion,[Validators.required,Validators.minLength(3)]),
     'email': new FormControl(this.email,[Validators.required, Validators.pattern("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$")]),
     'provincia': new FormControl(this.provincia,Validators.required),
-    'ciudad': new FormControl(this.ciudad),
-    'direccion': new FormControl(this.direccion),
-    'tipoMusica': new FormControl(this.tipoMusica)
+    'ciudad': new FormControl(this.ciudad,Validators.required),
+    'direccion': new FormControl(this.direccion,Validators.required),
+    'tipoMusica': new FormControl(this.tipoMusica),
+    'token': new FormControl(this.token)
 
   });
   }
@@ -45,16 +51,106 @@ export class CrearlugarComponent implements OnInit {
   ngOnInit() {
   }
 
+generaEtiquetas()
+{
+  let etiquetas:any[]=[];
+
+    for(let i=0; i<this.forma.value.tipoMusica.length;i++){
+      for(let j=0;j<this.tipoMusicaValores.length;j++){
+      if(this.tipoMusicaValores[j].value == this.forma.value.tipoMusica[i]){
+        etiquetas.push(this.tipoMusicaValores[j]);
+      }
+    }
+    }
+
+    return etiquetas;
+}
+
+nombreRelleno(){
+  if (this.enviado)
+      return this.forma.value.nombre;
+  else
+    return true
+}
+emailRelleno(){
+    if (this.enviado)
+  return this.forma.value.email;
+  else
+    return true
+}
+
+ProvinciaRelleno(){
+    if (this.enviado)
+  return this.forma.value.provincia;
+  else
+    return true
+}
+
+CiudadRelleno(){
+    if (this.enviado)
+  return this.forma.value.ciudad;
+  else
+    return true
+}
+
+tipoMusicaRelleno(){
+    if (this.enviado)
+  return this.forma.value.tipoMusica;
+  else
+    return true
+}
+
+descripcionRelleno(){
+    if (this.enviado)
+    return this.forma.value.descripcion;
+    else
+      return true
+}
   guardarCambios(){
+    this.enviado = true;
     if(this.forma.valid){
-      this._lugaresService.addLugar(this.forma.value);
+      console.log(this.forma.value)
+        this._lugaresService.addLugar(this.forma.value).subscribe(
+          response => {
+            if(!response.lugar){
+
+            }else{
+
+              this._lugaresService.updateLugarTM(this.generaEtiquetas(),response.lugar._id).subscribe(
+                data=>{
+                  this._lugaresService.makeFileRequest('/api/upload-image-lugar/' + response.lugar._id,[],this.filesToUpload,'image')
+                      .then(
+                          (result)=>{
+                            this.router.navigate(['/lugar',response.lugar._id]);
+                          },
+                          (error)=>{
+                              console.log(error);
+                          }
+
+                      );
+                }
+
+              );
+
+            }
+
+          }
+
+
+        );
     }else{
-      console.log(this.forma.valid);
-      console.log(this.forma.value);
+      swal(
+        'Oops...',
+        'Rellene todos los campos correctamente',
+        'error'
+      )
     }
 
   }
 
+  fileChangeEvent(fileInput:any){
+    this.filesToUpload = <Array<File>>fileInput.target.files;
+  }
 
       Cdireccion(){
         let direccion_="";

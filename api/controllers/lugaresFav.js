@@ -162,6 +162,32 @@ var params = req.body;
   }).remove().exec();
 }
 
+function deleteLugarFavAll(req,res){
+//  var friendId = req.params.id;
+var params = req.body;
+
+
+  var lugarID = params.lugarID;
+
+
+  LugaresFav.find({lugarID: lugarID},(err,lugarFavRemove)=>{
+    if(err){
+
+        res.status(500).send({message:'Error en la petición'});
+    }else{
+      if(!lugarFavRemove){
+        res.status(404).send({message:'No existe el lugar'});
+      }else{
+
+          res.status(200).send({message:'lugar eliminado'});
+      }
+
+
+    }
+
+
+  }).remove().exec();
+}
 
 
 
@@ -173,6 +199,7 @@ module.exports = {
   getLugaresFav,
   deleteLugarFav,
   isLugaresFav,
-  getLugaresFavP
+  getLugaresFavP,
+  deleteLugarFavAll
 
 };

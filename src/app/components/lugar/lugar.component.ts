@@ -9,6 +9,7 @@ import { AdditionalWindowPL, crearPlaylist } from './crearPlaylist.component';
 import { Overlay } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 import {Auth} from '../../services/auth.service';
+import { Observable } from 'rxjs/Observable';
 
 declare var swal: any;
 
@@ -39,6 +40,7 @@ export class LugarComponent {
   informacionVisible = true;
   playlistVisible = false;
   usuarioVisible = false;
+  editar = false;
   //canciones sin validar
   playlistSV:any[]=[];
   //cancion de la lista de spotify
@@ -67,6 +69,10 @@ export class LugarComponent {
 
   orderby="maxDate"
   orderOr = "-1"
+  public filesToUpload: Array<File>;
+
+
+
 
 constructor(public _playerService:PlayerService,
  overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal,
@@ -125,6 +131,15 @@ if(this.isLoginSpotify()){
 
 
 
+ ngOnInit() {
+        setInterval(() => {
+          this._playlistService.getCancionesSV(this.id_,this.orderOr,this.orderby).subscribe(data=>{
+            this.playlistSV = data.playlist;
+          });
+
+        }, 5000);
+   }
+
  public options = {
      position: ["bottom", "left"],
      timeOut: 5000,
@@ -145,6 +160,12 @@ deleteSong(cancion:any,index:any){
   this._jucaboxService.deleteTrackPlaylist(this.playlistSeleccionada,cancion,index).subscribe(data=> this.getplaylistSeleccionada());
 }
 
+
+  fileChangeEvent(fileInput:any){
+    this.filesToUpload = <Array<File>>fileInput.target.files;
+  }
+
+
 orderbyCol(columna:string){
 
   this.orderby = columna;
@@ -163,6 +184,18 @@ getImage(url:string){
 reordenarDown(cancion:any,index:any){
 
   this._jucaboxService.changePositionTrackPlaylist(this.playlistSeleccionada,index+1,'D').subscribe(data=> this.getplaylistSeleccionada());
+}
+
+eliminarLugar(){
+  this._lugaresService.removeLugar(this.id_).subscribe(
+    data=>{
+      this._lugaresService.removeFavAll(this.id_).subscribe(data=>
+        {
+          this.router.navigate(['/lugares'])
+        });
+
+    }
+  );
 }
 
 recargarPL(){
@@ -186,6 +219,8 @@ recargarPL(){
 
 }
 
+
+
 selectedRow(item:any,index:any){
   if(!this.deviceSeleccionado)
   swal(
@@ -199,9 +234,14 @@ selectedRow(item:any,index:any){
   this._playerService.setDevice(this.deviceSeleccionado);
   this._playerService.setPlaylist(this.playlistSeleccionada);
   this._playerService.setLengthPL(this.lengthPLSeleccionada);
+  this._playerService.playSongDevice();
+
+
+
 
   }
 }
+
 
 
 
@@ -262,6 +302,7 @@ visibleInformacion(){
   this.playlistVisible = false;
   this.usuarioVisible = false;
   this.cancionesTopVisible = false;
+  this.editar = false;
 }
 
 visiblePlaylist(){
@@ -269,6 +310,7 @@ visiblePlaylist(){
   this.playlistVisible = true;
   this.usuarioVisible = false;
   this.cancionesTopVisible = false;
+  this.editar = false;
 }
 
 visibleUsuario(){
@@ -276,6 +318,7 @@ visibleUsuario(){
   this.playlistVisible = false;
   this.usuarioVisible = true;
   this.cancionesTopVisible = false;
+  this.editar = false;
 }
 
 visibleCancionesTop(){
@@ -283,6 +326,15 @@ visibleCancionesTop(){
   this.playlistVisible = false;
   this.usuarioVisible = false;
   this.cancionesTopVisible = true;
+  this.editar = false;
+}
+
+visibleEditar(){
+  this.informacionVisible = false;
+  this.playlistVisible = false;
+  this.usuarioVisible = false;
+  this.cancionesTopVisible = false;
+  this.editar = true;
 }
 
 getCancionesSV(orden:string,col:string){
@@ -316,13 +368,15 @@ Cdireccion(){
   let direccion_="";
   let ciudad_="";
   let provincia_="";
-  if( this.lugar.direccion==null || this.lugar.ciudad==null || this.lugar.provincia==null  ){
-      direccion_= '+';
-  }else{
-      direccion_= this.lugar.direccion + '+' + this.lugar.ciudad + '+' + this.lugar.provincia;
 
-  }
+    if(this.lugar.direccion != null && this.lugar.direccion != '')
+      direccion_= this.lugar.direccion + '+' + this.lugar.ciudad + '+' + this.lugar.provincia;
+    else
+        direccion_= this.lugar.ciudad + '+' + this.lugar.provincia;
+
+
   direccion_.replace(' ','+');
+
   return direccion_;
 
 }

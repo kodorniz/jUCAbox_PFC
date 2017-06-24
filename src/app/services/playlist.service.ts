@@ -73,6 +73,12 @@ else
 
   }
 
+  getCancionesSVSocket() {
+
+
+  }
+
+
   getCancionesSV(lugarID:string,orden:string,col:string){
     let authToken = localStorage.getItem('tokenJB');
 

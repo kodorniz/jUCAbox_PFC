@@ -1,4 +1,9 @@
 <simple-notifications [options]="options"></simple-notifications>
+<style>
+.fav {
+  color:red;border-color:red;background-color: white;
+}
+</style>
 <div class="box box-default">
   <div class="box-body animated fadeIn fast" style="position: relative">
 <div >
@@ -142,7 +147,7 @@
 
                         <a href="#" [routerLink]="['/lugar',lugar._id]" class="btn btn-success " ><i class="fa fa-eye " aria-hidden="true"></i>  Ver Lugar...</a>
 
-                        <button *ngIf="_Auth.authenticated() && !isFav(lugar._id)" (click)="addFav(lugar._id,usuarioID,lugar.nombre)"  class="btn btn-default" style="color:red;border-color:red;background-color: white;" ><i class="fa fa-heart" aria-hidden="true"></i>  Añadir a favoritos</button>
+                        <button *ngIf="_Auth.authenticated() && !isFav(lugar._id)" (click)="addFav(lugar._id,usuarioID,lugar.nombre)"  class="btn btn-default fav" ><i class="fa fa-heart" aria-hidden="true"></i>  Añadir a favoritos</button>
                         <button *ngIf="_Auth.authenticated() && isFav(lugar._id)" (click)="addFav(lugar._id,usuarioID,lugar.nombre)" class="btn btn-danger" ><i class="fa fa-times" aria-hidden="true"></i>  Eliminar de favoritos</button>
 
                       </div>

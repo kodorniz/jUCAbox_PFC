@@ -17,6 +17,8 @@ api.get('/getLugaresFav/:id',md_auth.ensureAuth,LugarFavController.getLugaresFav
 api.get('/getLugaresFavP/:id',md_auth.ensureAuth,LugarFavController.getLugaresFavP);
 api.get('/isLugaresFav/:id/:lugarID',md_auth.ensureAuth,LugarFavController.isLugaresFav);
 api.delete('/deleteLugarFav',LugarFavController.deleteLugarFav);
+api.delete('/deleteLugarFavAll',LugarFavController.deleteLugarFavAll);
+//deleteLugarFavAll
 /*api.post('/register',UserController.saveUser);
 api.put('/update-user/:id',md_auth.ensureAuth,UserController.updateUser);
 

@@ -142,26 +142,34 @@ export class LugaresComponent implements OnInit {
 
 
     if(!this.isFav(id)){
-          this._lugaresService.addFav(id,userID).subscribe();
-          this._notificationService.success( nombre,"Añadido a favoritos correctamente");
+          this._lugaresService.addFav(id,userID).subscribe(data=>{
+            this._lugaresService.getLugaresFav(localStorage.getItem('userJB')).subscribe(
+                data=>{
+                  this.lugaresFav=[];
+                  this.lugaresFav = data.lugares;
+                  this._notificationService.success( nombre,"Añadido a favoritos correctamente");
+
+                }
+              );
+          });
+
+
+
+      }else{
+        this._lugaresService.removeFav(id,userID).subscribe(data=>{
 
           this._lugaresService.getLugaresFav(localStorage.getItem('userJB')).subscribe(
               data=>{
-
+                  this.lugaresFav=[];
                 this.lugaresFav = data.lugares;
+                this._notificationService.success(nombre,"Eliminado de favoritos");
 
               }
             );
-      }else{
-        this._lugaresService.removeFav(id,userID).subscribe();
-        this._notificationService.success(nombre,"Eliminado de favoritos");
-        this._lugaresService.getLugaresFav(localStorage.getItem('userJB')).subscribe(
-            data=>{
+        });
 
-              this.lugaresFav = data.lugares;
 
-            }
-          );
+
       }
 
 

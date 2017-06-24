@@ -143,18 +143,9 @@ function updateTipoMusica(req,res){
   var tipoMusica = [];
   var valores = req.body;
 
-for(var val in req.body){
-  //var pars = JSON.parse(valores[val]);
 
 
-    tipoMusica.push(JSON.parse(valores[val]));
-
-
-
-  }
-
-
-  Lugar.findByIdAndUpdate(lugarId,{tipoMusica: tipoMusica},(err,lugarUpdated)=>{
+  Lugar.findByIdAndUpdate(lugarId,{tipoMusica: valores.tipoMusica},(err,lugarUpdated)=>{
         if(err){
           res.status(500).send({message:'Error de servidor: No se ha actualizado el lugar'});
         }else{

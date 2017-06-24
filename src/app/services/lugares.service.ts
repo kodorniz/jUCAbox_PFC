@@ -1,23 +1,15 @@
 import { Injectable } from '@angular/core';
 import {SelectModule, IOption} from 'ng-select';
 //import { Select2OptionData } from 'ng2-select2';
-import { HttpModule, Http,RequestOptions,Headers,URLSearchParams } from '@angular/http';
+import { HttpModule, Http,RequestOptions,Headers,URLSearchParams, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class LugaresService {
 
   // TODO FECHA INICIO FECHA FIN
-  private tokenLugares:any[]=[
-    {
-      id:"1",
-      token:"Token1"
-    },
-    {
-      id:"2",
-      token:"Token2"
-    }
-  ];
+  private tokenLugares:any[]=[];
 
   private lugaresAdmin:any[]=[];
 
@@ -285,13 +277,57 @@ export class LugaresService {
 
 
     let headers = new Headers({ 'Accept': 'application/json' });
-    headers.append('Authorization', `Bearer ${authToken}`);
+    headers.append('Authorization', authToken);
     let objeto = {"lugarID": lugarID,"userID": userID};
     let options = new RequestOptions({ headers: headers , body: objeto});
 
 
     return this.http
       .delete(  '/api/deleteLugarFav',options)
+      .map(res => {
+        console.log(res);
+        return res.json();
+      }
+    ).catch(this.handleError);
+
+    //this.lugaresFav.pop(this.getLugar(lugarID));
+  }
+
+  removeFavAll(lugarID:string){
+
+    let authToken = localStorage.getItem('tokenJB');
+
+
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', authToken);
+    let objeto = {"lugarID": lugarID};
+    let options = new RequestOptions({ headers: headers , body: objeto});
+
+
+    return this.http
+      .delete(  '/api/deleteLugarFavAll',options)
+      .map(res => {
+        console.log(res);
+        return res.json();
+      }
+    ).catch(this.handleError);
+
+    //this.lugaresFav.pop(this.getLugar(lugarID));
+  }
+
+  removeLugar(lugarID:string){
+
+    let authToken = localStorage.getItem('tokenJB');
+
+
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', authToken);
+
+    let options = new RequestOptions({ headers: headers});
+
+
+    return this.http
+      .delete(  '/api/deleteLugar/' + lugarID,options)
       .map(res => {
         console.log(res);
         return res.json();
@@ -390,10 +426,131 @@ export class LugaresService {
 
   addLugar(lugar:any){
 
-    //Insertar en mongodb lugar nuevo TODO
-    this.lugares.push(lugar);
-    console.log(this.lugares);
+    let authToken = localStorage.getItem('tokenJB');
+
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', authToken);
+
+    let options = new RequestOptions({ headers: headers });
+    let objeto;
+
+
+    objeto = {
+      ciudad: lugar.ciudad,
+      descripcion: lugar.descripcion,
+      direccion: lugar.direccion,
+      email:lugar.email,
+      nombre: lugar.nombre,
+      provincia: lugar.provincia,
+      token: lugar.token,
+      userID: localStorage.getItem('userJB')
     }
+
+
+
+
+    return this.http
+      .post('/api/addLugar',objeto,options)
+      .map(res => {
+        console.log(res);
+        return res.json();
+      }
+    ).catch(this.handleError);
+
+    }
+
+    uploadImageLugar(img:any,lugarID:any){
+
+      let authToken = localStorage.getItem('tokenJB');
+
+      let headers = new Headers({ 'Accept': 'application/json' });
+      headers.append('Authorization', authToken);
+
+      let options = new RequestOptions({ headers: headers });
+      let objeto;
+
+
+      objeto = {
+      }
+
+
+
+
+      return this.http
+        .post('/api/upload-image-lugar/',objeto,options)
+        .map(res => {
+          console.log(res);
+          return res.json();
+        }
+      ).catch(this.handleError);
+
+      }
+
+    updateLugar(lugar:any,lugarID:any){
+
+      let authToken = localStorage.getItem('tokenJB');
+
+      let headers = new Headers({ 'Accept': 'application/json' });
+      headers.append('Authorization', authToken);
+
+      let options = new RequestOptions({ headers: headers });
+      let objeto;
+
+
+      objeto = {
+        ciudad: lugar.ciudad,
+        descripcion: lugar.descripcion,
+        direccion: lugar.direccion,
+        email:lugar.email,
+        nombre: lugar.nombre,
+        provincia: lugar.provincia,
+        token: lugar.token,
+        userID: localStorage.getItem('userJB')
+      }
+
+
+
+
+      return this.http
+        .put('/api/updateLugar/' + lugarID,objeto,options)
+        .map(res => {
+          console.log(res);
+          return res.json();
+        }
+      ).catch(this.handleError);
+
+      }
+
+      updateLugarTM(tipoMusica:any,lugarID:any){
+
+        let authToken = localStorage.getItem('tokenJB');
+
+        let headers = new Headers({ 'Accept': 'application/json' });
+        headers.append('Authorization', authToken);
+
+        let options = new RequestOptions({ headers: headers });
+        let objeto;
+
+
+        objeto = {
+          tipoMusica: tipoMusica
+        }
+
+
+
+
+
+
+        return this.http
+          .put('/api/updateLugarTM/' + lugarID,objeto,options)
+          .map(res => {
+            console.log(res);
+            return res.json();
+          }
+        ).catch(this.handleError);
+
+        }
+
 
     private handleError (error: Response | any) {
         // In a real world app, you might use a remote logging infrastructure
@@ -408,6 +565,36 @@ export class LugaresService {
         }
         console.error(errMsg);
         return Observable.throw(errMsg);
+      }
+
+
+      makeFileRequest(url:string, params: Array<string>,files: Array<File>,name: string){
+        var token = localStorage.getItem('tokenJB');
+
+        return new Promise(function(resolve,reject){
+          var formData:any = new FormData();
+          var xhr = new XMLHttpRequest();
+
+          for(let i=0; i< files.length;i++){
+            formData.append(name,files[i],files[i].name);
+          }
+
+          xhr.onreadystatechange = function(){
+            if(xhr.readyState == 4){
+              if(xhr.status == 200){
+                resolve(JSON.parse(xhr.response));
+              }else{
+                  reject(xhr.response);
+              }
+            }
+          }
+
+          xhr.open('POST',url,true);
+          xhr.setRequestHeader('Authorization',token);
+          xhr.send(formData);
+
+
+        })
       }
 
 
