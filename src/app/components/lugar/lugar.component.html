@@ -11,7 +11,7 @@
       <button type="button" [ngClass]="{'btn': true,'btn-primary': this.informacionVisible, 'btn-default': !this.informacionVisible}" (click) = "visibleInformacion()"><i class="fa fa-info" aria-hidden="true"></i> Información</button>
       <button type="button" [ngClass]="{'btn': true,'btn-primary': this.playlistVisible, 'btn-default': !this.playlistVisible}" (click) = "visiblePlaylist()"><i class="fa fa-music" aria-hidden="true"></i> Playlist</button>
       <button type="button" [ngClass]="{'btn': true,'btn-primary': this.cancionesTopVisible, 'btn-default': !this.cancionesTopVisible}" (click) = "visibleCancionesTop()"><i class="fa fa-arrow-circle-up" aria-hidden="true"></i> Canciones Top</button>
-      <button type="button" [ngClass]="{'btn': true,'btn-primary': this.usuarioVisible, 'btn-default': !this.usuarioVisible}" (click) = "visibleUsuario()"><i class="fa fa-star" aria-hidden="true"></i> Usuarios</button>
+      <button *ngIf="isConnected()" type="button" [ngClass]="{'btn': true,'btn-primary': this.usuarioVisible, 'btn-default': !this.usuarioVisible}" (click) = "visibleUsuario()"><i class="fa fa-star" aria-hidden="true"></i> Usuarios</button>
       <button *ngIf="isAdmin()" type="button" [ngClass]="{'btn': true,'btn-primary': this.editar, 'btn-default': !this.editar}" (click) = "visibleEditar()"><i class="fa fa-edit" aria-hidden="true"></i> Editar Información</button>
 
     </div>
@@ -22,13 +22,13 @@
 
 <!--<div>-->
   <div id="myCarousel" class="carousel slide" data-ride="carousel">
-      <!-- Carousel indicators -->
+      <!-- Carousel indicators
       <ol  class="carousel-indicators">
 
           <li  data-target="#myCarousel" data-slide-to="0" class="active"></li>
 
             <li  *ngFor="let img of lugar.img | slice:1 ;let i = index " data-target="#myCarousel" data-slide-to={i} ></li>
-      </ol>
+      </ol>-->
       <!-- Wrapper for carousel items -->
       <div style =" background-image: url('assets/img/background.jpg');    border-radius: 10px;">
       <div class="carousel-inner" style="width:50%;margin:auto;box-shadow: 0 9px 0px 0px white, 0 -9px 0px 0px white, 12px 0 15px -4px rgba(31, 73, 125, 0.8), -12px 0 15px -4px rgba(31, 73, 125, 0.8);">
@@ -44,13 +44,13 @@
 
       </div>
     </div>
-      <!-- Carousel controls -->
+      <!-- Carousel controls
       <a class="carousel-control left" href="#myCarousel" data-slide="prev">
           <span class="glyphicon glyphicon-chevron-left"></span>
       </a>
       <a class="carousel-control right" href="#myCarousel" data-slide="next">
           <span class="glyphicon glyphicon-chevron-right"></span>
-      </a>
+      </a>-->
   </div>
 
 
@@ -376,6 +376,63 @@
       </div>
     </div>
 
+
+<!-- Usuarios Favoritos -->
+
+<div  *ngIf="amigos.length == 0 && this.usuarioVisible">
+  <div class="callout callout-info animated fadeIn fast">
+      <h4>Oops!</h4>
+
+      <p>Actualmente ningún usuario le tiene como favorito</p>
+    </div>
+</div>
+<div  *ngIf="amigos.length != 0 && this.usuarioVisible">
+
+  <div class="box box-warning animated fadeIn fast" *ngFor="let amigo of amigos;let i = index">
+
+        <div class="box-header with-border">
+          <h3 class="box-title">{{amigo.userID.nickName}}</h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <div class="row">
+            <div class="col-md-2">
+              <img class="profile-user-img img-responsive img-circle" [src]="amigo.userID.avatarUrl" alt="User profile picture">
+              <br>
+
+              <div class="text-center"><button type="button" class="btn btn-primary " name="button" (click)="navigateFriend(amigo.userID)"><i class="fa fa-user"></i> Ver perfil </button></div>
+            </div>
+            <div class="col-md-10">
+              <br>
+              <div class="input-group">
+      <div class="input-group-addon"><i class="fa fa-info"></i> Nombre</div>
+      <input type="text" class="form-control" id="exampleInputAmount" placeholder="Sin Nombre" value ={{getNombre(amigo.userID)}} disabled style="text-align: right;">
+
+    </div>
+    <br>
+              <div class="input-group">
+      <div class="input-group-addon"><i class="fa fa-envelope"></i>  Email</div>
+      <input type="text" class="form-control" id="exampleInputAmount" placeholder="Sin Email" value ={{amigo.userID.email}} disabled style="text-align: right;">
+
+    </div>
+    <br>
+              <div class="input-group">
+
+    </div>
+
+            </div>
+
+          </div>
+
+        </div><!-- /.box-body -->
+</div>
+
+
+</div>
+
+<!-- Editar informacion -->
+<div *ngIf="editar">
+<app-crearlugar></app-crearlugar>
+</div>
 <div>
 <button (click) = "volverLugares()" type="button" class="btn btn-outline-danger"><i class="fa fa-arrow-left" ></i> Volver lugares...</button>
 <button *ngIf="isAdmin()" (click) = "eliminarLugar()" type="button" class="btn btn-danger" style="float: right;"><i class="fa fa-times" ></i> Eliminar lugar</button>

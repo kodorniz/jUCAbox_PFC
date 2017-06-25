@@ -174,7 +174,29 @@ export class LugaresService {
 
   }
 
+  getLugaresFavL(lugarID:string){
 
+    let authToken = localStorage.getItem('tokenJB');
+
+
+    let headers = new Headers();
+    headers.append('Authorization', authToken);
+
+
+    let url = '/api/getLugaresFavL/' + lugarID;
+
+    return this.http.get(url,{headers})
+            .map( res =>{
+              //  console.log(res.json());
+              //  this.artistas =  res.json().artists.items;
+
+                return res.json();
+
+
+
+            }).catch(this.handleError);
+
+  }
 
   getLugaresFav(userID:string){
 
@@ -216,6 +238,7 @@ export class LugaresService {
       }
     ).catch(this.handleError);
   }
+
 
   getLugaresNombre(termino:string,provincia:string,ciudad:string,tipoMusica:string,userID:string,admin:boolean){
 
@@ -486,6 +509,33 @@ export class LugaresService {
 
       }
 
+      deleteAllimg(lugarID:any){
+
+        let authToken = localStorage.getItem('tokenJB');
+
+        let headers = new Headers({ 'Accept': 'application/json' });
+        headers.append('Authorization', authToken);
+
+        let options = new RequestOptions({ headers: headers });
+        let objeto;
+
+
+        objeto = {
+        }
+
+
+
+
+        return this.http
+          .post('/api/delete-Allimage-lugar/' + lugarID,objeto,options)
+          .map(res => {
+            console.log(res);
+            return res.json();
+          }
+        ).catch(this.handleError);
+
+        }
+
     updateLugar(lugar:any,lugarID:any){
 
       let authToken = localStorage.getItem('tokenJB');
@@ -507,6 +557,8 @@ export class LugaresService {
         token: lugar.token,
         userID: localStorage.getItem('userJB')
       }
+
+      console.log(objeto);
 
 
 
@@ -574,7 +626,7 @@ export class LugaresService {
         return new Promise(function(resolve,reject){
           var formData:any = new FormData();
           var xhr = new XMLHttpRequest();
-
+          if (files){
           for(let i=0; i< files.length;i++){
             formData.append(name,files[i],files[i].name);
           }
@@ -592,9 +644,11 @@ export class LugaresService {
           xhr.open('POST',url,true);
           xhr.setRequestHeader('Authorization',token);
           xhr.send(formData);
+        }
 
 
         })
+
       }
 
 

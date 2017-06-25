@@ -15,13 +15,17 @@ export class AppFooterComponent {
     }
 
 
+
     ngOnInit() {
+
+      if(this.isLoginSpotify()){
            setInterval(() => {
 
              this._jucaboxService.getStatusPlayer().subscribe(
 
 
                data=>{
+
                  if(this._playerService.getPlaylist()){
                         this._jucaboxService.getTracksPlaylists(this._playerService.getPlaylist()).subscribe(
                           data2=>{
@@ -33,7 +37,7 @@ export class AppFooterComponent {
                               }
                             }
 
-                            console.log('posicion',position);
+                            if(position){
                             let cancionRep ={
                              name: data.item.name,
                              images: data.item.album.images,
@@ -41,11 +45,15 @@ export class AppFooterComponent {
                              artista: data.item.artists[0].name,
                              index: position
                             }
-                            //console.log('cancion',cancionRep);
 
-                            this._playerService.setDevice(data.device.id);
+                            if(data.device.id && !this._playerService.getDevice()){
+
+                          
+                              this._playerService.setDevice(data.device.id);
+                            }
 
                             this._playerService.setCancionRepSP(cancionRep);
+                          }
                           }
 
                         )
@@ -68,6 +76,14 @@ export class AppFooterComponent {
 
 
            }, 5000);
+         }
+      }
+
+      public isLoginSpotify(){
+        if (localStorage.getItem('id_token_spotify'))
+          return true;
+        else
+        return false;
       }
 
 }

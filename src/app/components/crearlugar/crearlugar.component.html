@@ -1,4 +1,4 @@
-
+<simple-notifications [options]="options"></simple-notifications>
 
 
 
@@ -37,6 +37,7 @@
                 <div class="col-sm-9">
                     <input type="text" id="nombre" placeholder="Nombre" class="form-control"
                     autofocus
+                    [(ngModel)]="nombre"
                     formControlName = "nombre">
                 </div>
             </div>
@@ -44,26 +45,26 @@
                 <label for="email" class="col-sm-3 control-label">Email</label>
                 <div class="col-sm-9">
                     <input type="email" id="email" placeholder="email" class="form-control"
-                    formControlName = "email">
+                    formControlName = "email" [(ngModel)]="email">
                 </div>
             </div>
             <div class="form-group" [ngClass]="{'has-error':  !ProvinciaRelleno()}">
                 <label for="provincia" class="col-sm-3 control-label">Provincia</label>
                 <div class="col-sm-9">
-                    <input type="text" id="provincia" placeholder="Provincia" class="form-control" formControlName = "provincia">
+                    <input [(ngModel)]="provincia" type="text" id="provincia" placeholder="Provincia" class="form-control" formControlName = "provincia">
                 </div>
             </div>
             <div class="form-group" [ngClass]="{'has-error':  !CiudadRelleno()}">
                 <label for="ciudad" class="col-sm-3 control-label">Ciudad</label>
                 <div class="col-sm-9">
-                    <input type="ciudad" id="ciudad" placeholder="Ciudad" class="form-control" formControlName = "ciudad">
+                    <input type="ciudad" [(ngModel)]="ciudad" id="ciudad" placeholder="Ciudad" class="form-control" formControlName = "ciudad">
                 </div>
             </div>
 
             <div class="form-group" >
                 <label for="direccion" class="col-sm-3 control-label">Dirección</label>
                 <div class="col-sm-9">
-                    <input type="text" id="direccion" placeholder="Dirección" class="form-control" formControlName = "direccion">
+                    <input type="text" [(ngModel)]="direccion" id="direccion" placeholder="Dirección" class="form-control" formControlName = "direccion">
 
 
         </div>
@@ -85,6 +86,7 @@
                       [options]="tipoMusicaValores"
                       placeholder="Seleccione un tipo de música"
                       [multiple]="true"
+                      [(ngModel)]="tipoMusica"
                         filterPlaceholder="Puede filtrar por el tipo de música"
                         formControlName = "tipoMusica">
                     </ng-select>
@@ -95,18 +97,18 @@
             <div class="form-group" [ngClass]="{'has-error':  !descripcionRelleno()}">
                 <label for="descripcion" class="col-sm-3 control-label">Descripción</label>
                 <div class="col-sm-9">
-                    <textarea id="descripcion" placeholder="Descripcion" class="form-control" formControlName = "descripcion"></textarea>
+                    <textarea   [(ngModel)]="descripcion"  id="descripcion" placeholder="Descripcion" class="form-control" formControlName = "descripcion"></textarea>
                 </div>
             </div>
             <div class="form-group">
                 <label for="token" class="col-sm-3 control-label">Token</label>
                 <div class="col-sm-9">
-                    <textarea id="token" placeholder="Añada un token, si no necesita déjelo vacío..." class="form-control" formControlName = "token"></textarea>
+                    <textarea [(ngModel)]="token" id="token" placeholder="Añada un token, si no necesita déjelo vacío..." class="form-control" formControlName = "token"></textarea>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="imagen" class="col-sm-3 control-label">Añadir Imagen</label>
+                <label for="imagen" class="col-sm-3 control-label">Imagen</label>
                 <div class="col-sm-9">
                     <input type="file" placeholder="Subir imagen..." (change)="fileChangeEvent($event)" />
                 </div>
@@ -124,7 +126,7 @@
                     <button type="submit" class="btn btn-primary btn-block">Guardar cambios</button>
                 </div>
             </div>
-            
+
     </div>
         </form>
       </div>

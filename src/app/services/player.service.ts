@@ -22,6 +22,7 @@ export class PlayerService {
 
 
   setDevice(device:any){
+
     this.deviceSeleccionado=device;
   }
   setLengthPL(length_:any){
@@ -110,7 +111,8 @@ export class PlayerService {
 
   nextSongPL(){
     let index_ = this.cancionRep.index;
-    console.log('nextSongPL',this.cancionRep);
+    console.log('nextSongPL',this.cancionRep.index+1);
+    console.log('length',this.lengthPLSeleccionada);
     if(this.cancionRep.index+1==this.lengthPLSeleccionada)
           this._jucaboxService.getTrackPlaylists(this.playlistSeleccionada,0).subscribe(data=>{
             this.cancionRep={

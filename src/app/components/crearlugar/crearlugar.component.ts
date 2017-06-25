@@ -4,6 +4,8 @@ import {SelectModule, IOption} from 'ng-select';
 import { LugaresService } from '../../services/lugares.service';
 import { DomseguroPipe } from '../../pipes/domseguro.pipe';
 import {  Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router'
+import { NotificationsService } from 'angular2-notifications';
 declare var swal: any;
 
 @Component({
@@ -22,9 +24,12 @@ export class CrearlugarComponent implements OnInit {
   ciudad: string;
   direccion: string;
   tipoMusica: Array<IOption>;
+  tipoMArray:any[] =[];
   token:string;
   public filesToUpload: Array<File>;
   public enviado=false;
+  lugarID:string;
+    menuState:string = 'out';
 
   tipoMusicaValores:Array<IOption> = [
        {value: '0', label: 'Pop'},
@@ -32,7 +37,7 @@ export class CrearlugarComponent implements OnInit {
        {value: '2', label: 'Reggaeton'},
        {value: '3', label: 'Rock'}
    ];
-  constructor(private router: Router,private _lugaresService: LugaresService) {
+  constructor(private router: Router,private activatedRoute:ActivatedRoute,private _lugaresService: LugaresService,private _notificationService: NotificationsService) {
 
 
     this.forma = new FormGroup({
@@ -46,7 +51,47 @@ export class CrearlugarComponent implements OnInit {
     'token': new FormControl(this.token)
 
   });
+
+  this.activatedRoute.params.subscribe( params => {
+      this.lugarID = params.id;
+      if(this.lugarID){
+        this._lugaresService.getLugar(params['id']).subscribe(data =>
+        {
+
+          this.id = data.lugar._id;
+          this.nombre = data.lugar.nombre;
+          this.descripcion = data.lugar.descripcion;
+          this.email = data.lugar.email;
+          this.provincia = data.lugar.provincia;
+          this.ciudad = data.lugar.ciudad;
+          this.direccion = data.lugar.direccion;
+          this.token = data.lugar.token;
+          if(data.lugar.tipoMusica)
+            for(let i=0;i<data.lugar.tipoMusica.length;i++){
+              //this.tipoMusica = data.lugar.tipoMusica[i];
+                  this.tipoMArray.push(data.lugar.tipoMusica[i].value);
+            }
+          //this.tipoMusica = data.lugar.tipoMusica;
+
+          this.tipoMusica = this.tipoMArray;
+
+        });
+      }
+  });
+
+
+
   }
+
+  public options = {
+      position: ["bottom", "left"],
+      timeOut: 5000,
+      lastOnBottom: true
+  }
+    toggleMenu() {
+      // 1-line if statement that toggles the value:
+      this.menuState = this.menuState === 'out' ? 'in' : 'out';
+    }
 
   ngOnInit() {
   }
@@ -54,7 +99,7 @@ export class CrearlugarComponent implements OnInit {
 generaEtiquetas()
 {
   let etiquetas:any[]=[];
-
+    if(this.forma.value.tipoMusica){
     for(let i=0; i<this.forma.value.tipoMusica.length;i++){
       for(let j=0;j<this.tipoMusicaValores.length;j++){
       if(this.tipoMusicaValores[j].value == this.forma.value.tipoMusica[i]){
@@ -62,6 +107,7 @@ generaEtiquetas()
       }
     }
     }
+  }
 
     return etiquetas;
 }
@@ -109,7 +155,52 @@ descripcionRelleno(){
   guardarCambios(){
     this.enviado = true;
     if(this.forma.valid){
-      console.log(this.forma.value)
+      console.log('TM',this.tipoMusica);
+
+      if(this.lugarID){
+
+        this._lugaresService.updateLugar(this.forma.value,this.lugarID).subscribe(
+          response => {
+            if(!response){
+
+            }else{
+
+
+              this._notificationService.success( this.nombre,"Actualizado correctamente");
+              this._lugaresService.updateLugarTM(this.generaEtiquetas(),this.lugarID).subscribe(
+                data=>{
+                  this._lugaresService.deleteAllimg(this.lugarID).subscribe(
+
+                    data=>{
+                      this._lugaresService.makeFileRequest('/api/upload-image-lugar/' + this.lugarID,[],this.filesToUpload,'image')
+                          .then(
+                              (result)=>{
+
+
+                                //this.router.navigate(['/lugar',response.lugar._id]);
+                              },
+                              (error)=>{
+                                  console.log(error);
+                              }
+
+                          );
+                    }
+
+                  );
+
+                }
+
+              );
+
+            }
+
+          }
+
+
+        );
+
+      }else{
+
         this._lugaresService.addLugar(this.forma.value).subscribe(
           response => {
             if(!response.lugar){
@@ -138,6 +229,7 @@ descripcionRelleno(){
 
 
         );
+      }
     }else{
       swal(
         'Oops...',

@@ -19,6 +19,8 @@ api.get('/getLugar/:id',LugarController.getLugar);
 api.get('/getLugar',LugarController.getLugares);
 api.post('/upload-image-lugar/:id',[md_auth.ensureAuth,md_upload],LugarController.uploadImage);
 api.post('/delete-image-lugar/:id',[md_auth.ensureAuth,md_upload],LugarController.deleteImageFile);
+api.post('/delete-Allimage-lugar/:id',[md_auth.ensureAuth,md_upload],LugarController.deleteAllImageFile);
+//deleteAllImageFile
 api.get('/get-image-lugar/:imageFile',LugarController.getImageFile);
 api.delete('/deleteLugar/:id',md_auth.ensureAuth,LugarController.deleteLugar);
 api.post('/getLugaresNombre',LugarController.getLugaresNombre);

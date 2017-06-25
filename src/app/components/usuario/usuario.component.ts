@@ -78,7 +78,6 @@ export class UsuarioComponent implements OnInit {
          logService.getLogInit(this.Usuario._id);
 
           _lugaresService.getLugaresFavP(this.Usuario._id).subscribe(data=>{
-            console.log('en usuario',data.lugares);
             this.lugares = data.lugares;
           });
           _artistasService.getArtistasFav(this.Usuario._id).subscribe(
@@ -226,7 +225,6 @@ removeFav(artistaID:string,userID: string,nombreArtista: string){
   }
 
   getActualCancion(){
-    console.log(this.cancion);
     return this.cancion;
   }
 
@@ -242,18 +240,21 @@ removeFav(artistaID:string,userID: string,nombreArtista: string){
 
 
 
-  navigateFriend(userID:string){
+  navigateFriend(_id:string){
+    console.log('dentro');
 
-    this.usuarioAmigo = this.amigos.filter(
-      function(data){
-
-        return data.userID == userID;
+    for(let i=0;i<this.amigos.length;i++){
+      if(this.amigos[i].friendID._id==_id){
+        this.usuarioAmigo = this.amigos[i].friendID;
       }
-    )[0];
+    }
 
 
+    console.log('this.amigos',this.amigos)
+    console.log('this.usuarioAmigo',this.usuarioAmigo)
 
-    this._friendDetailService.pushFriend(this._userServ.completeUser(this.usuarioAmigo))
+
+    this._friendDetailService.pushFriend(this.usuarioAmigo)
     this.router.navigateByUrl('/amigo-detalle');
 
 

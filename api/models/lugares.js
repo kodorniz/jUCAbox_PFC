@@ -7,6 +7,7 @@ var LugaresSchema = Schema({
   img: [String],
   provincia: String,
   ciudad: String,
+  email: String,
   direccion: String,
   userID: { type:Schema.ObjectId, ref:'User'},
   tipoMusica: [Schema.Types.Mixed],

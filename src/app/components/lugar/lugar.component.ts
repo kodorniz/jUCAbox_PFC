@@ -68,7 +68,7 @@ export class LugarComponent {
     artista:"",
     index:""
   };
-
+  amigos:any[]=[];
   private myDatePickerOptions: IMyDpOptions = {
     // other options...
     dateFormat: 'dd/mm/yyyy',
@@ -112,7 +112,13 @@ constructor(public _playerService:PlayerService,
     });
 
     this.id_ = params['id'];
+    this._lugaresService.getLugaresFavL(this.id_).subscribe(
+        data=>{
 
+          this.amigos = data.lugares;
+
+        }
+      );
     if(this.isLoginSpotify()){
       this.recargarPL();
       this.recargarDevices();
@@ -145,8 +151,12 @@ if(this.isLoginSpotify()){
           this._playlistService.getCancionesSV(this.id_,this.orderOr,this.orderby).subscribe(data=>{
             this.playlistSV = data.playlist;
           });
+            if(!this.deviceSeleccionado){
+                this.deviceSeleccionado=this._playerService.getDevice();
+            }
+                this._playerService.setPlaylist(this.playlistSeleccionada);
+                this._playerService.setLengthPL(this.lengthPLSeleccionada);
 
-            this.deviceSeleccionado=this._playerService.getDevice();
 
         }, 1000);
    }
@@ -291,6 +301,22 @@ if(!this.playlistSeleccionada){
 
 }
 
+isConnected(){
+  if(localStorage.getItem('userJB'))
+    return true
+  else
+    return false
+}
+
+getNombre(amigo:any){
+
+  if(!amigo.firstname ){
+    return null;
+  }else{
+  return amigo.firstname + ' ' + amigo.lastname;
+}
+}
+
 public isLoginSpotify(){
   if (localStorage.getItem('id_token_spotify'))
     return true;
@@ -310,6 +336,9 @@ public isAdmin(){
  }
 
 visibleInformacion(){
+  this._lugaresService.getLugar(this.id_).subscribe(data =>
+  this.lugar = data.lugar);
+
   this.informacionVisible = true;
   this.playlistVisible = false;
   this.usuarioVisible = false;

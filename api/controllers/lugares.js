@@ -17,6 +17,7 @@ function saveLugar(req,res){
   lugar.userID = params.userID;
   lugar.nombre = params.nombre;
   lugar.descripcion = params.descripcion;
+  lugar.email = params.email;
   lugar.img = [];
   lugar.provincia = params.provincia;
   lugar.ciudad = params.ciudad;
@@ -250,6 +251,59 @@ function uploadImage(req,res){
   }else{
     res.status(200).send({message:'no ha subido ninguna imagen'});
   }
+}
+
+function deleteAllImageFile(req,res){
+  var imageFile = req.body.imageFile;
+  var resolve = __dirname + '/../uploads/lugar/'
+  var lugarId = req.params.id;
+
+  fs.exists(resolve,function(exists){
+    if(exists){
+      //res.sendFile(resolve + imageFile);
+      Lugar.findById(lugarId,(err,lugar)=>{
+        if(err){
+          res.status(500).send({message:'Error en la petición'});
+        }else{
+          if(!lugar){
+            res.status(404).send({message:'no existe el lugar'});
+          }else{
+            var imgs = [];
+
+            var imgs2 = lugar.img;
+            for(var i=0;i<imgs2.length;i++){
+              if(imgs2[i] != imageFile){
+
+              imgs.push(imgs2[i]);
+              }
+            }
+
+            console.log(imgs2);
+
+            Lugar.findByIdAndUpdate(lugarId,{img: []},(err,lugarUpdated)=>{
+                  if(err){
+                    res.status(500).send({message:'Error de servidor: No se ha actualizado el lugar'});
+                  }else{
+                    if(!lugarUpdated){
+                      res.status(404).send({message:'Error de app: No se ha actualizado el lugar'});
+                    }else{
+                      for(var i=0;i<imgs2.length;i++){
+                      fs.unlink(resolve + imgs2[i]);
+                      }
+                      res.status(200).send({message:lugarUpdated});
+                    }
+                  }
+            });
+
+
+
+          }
+        }
+      })
+    }else{
+      res.status(404).send({message:'no existe la imagen'});
+    }
+  })
 }
 
 function deleteImageFile(req,res){
@@ -495,6 +549,7 @@ module.exports = {
   updateTipoMusica,
   deleteImageFile,
   getLugaresNombre,
-  getTokenLugar
+  getTokenLugar,
+  deleteAllImageFile
 
 };

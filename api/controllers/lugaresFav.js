@@ -108,6 +108,31 @@ function getLugaresFav(req,res){
   })
 }
 
+function getLugaresFavL(req,res){
+
+  var lugarID = req.params.id;
+  if(req.params.page){
+  var page = req.params.page;
+}else{
+    var page = 1;
+}
+
+
+  var itemsPerPage = 1000;
+
+  LugaresFav.find({lugarID: lugarID}).paginate(page,itemsPerPage).populate('userID').exec(function(err,lugares,total){
+    if(err){
+        res.status(500).send({message:'Error en la petición'});
+    }else{
+      if(!lugares){
+        res.status(404).send({message:'no existen lugares'});
+      }else{
+        res.status(200).send({lugares: lugares,total_items: total});
+      }
+    }
+  })
+}
+
 function isLugaresFav(req,res){
 
   var userID = req.params.id;
@@ -197,6 +222,7 @@ module.exports = {
 
   addLugarFav,
   getLugaresFav,
+  getLugaresFavL,
   deleteLugarFav,
   isLugaresFav,
   getLugaresFavP,
