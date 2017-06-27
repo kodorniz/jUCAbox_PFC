@@ -196,6 +196,40 @@ function getUsers(req,res){
   })
 }
 
+function getUsersbyName(req,res){
+
+
+  var params = req.body;
+
+  //var fecha = moment(params.creationDate,'DD/MM/YYYY');
+
+
+  var firstname =  params.firstname;
+  var lastname = params.lastname;
+  var nickName = params.nickName;
+
+  if (!firstname)
+    firstname = ''
+  if (!lastname)
+    lastname = ''
+  if (!nickName)
+    nickName = ''
+
+
+    User.find({firstname: new RegExp(firstname, "i"),lastname: new RegExp(lastname, "i"),nickName: new RegExp(nickName, "i") },function(err,users){
+    //User.find({nickName: new RegExp(nickName, "i") },function(err,users){
+    if(err){
+        res.status(500).send({message:'Error en la petición'});
+    }else{
+      if(!users){
+        res.status(404).send({message:'no existen usuarios'});
+      }else{
+        res.status(200).send({users: users});
+      }
+    }
+  })
+}
+
 
 // Dar de baja
 function deleteUser(req,res){
@@ -250,6 +284,7 @@ module.exports = {
   getUser,
   getUsers,
   deleteUser,
-  getUserByID
+  getUserByID,
+  getUsersbyName
 
 };

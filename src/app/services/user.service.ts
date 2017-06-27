@@ -6,6 +6,7 @@ import {Auth} from './auth.service';
 import { AuthHttp } from 'angular2-jwt';
 import { HttpModule, Http,RequestOptions,Headers } from '@angular/http';
 
+
 @Injectable()
 export class UserService {
 
@@ -71,6 +72,40 @@ export class UserService {
           .map(res =>res.json());
     }
 
+    public getUserName(firstname:string,lastname:string,nickName:String){
+      let authToken = localStorage.getItem('tokenJB');
+
+      let headers = new Headers({ 'Accept': 'application/json' });
+      headers.append('Authorization', authToken);
+
+      let options = new RequestOptions({ headers: headers });
+      let objeto = {"firstname": firstname,"lastname": lastname,"nickName": nickName};
+      console.log(objeto);
+      return this._http
+        .post('/api/getUsersByName',objeto,options)
+        .map(res => {
+          return res.json();
+        }
+      ).catch(this.handleError);
+    }
+
+
+
+
+    private handleError (error: Response | any) {
+        // In a real world app, you might use a remote logging infrastructure
+        console.log(Response);
+        let errMsg: string;
+        if (error instanceof Response) {
+          const body = error.json() || '';
+          const err = body['error'] || JSON.stringify(body);
+          errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+        } else {
+          errMsg = error.message ? error.message : error.toString();
+        }
+        console.error(errMsg);
+        return Observable.throw(errMsg);
+      }
 
     public completeUser(Usuario:User){
 

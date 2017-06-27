@@ -10,7 +10,7 @@ import { environment } from '../environments/environment';
 import { TranslateModule, TranslateLoader, TranslateStaticLoader } from 'ng2-translate';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
 import { Ng2HandyOauthModule } from 'ng2-handy-oauth';
-
+import { UiSwitchModule } from 'angular2-ui-switch'
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
 
@@ -167,6 +167,7 @@ let services = [
     BootstrapModalModule,
     SelectModule,
 MyDatePickerModule,
+UiSwitchModule,
 
     ReactiveFormsModule,
     Ng2HandyOauthModule.forRoot({

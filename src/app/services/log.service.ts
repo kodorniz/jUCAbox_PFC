@@ -46,7 +46,7 @@ export class LogService {
                //  console.log(res.json());
                //  this.artistas =  res.json().artists.items;
                 this.Log = res.json().log;
-                console.log(this.Log);
+
                  return res.json();
 
              }).catch(this.handleError);
@@ -114,7 +114,7 @@ export class LogService {
     return this.http
       .post('/api/addLog',objeto,options)
       .map(res => {
-        console.log(res);
+
         return res.json();
       }
     ).catch(this.handleError);
@@ -181,8 +181,7 @@ export class LogService {
   }
 
 getVueltas(total:number,paginaActual:number,limitePaginas:number):any{
-   console.log(10,1,12);
-   console.log(limitePaginas,'*',paginaActual, '>', total)
+
 
   if(limitePaginas*paginaActual < total)
     return total;
@@ -244,7 +243,7 @@ getVueltas(total:number,paginaActual:number,limitePaginas:number):any{
     CambiaPagina(nuevaPagina:number,userID:string){
           this.paginaActual = nuevaPagina;
           this.getLogInit(userID);
-          console.log(this.initLog);
+
         }
 
     nextPage(userID:string){
@@ -273,7 +272,7 @@ getVueltas(total:number,paginaActual:number,limitePaginas:number):any{
 
     private handleError (error: Response | any) {
         // In a real world app, you might use a remote logging infrastructure
-        console.log(Response);
+
         let errMsg: string;
         if (error instanceof Response) {
           const body = error.json() || '';
@@ -282,7 +281,7 @@ getVueltas(total:number,paginaActual:number,limitePaginas:number):any{
         } else {
           errMsg = error.message ? error.message : error.toString();
         }
-        console.error(errMsg);
+
         return Observable.throw(errMsg);
       }
 

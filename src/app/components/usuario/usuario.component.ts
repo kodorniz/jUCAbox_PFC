@@ -64,6 +64,16 @@ export class UsuarioComponent implements OnInit {
     amigos:any[]=[];
     prueba:any;
     usuarioAmigo:any;
+
+
+    //para buscar
+    lastnameB:any;
+    firstnameB:any;
+    nicknameB:any;
+    jFriend:any=true;
+    soloAmigos:any[]=[];
+
+
     constructor( private _jucaboxService: JucaboxService,private router: Router,overlay: Overlay, vcRef: ViewContainerRef,public modal: Modal,private _friendsService:FriendsService,private _friendDetailService:FriendDetailService,private userServ:Auth,private _userServ:UserService,  private logService: LogService, private _lugaresService: LugaresService,private _artistasService: ArtistasService,public _playlistService:PlaylistService,public _notificationService: NotificationsService) {
       //console.log(this._userServ.getTokenApi());
 
@@ -106,6 +116,8 @@ export class UsuarioComponent implements OnInit {
          _friendsService.getFriendsUser(this.Usuario._id).subscribe(
           data => {
             this.amigos = data.friends;
+            this.soloAmigos = data.friends;
+            this.getUsers();
           }
 
         );
@@ -173,6 +185,105 @@ export class UsuarioComponent implements OnInit {
   navigateLog(url:any){
     this.router.navigateByUrl(url);
   }
+
+getUsers(){
+
+  if(this.jFriend){
+    this._userServ.getUserName(this.firstnameB,this.lastnameB,this.nicknameB).subscribe(
+      data =>
+      {
+        let amigos_:any[] = [];
+        let amigo:any;
+        for(let i=0;i<data.users.length;i++){
+            amigo=false;
+            if(data.users[i]._id != localStorage.getItem('userJB')){
+            for(let j=0;j<this.soloAmigos.length;j++){
+              if(this.soloAmigos[j].friendID._id==data.users[i]._id){
+                  amigo = true;
+              }
+            }
+
+          if(amigo==true){
+
+          let clave = {friendID: data.users[i],amigo: amigo};
+          amigos_.push(clave);
+        }
+        }
+        }
+
+
+        this.amigos = amigos_;
+      }
+
+    );
+  }else{
+    this._userServ.getUserName(this.firstnameB,this.lastnameB,this.nicknameB).subscribe(
+      data =>
+      {
+        let amigos_:any[] = [];
+        let amigo:any;
+        for(let i=0;i<data.users.length;i++){
+            amigo=false;
+            if(data.users[i]._id != localStorage.getItem('userJB')){
+            for(let j=0;j<this.soloAmigos.length;j++){
+              if(this.soloAmigos[j].friendID._id==data.users[i]._id){
+                  amigo = true;
+              }
+            }
+
+          let clave = {friendID: data.users[i],amigo: amigo};
+          amigos_.push(clave);
+        }
+        }
+
+
+        this.amigos = amigos_;
+      }
+
+    );
+  }
+
+}
+
+
+addFriend(friendID:string,friendNick:string,amigo:boolean){
+  this._friendsService.addFriend(localStorage.getItem('userJB'),friendID).subscribe(
+
+    data=>{
+      console.log('addFriend',data);
+      this.logService.addLog(localStorage.getItem('userJB'),"Amistad","Añadido amigo nuevo",friendNick,"Se ha añadido a la lista de amigos a " + friendNick,'').subscribe();
+      this._friendsService.getFriendsUser(this.Usuario._id).subscribe(
+       data => {
+
+         this.amigos = data.friends;
+         this.soloAmigos = data.friends;
+         this.getUsers();
+       }
+
+     );
+
+    }
+  )
+}
+
+removeFriend(friendID:string,friendNick:string){
+  this._friendsService.removeFriend(localStorage.getItem('userJB'),friendID).subscribe(
+
+    data=>{
+      this.logService.addLog(localStorage.getItem('userJB'),"Amistad","Eliminado amigo",friendNick,"Se ha eliminado de la lista de amigos a " + friendNick,'').subscribe();
+      this._friendsService.getFriendsUser(this.Usuario._id).subscribe(
+       data => {
+         this.amigos = data.friends;
+         this.soloAmigos = data.friends;
+         this.getUsers();
+       }
+
+     );
+
+    }
+  )
+}
+
 
 removeFav(artistaID:string,userID: string,nombreArtista: string){
 

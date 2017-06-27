@@ -25,6 +25,7 @@
     "angular2-modal": "^2.0.3",
     "angular2-notifications": "^0.4.53",
     "angular2-toaster": "^1.0.2",
+    "angular2-ui-switch": "^1.2.0",
     "angular2-uuid": "^1.1.0",
     "body-parser": "^1.17.2",
     "bootstrap": "^3.3.7",

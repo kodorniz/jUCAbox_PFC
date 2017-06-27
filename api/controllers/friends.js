@@ -38,13 +38,13 @@ function addFriend(req,res){
               if(!friendStored){
                     res.status(300).send({message:'No se ha guardado el amigo'});
               }else{
-                    res.status(200).send({friend:friendStored});
+                    res.status(200).send({friend:'ok'});
               }
             }
 
         });
       }else{
-        console.log(friendExist.length);
+      //  console.log(friendExist.length);
           res.status(400).send({message:'amigo ya existe'});
       }
 
@@ -54,34 +54,7 @@ function addFriend(req,res){
 
   });
 
-  Friend.find({friendID:   friend.userID,userID: friend.friendID},(err,friendExist)=>{
-    if(err){
-        res.status(500).send({message:'Error en la petición'});
-    }else{
-      if(friendExist.length==0 || !friendExist){
-        friend.save((err,friendStored)=>{
-            if(err){
-              console.log(err);
-              res.status(500).send({message:'Error al guardar el amigo'});
-            }else{
-              if(!friendStored){
-                    res.status(300).send({message:'No se ha guardado el amigo'});
-              }else{
-                    res.status(200).send({friend:friendStored});
-              }
-            }
 
-        });
-      }else{
-        console.log(friendExist.length);
-          res.status(400).send({message:'amigo ya existe'});
-      }
-
-
-    }
-
-
-  });
 
 
 }
@@ -101,6 +74,31 @@ function getFriends(req,res){
   var itemsPerPage = 1000;
 
   Friend.find({userID: userID}).paginate(page,itemsPerPage).populate('friendID').exec(function(err,friends,total){
+    if(err){
+        res.status(500).send({message:'Error en la petición'});
+    }else{
+      if(!friends){
+        res.status(404).send({message:'no existen amigos'});
+      }else{
+        res.status(200).send({friends: friends,total_items: total});
+      }
+    }
+  })
+}
+
+function getFriendsRelation(req,res){
+
+  var userID = req.params.userID;
+  if(req.params.page){
+  var page = req.params.page;
+}else{
+    var page = 1;
+}
+
+  var friendID = req.params.friendID;
+  var itemsPerPage = 1000;
+
+  Friend.find({userID: userID,friendID: friendID}).paginate(page,itemsPerPage).populate('friendID').exec(function(err,friends,total){
     if(err){
         res.status(500).send({message:'Error en la petición'});
     }else{
@@ -139,23 +137,7 @@ var params = req.body;
 
   }).remove().exec();
 
-  Friend.find({friendID: userID,userID: friendID},(err,friendRemove)=>{
-    if(err){
 
-        res.status(500).send({message:'Error en la petición'});
-    }else{
-      if(!friendRemove){
-        res.status(404).send({message:'No existe el amigo'});
-      }else{
-
-          res.status(200).send({message:'amigo eliminado'});
-      }
-
-
-    }
-
-
-  }).remove().exec();
 }
 
 
@@ -165,6 +147,7 @@ module.exports = {
 
   addFriend,
   getFriends,
-  deleteFriend
+  deleteFriend,
+  getFriendsRelation
 
 };

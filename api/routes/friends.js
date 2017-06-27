@@ -14,8 +14,10 @@ var md_upload = multipart({ uploadDir: resolve + '/../uploads/lugar' });
 
 api.post('/addFriend',md_auth.ensureAuth,FriendController.addFriend);
 api.get('/getFriends/:id',md_auth.ensureAuth,FriendController.getFriends);
-api.delete('/deletFriend',md_auth.ensureAuth,FriendController.deleteFriend);
+api.get('/getFriendsRelation/:userID/:friendID',md_auth.ensureAuth,FriendController.getFriendsRelation);
+api.delete('/deleteFriend',md_auth.ensureAuth,FriendController.deleteFriend);
 /*api.post('/register',UserController.saveUser);
+//getFriendsRelation
 api.put('/update-user/:id',md_auth.ensureAuth,UserController.updateUser);
 
 api.get('get-image-user/:imageFile',[md_auth.ensureAuth,md_upload],UserController.getImageFile);
