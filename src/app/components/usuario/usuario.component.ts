@@ -352,7 +352,7 @@ removeFav(artistaID:string,userID: string,nombreArtista: string){
 
 
   navigateFriend(_id:string){
-    console.log('dentro');
+
 
     for(let i=0;i<this.amigos.length;i++){
       if(this.amigos[i].friendID._id==_id){
@@ -361,8 +361,6 @@ removeFav(artistaID:string,userID: string,nombreArtista: string){
     }
 
 
-    console.log('this.amigos',this.amigos)
-    console.log('this.usuarioAmigo',this.usuarioAmigo)
 
 
     this._friendDetailService.pushFriend(this.usuarioAmigo)

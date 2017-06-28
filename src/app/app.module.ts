@@ -10,7 +10,9 @@ import { environment } from '../environments/environment';
 import { TranslateModule, TranslateLoader, TranslateStaticLoader } from 'ng2-translate';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
 import { Ng2HandyOauthModule } from 'ng2-handy-oauth';
-import { UiSwitchModule } from 'angular2-ui-switch'
+import { UiSwitchModule } from 'angular2-ui-switch';
+import "froala-editor/js/froala_editor.pkgd.min.js";
+import { FroalaEditorModule, FroalaViewModule } from 'angular2-froala-wysiwyg';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
 
@@ -162,6 +164,7 @@ let services = [
     FormsModule,
     HttpModule,
     APP_ROUTING,
+    FroalaEditorModule.forRoot(), FroalaViewModule.forRoot(),
     SimpleNotificationsModule.forRoot(),
     ModalModule.forRoot(),
     BootstrapModalModule,

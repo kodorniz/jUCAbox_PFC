@@ -267,6 +267,33 @@ export class LugaresService {
     ).catch(this.handleError);
   }
 
+  addMensaje(lugarID:string,mensaje:string){
+    //ADD MONGODB
+    let authToken = localStorage.getItem('tokenJB');
+
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', authToken);
+
+    let options = new RequestOptions({ headers: headers });
+    let objeto;
+
+
+     objeto = {"lugarID": lugarID,"mensaje": mensaje};
+
+
+
+
+
+    return this.http
+      .post('/api/addLugarMensaje',objeto,options)
+      .map(res => {
+        console.log(res);
+        return res.json();
+
+      }
+    ).catch(this.handleError);
+  }
+
   addFav(id:string,userID:string){
     //ADD MONGODB
     let authToken = localStorage.getItem('tokenJB');

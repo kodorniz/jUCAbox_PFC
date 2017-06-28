@@ -12,6 +12,7 @@
       <button type="button" [ngClass]="{'btn': true,'btn-primary': this.playlistVisible, 'btn-default': !this.playlistVisible}" (click) = "visiblePlaylist()"><i class="fa fa-music" aria-hidden="true"></i> Playlist</button>
       <button type="button" [ngClass]="{'btn': true,'btn-primary': this.cancionesTopVisible, 'btn-default': !this.cancionesTopVisible}" (click) = "visibleCancionesTop()"><i class="fa fa-arrow-circle-up" aria-hidden="true"></i> Canciones Top</button>
       <button *ngIf="isConnected()" type="button" [ngClass]="{'btn': true,'btn-primary': this.usuarioVisible, 'btn-default': !this.usuarioVisible}" (click) = "visibleUsuario()"><i class="fa fa-star" aria-hidden="true"></i> Usuarios</button>
+      <button *ngIf="isAdmin()" type="button" [ngClass]="{'btn': true,'btn-primary': this.mensajeVisible, 'btn-default': !this.mensajeVisible}" (click) = "visibleMensajes()"><i class="fa fa-envelope" aria-hidden="true"></i> Mensajes</button>
       <button *ngIf="isAdmin()" type="button" [ngClass]="{'btn': true,'btn-primary': this.editar, 'btn-default': !this.editar}" (click) = "visibleEditar()"><i class="fa fa-edit" aria-hidden="true"></i> Editar Información</button>
 
     </div>
@@ -429,6 +430,19 @@
 
 </div>
 
+<!-- Enviar mensajes -->
+<div *ngIf="mensajeVisible">
+  <div style="margin-bottom:20px;" [(froalaModel)]="froala" [froalaEditor]>Hello, Froala!</div>
+  <div style="text-align:right;margin-bottom:20px;">
+    <button class="btn btn-success" (click)="addMensaje()"><i class="fa fa-envelope"></i> Publicar mensaje</button>
+  </div>
+<!--  <div [innerHTML]="this.mensajeEJemplo.mensaje"></div>-->
+  <div>
+  <h3>
+    Mensajes insertados
+  </h3>
+  </div>
+</div>
 <!-- Editar informacion -->
 <div *ngIf="editar">
 <app-crearlugar></app-crearlugar>

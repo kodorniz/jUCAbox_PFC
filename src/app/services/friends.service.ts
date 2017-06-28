@@ -50,7 +50,7 @@ export class FriendsService {
             .map( res =>{
               //  console.log(res.json());
               //  this.artistas =  res.json().artists.items;
-
+                console.log(res.json());
                 return res.json();
 
             })

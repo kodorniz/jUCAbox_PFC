@@ -41,6 +41,7 @@ export class LugarComponent {
   informacionVisible = true;
   playlistVisible = false;
   usuarioVisible = false;
+  mensajeVisible = false;
   editar = false;
   //canciones sin validar
   playlistSV:any[]=[];
@@ -61,6 +62,7 @@ export class LugarComponent {
   devices_:any[]=[];
   lengthPLSeleccionada:any=0;
   deviceSeleccionado:any="";
+  public froala: string = 'My Document\'s Title'
   cancionRep:any={
     name:"",
     images:"",
@@ -73,6 +75,12 @@ export class LugarComponent {
     // other options...
     dateFormat: 'dd/mm/yyyy',
   };
+
+  mensajeEJemplo = {
+
+    mensaje : "<p>My <strong>Document&#39;s </strong>Title</p><p><br></p><p><img src=\"https://i.froala.com/download/b7abedaead0ded561a349fa8903d2a2e9c1578f9.png?1498672985\" style=\"width: 114px; height: 114px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p><br></p>",
+
+  }
 
   public fini: Object = { date: { year: new Date().getFullYear(), month: new Date().getMonth(), day: new Date().getDate()} };
   public ffin: Object = { date: { year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()} };
@@ -187,6 +195,15 @@ deleteSong(cancion:any,index:any){
   }
 
 
+showFroala(){
+  console.log(this.froala);
+}
+
+addMensaje(){
+  this._lugaresService.addMensaje(this.id_,this.froala).subscribe(data=>{
+    this.froala = '';
+  });
+}
 orderbyCol(columna:string){
 
   this.orderby = columna;
@@ -344,6 +361,7 @@ visibleInformacion(){
   this.usuarioVisible = false;
   this.cancionesTopVisible = false;
   this.editar = false;
+  this.mensajeVisible = false;
 }
 
 visiblePlaylist(){
@@ -352,6 +370,7 @@ visiblePlaylist(){
   this.usuarioVisible = false;
   this.cancionesTopVisible = false;
   this.editar = false;
+  this.mensajeVisible = false;
 }
 
 visibleUsuario(){
@@ -360,6 +379,7 @@ visibleUsuario(){
   this.usuarioVisible = true;
   this.cancionesTopVisible = false;
   this.editar = false;
+  this.mensajeVisible = false;
 }
 
 visibleCancionesTop(){
@@ -370,6 +390,7 @@ visibleCancionesTop(){
     this.usuarioVisible = false;
     this.cancionesTopVisible = true;
     this.editar = false;
+    this.mensajeVisible = false;
   });
 
 }
@@ -380,6 +401,16 @@ visibleEditar(){
   this.usuarioVisible = false;
   this.cancionesTopVisible = false;
   this.editar = true;
+  this.mensajeVisible = false;
+}
+
+visibleMensajes(){
+  this.informacionVisible = false;
+  this.playlistVisible = false;
+  this.usuarioVisible = false;
+  this.cancionesTopVisible = false;
+  this.editar = false;
+  this.mensajeVisible = true;
 }
 
 getCancionesSV(orden:string,col:string){
