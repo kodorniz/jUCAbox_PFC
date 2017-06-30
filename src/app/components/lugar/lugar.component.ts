@@ -62,7 +62,8 @@ export class LugarComponent {
   devices_:any[]=[];
   lengthPLSeleccionada:any=0;
   deviceSeleccionado:any="";
-  public froala: string = 'My Document\'s Title'
+  public froala: string ;
+  mensajes:any[]=[];
   cancionRep:any={
     name:"",
     images:"",
@@ -76,11 +77,13 @@ export class LugarComponent {
     dateFormat: 'dd/mm/yyyy',
   };
 
-  mensajeEJemplo = {
+  public optionsFroala: Object = {
+  placeholderText: 'Escriba su mensaje...',
+  charCounterCount: false,
+  heigth: 1600
+}
 
-    mensaje : "<p>My <strong>Document&#39;s </strong>Title</p><p><br></p><p><img src=\"https://i.froala.com/download/b7abedaead0ded561a349fa8903d2a2e9c1578f9.png?1498672985\" style=\"width: 114px; height: 114px;\" class=\"fr-fic fr-dib\"></p><p><br></p><p><br></p>",
 
-  }
 
   public fini: Object = { date: { year: new Date().getFullYear(), month: new Date().getMonth(), day: new Date().getDate()} };
   public ffin: Object = { date: { year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()} };
@@ -120,6 +123,10 @@ constructor(public _playerService:PlayerService,
     });
 
     this.id_ = params['id'];
+      this._lugaresService.getMensajes(this.id_).subscribe(data=>{
+        this.mensajes = data.lugares;
+
+      });
     this._lugaresService.getLugaresFavL(this.id_).subscribe(
         data=>{
 
@@ -132,6 +139,8 @@ constructor(public _playerService:PlayerService,
       this.recargarDevices();
     }
   })
+
+
 
 if(this.isLoginSpotify()){
   this._playlistService.GetPlaylistsSP().subscribe(
@@ -189,6 +198,10 @@ deleteSong(cancion:any,index:any){
   this._jucaboxService.deleteTrackPlaylist(this.playlistSeleccionada,cancion,index).subscribe(data=> this.getplaylistSeleccionada());
 }
 
+navigateLugar(id:string){
+  console.log('hola');
+  this.router.navigate(['/lugar',id]);
+}
 
   fileChangeEvent(fileInput:any){
     this.filesToUpload = <Array<File>>fileInput.target.files;
@@ -196,12 +209,15 @@ deleteSong(cancion:any,index:any){
 
 
 showFroala(){
-  console.log(this.froala);
+
 }
 
 addMensaje(){
   this._lugaresService.addMensaje(this.id_,this.froala).subscribe(data=>{
-    this.froala = '';
+    this.froala ='';
+    this._lugaresService.getMensajes(this.id_).subscribe(data=>{
+      this.mensajes = data.lugares;
+    });
   });
 }
 orderbyCol(columna:string){
@@ -213,6 +229,13 @@ orderbyCol(columna:string){
     this.playlistSV = data.playlist;
   });
 
+}
+
+getMensajes(){
+  this._lugaresService.getMensajes(this.id_).subscribe(data=>{
+    this.mensajes = data.lugares;
+
+  });
 }
 
 getImage(url:string){
@@ -429,6 +452,21 @@ validateCancionSV(){
 
 getActualCancion(){
   return this.cancion;
+}
+
+borrarMensaje(idMensaje:string){
+
+
+
+this._lugaresService.removeMensaje(idMensaje).subscribe(data=>{
+  this._lugaresService.getMensajes(this.id_).subscribe(data=>{
+    this.mensajes = data.lugares;
+
+  })
+
+});
+
+
 }
 
 sendCancion(cancion){

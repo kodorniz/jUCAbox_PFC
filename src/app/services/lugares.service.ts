@@ -266,6 +266,81 @@ export class LugaresService {
       }
     ).catch(this.handleError);
   }
+  getMensajesTodos(){
+
+    let authToken = localStorage.getItem('tokenJB');
+
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', authToken);
+
+    let options = new RequestOptions({ headers: headers });
+
+
+
+     //objeto = {"lugarID": termino,"provincia": provincia,"ciudad": ciudad,"tipoMusica": tipoMusica,"userID": userID,"admin":admin};
+
+
+
+
+
+    return this.http
+      .get('/api/getLugaresMensajes/',options)
+      .map(res => {
+
+        return res.json();
+
+      }
+    ).catch(this.handleError);
+  }
+
+  getMensajes(lugarID: string){
+
+    let authToken = localStorage.getItem('tokenJB');
+
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', authToken);
+
+    let options = new RequestOptions({ headers: headers });
+
+
+
+     //objeto = {"lugarID": termino,"provincia": provincia,"ciudad": ciudad,"tipoMusica": tipoMusica,"userID": userID,"admin":admin};
+
+
+
+
+
+    return this.http
+      .get('/api/getLugaresMensaje/' + lugarID,options)
+      .map(res => {
+
+        return res.json();
+
+      }
+    ).catch(this.handleError);
+  }
+
+  removeMensaje(mensajeID: string){
+
+    let authToken = localStorage.getItem('tokenJB');
+
+
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', authToken);
+    let objeto = {"mensajeID": mensajeID};
+    let options = new RequestOptions({ headers: headers , body: objeto});
+
+
+    return this.http
+      .delete(  '/api/deleteLugarMensaje',options)
+      .map(res => {
+        console.log(res);
+        return res.json();
+      }
+    ).catch(this.handleError);
+
+    //this.lugaresFav.pop(this.getLugar(lugarID));
+  }
 
   addMensaje(lugarID:string,mensaje:string){
     //ADD MONGODB

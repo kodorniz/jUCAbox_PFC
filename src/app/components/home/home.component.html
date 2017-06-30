@@ -67,8 +67,49 @@
 
       </div>
     </div>
-    <hr>
-<div class="parallax">
+    <div *ngIf="isLogin()">
+
+
+
+
+
+<h2 style="padding-left:10px;"><i class="fa fa-envelope"></i>  <span>Tablón de mensajes</span></h2>
+<hr style="padding-bottom:10px">
+
+
+<div *ngIf="this.mensajes.length==0 && ok==true">
+  <div class="callout callout-info">
+      <h4>Oops!!</h4>
+
+      <p>No ha escrito nigún mensaje.</p>
+
+    </div>
+</div>
+<div *ngFor="let mensaje of this.mensajes" class="box box-success box-solid"  style="    margin-left: 5px;margin-top:35px;">
+            <div class="box-header with-border">
+              <div style="    display: -webkit-inline-box;" >
+                  <img (click)="navigateLugar(mensaje.lugarID._id)" [src]="getImage(mensaje.lugarID.img)" style="margin-right:5px;    margin-left: -20px;
+margin-top: -40px;    overflow: hidden; cursor:pointer;
+width: 70px;
+height: 70px;border: 2px solid #00a65a;" class="img-responsive img-circle">
+              <h2 class="box-title" (click)="navigateLugar(mensaje.lugarID._id)" style="cursor:pointer;font-size: 25px;">{{mensaje.lugarID.nombre}} - <small style="    color: white;">{{mensaje.lugarID.ciudad}} ({{mensaje.lugarID.provincia}})</small></h2>
+              </div>
+              <div class="box-tools pull-right">
+                <i class="fa fa-clock-o"></i> <span style="padding-right:20px;"> {{mensaje.fecha | dateLog}} </span>
+              </div>
+              <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" [innerHTML]="mensaje.mensaje  | safeHtml">
+
+            </div>
+            <!-- /.box-body -->
+</div>
+
+
+</div>
+<div class="parallax" *ngIf="!isLogin()">
+<hr>
 
   <div class="row  " style="
     width: 50%;

@@ -96,6 +96,7 @@ import { LogService } from './services/log.service';
 import { FriendsService } from './services/friends.service';
 import { FriendDetailService } from './services/friend-detail.service';
 import { DateLogPipe } from './pipes/date-log.pipe';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { LOCALE_ID } from '@angular/core';
 import { AmigoDetalleComponent } from './components/amigo-detalle/amigo-detalle.component';
 import { PlaylistService } from './services/playlist.service';
@@ -155,6 +156,7 @@ let services = [
     UsuarioComponent,
     SinfotoAvatarPipe,
     DateLogPipe,
+    SafeHtmlPipe,
     AmigoDetalleComponent,
     CrearlugarComponent,
     CallbackSpotifyComponent

@@ -58,7 +58,7 @@ function getLugaresMensaje(req,res){
 
   var itemsPerPage = 1000;
 
-  LugaresMensaje.find({lugarID: lugarID}).paginate(page,itemsPerPage,function(err,lugares,total){
+  LugaresMensaje.find({lugarID: lugarID}).sort('-fecha').populate('lugarID').paginate(page,itemsPerPage,function(err,lugares,total){
     if(err){
         res.status(500).send({message:'Error en la petición'});
     }else{
@@ -83,7 +83,7 @@ function getLugaresMensajes(req,res){
 
   var itemsPerPage = 1000;
 
-  LugaresMensaje.find().paginate(page,itemsPerPage,function(err,lugares,total){
+  LugaresMensaje.find().sort('-fecha').populate('lugarID').paginate(page,itemsPerPage,function(err,lugares,total){
     if(err){
         res.status(500).send({message:'Error en la petición'});
     }else{

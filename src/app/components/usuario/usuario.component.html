@@ -66,7 +66,7 @@
   <br>
   <div class="btn-group" role="group">
       <button type="button" class="btn" [ngClass]="{'btn-default':!visHistorialAcciones , 'btn-primary':visHistorialAcciones}" (click)="verHistorialAcciones()"><i class="fa fa-list"></i> Historial de acciones</button>
-      <button type="button" class="btn" [ngClass]="{'btn-default':!visAmigos , 'btn-primary':visAmigos}" (click)="verAmigos()"><i class="fa fa-users" ></i> Amigos</button>
+      <button type="button" class="btn" [ngClass]="{'btn-default':!visAmigos , 'btn-primary':visAmigos}" (click)="verAmigos()"><i class="fa fa-users" ></i> Usuarios</button>
       <button type="button" class="btn" [ngClass]="{'btn-default':!visArtistasFavoritos , 'btn-primary':visArtistasFavoritos}" (click)="verArtistasFavoritos()"><i class="fa fa-music" ></i> Artistas Favoritos</button>
       <button type="button" class="btn" [ngClass]="{'btn-default':!visLugaresFavoritos , 'btn-primary':visLugaresFavoritos}" (click)="verLugaresFavoritos()"><i class="fa fa-home" ></i> Lugares Favoritos</button>
      <button type="button" class="btn" [ngClass]="{'btn-default':!visInformacionPersonal , 'btn-primary':visInformacionPersonal}" (click)="verInformacionPersonal()"><i class="fa fa-user" ></i> Información personal</button>
@@ -232,7 +232,7 @@
     <br>
               <div class="input-group" style="float:right">
                 <div *ngIf="amigo.amigo==true || amigo.amigo===undefined" class="text-center">
-                  
+
                     <button type="button" class="btn btn-success " name="button" (click)="sendMessage(amigo.friendID._id)"><i class="fa fa-envelope"></i> Enviar Mensaje </button>
                     <button type="button" class="btn btn-danger " name="button" (click)="removeFriend(amigo.friendID._id,amigo.friendID.nickName)"><i class="fa fa-times"></i> Eliminar Amigo </button>
                 </div>
@@ -320,7 +320,7 @@
             <!-- <a href="#" [routerLink]="['/lugar',lugar.id]" class="btn btn-secondary " ><i class="fa fa-eye " aria-hidden="true"><span class = "hide">  Ver Lugar...</span></i></a> -->
             <button  (click)="_lugaresService.removeFav(lugar.lugarID.id,Usuario._id)"  class="btn btn-danger" style="float:right;margin:5px;"><i class="fa fa-times" aria-hidden="true"></i> Eliminar</button>
 
-            <button [routerLink]="['/lugar',lugar.lugarID.id]"  class="btn btn-info" style="float:right;margin:5px;"><i class="fa fa-search" aria-hidden="true"></i> Ver detalles</button>
+            <button [routerLink]="['/lugar',lugar.lugarID._id]"  class="btn btn-info" style="float:right;margin:5px;"><i class="fa fa-search" aria-hidden="true"></i> Ver detalles</button>
             <!-- <a href="#" class="btn btn-success " ><i class="fa fa-cloud-upload" aria-hidden="true"><span class = "hide">  Enviar Cancion...</span></i></a> -->
           <!-- </div> -->
           <!-- </div>

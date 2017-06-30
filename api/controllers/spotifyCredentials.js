@@ -21,7 +21,7 @@ function getToken(callback) {
 
   request(opts, function (err, res, body) {
     if (err || res.statusCode !== 200) {
-      return callback(err || {statusCode: response.statusCode});
+      return callback(err || {statusCode: res.statusCode});
     }
     callback(null, body);
   });
