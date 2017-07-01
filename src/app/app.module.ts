@@ -104,6 +104,7 @@ import { CrearlugarComponent } from './components/crearlugar/crearlugar.componen
 import { CallbackSpotifyComponent } from './components/callback-spotify/callback-spotify.component';
 import { MyDatePickerModule } from 'mydatepicker';
 
+
 let widgets = [
     AppComponent,
     BreadcrumbComponent,
@@ -173,7 +174,6 @@ let services = [
     SelectModule,
 MyDatePickerModule,
 UiSwitchModule,
-
     ReactiveFormsModule,
     Ng2HandyOauthModule.forRoot({
       providers: {
