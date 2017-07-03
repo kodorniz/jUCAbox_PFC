@@ -31,6 +31,7 @@ function saveUser(req,res){
   user.provincia = params.provincia;
   user.pais = params.pais;
   user.nickName = params.nickName;
+  user.online = params.online;
 
 
 

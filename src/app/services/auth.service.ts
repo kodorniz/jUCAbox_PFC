@@ -102,7 +102,7 @@ language: "es"
           ,"provincia": user.provincia
           ,"pais": user.pais
           ,"nickName": user.nickName
-
+          ,"online": 'yes'
         };
         console.log('objeto',objeto);
         return this.http
@@ -115,9 +115,28 @@ language: "es"
           }
         ).subscribe();
       }else{
-      
+
         localStorage.setItem('tokenJB',data.token);
         localStorage.setItem('userJB',data.user[0]._id);
+
+        let authToken = localStorage.getItem('tokenJB');
+
+        let headers = new Headers({ 'Accept': 'application/json' });
+        headers.append('Authorization', authToken);
+
+        let options = new RequestOptions({ headers: headers });
+        let objeto;
+        objeto = {
+          online: 'yes'
+        }
+
+        return this.http
+          .put('/api/updateUser/' + data.user[0]._id,objeto,options)
+          .map(res => {
+            console.log(res);
+            return res.json();
+          }).subscribe();
+
 
       }
     });
@@ -150,6 +169,7 @@ language: "es"
     // Call the show method to display the widget.
     this.lock.show();
 
+
   }
 
   public authenticated() {
@@ -157,12 +177,15 @@ language: "es"
     // This searches for an item in localStorage with key == 'id_token'
     return tokenNotExpired();
   }
+
   public setCurrentUser( user: User ) {
     this.currentUser.next( user );
   }
 
 
   public logout() {
+    let userJB = localStorage.getItem('userJB');
+    let tokenJB = localStorage.getItem('tokenJB');
 
     localStorage.clear();
     let user = new User();
@@ -171,6 +194,27 @@ language: "es"
     localStorage.removeItem('id_token');
     localStorage.removeItem('profile');
     this.router.navigate(['/home']);
+
+    let authToken = tokenJB;
+
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', authToken);
+
+    let options = new RequestOptions({ headers: headers });
+    let objeto;
+    objeto = {
+      online: 'no'
+    }
+
+    return this.http
+      .put('/api/updateUser/' + userJB,objeto,options)
+      .map(res => {
+        console.log(res);
+        return res.json();
+      }).subscribe();
+
+
+
 
   }
 

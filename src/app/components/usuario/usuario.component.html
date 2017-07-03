@@ -38,7 +38,7 @@
 
                     <ul class="list-group list-group-unbordered">
                       <li class="list-group-item">
-                        <b>Amigos</b> <a class="pull-right">{{amigos.length}}</a>
+                        <b>Amigos</b> <a class="pull-right">{{soloAmigos.length}}</a>
                       </li>
                       <li class="list-group-item">
                         <b>Lugares Favoritos</b> <a class="pull-right">{{lugares.length}}</a>
@@ -199,6 +199,7 @@
 
   <div class="box box-warning " *ngFor="let amigo of amigos;let i = index">
 
+
         <div class="box-header with-border">
           <h3 class="box-title">{{amigo.friendID.nickName}}</h3>
         </div><!-- /.box-header -->
@@ -206,7 +207,9 @@
           <div class="row">
             <div class="col-md-2">
               <img class="profile-user-img img-responsive img-circle" [src]="amigo.friendID.avatarUrl" alt="User profile picture">
+
               <br>
+
 
               <div *ngIf="amigo.amigo==true || amigo.amigo===undefined" class="text-center">
 
@@ -235,6 +238,9 @@
 
                     <button type="button" class="btn btn-success " name="button" (click)="sendMessage(amigo.friendID._id)"><i class="fa fa-envelope"></i> Enviar Mensaje </button>
                     <button type="button" class="btn btn-danger " name="button" (click)="removeFriend(amigo.friendID._id,amigo.friendID.nickName)"><i class="fa fa-times"></i> Eliminar Amigo </button>
+                    <br>
+                    <span *ngIf="amigo.friendID.online=='yes'" style="float: right"><i class="fa fa-circle" style="color:green"></i> Online</span>
+                    <span *ngIf="amigo.friendID.online=='no'" style="float: right"><i class="fa fa-circle" style="color:red"></i>  Offline</span>
                 </div>
     </div>
 

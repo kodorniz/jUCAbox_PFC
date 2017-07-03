@@ -64,7 +64,7 @@ export class UsuarioComponent implements OnInit {
     amigos:any[]=[];
     prueba:any;
     usuarioAmigo:any;
-
+    userList:any;
 
     //para buscar
     lastnameB:any;
@@ -167,6 +167,17 @@ export class UsuarioComponent implements OnInit {
 
   ngOnInit() {
 
+    setInterval(() => {
+      this._friendsService.getFriendsUser(this.Usuario._id).subscribe(
+       data => {
+         this.soloAmigos = data.friends;
+         this.getUsers();
+       }
+
+     );
+
+
+    }, 1000);
 
 
   }
@@ -266,6 +277,13 @@ addFriend(friendID:string,friendNick:string,amigo:boolean){
   )
 }
 
+isUserConnected(userID:string){
+  this._userServ.isConnected(userID).subscribe(
+    data=>{
+      return data;
+    }
+  )
+}
 removeFriend(friendID:string,friendNick:string){
   this._friendsService.removeFriend(localStorage.getItem('userJB'),friendID).subscribe(
 

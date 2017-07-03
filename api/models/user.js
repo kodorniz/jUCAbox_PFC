@@ -16,7 +16,8 @@ var UserSchema = Schema({
   ciudad: String,
   provincia: String,
   pais: String,
-  nickName: String
+  nickName: String,
+  online: String
 });
 
 module.exports = mongoose.model('User',UserSchema);

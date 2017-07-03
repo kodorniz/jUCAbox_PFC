@@ -183,6 +183,27 @@ export class UserService {
       .get('https://sergioruiz.eu.auth0.com/api/v2/users',options)
       .map(res => res);
     }
+
+    isConnected(userID:string){
+/*
+      this.authHttp.get('https://sergioruiz.eu.auth0.com/api/v2/users')
+            .subscribe(
+              data => this.thing = data,
+              err => console.log(err),
+              () => console.log('Request Complete')
+            );
+      console.log('thing',this.thing);
+*/
+    let authToken = this.getTokenApi();
+
+    let headers = new Headers({ 'Accept': 'application/json' });
+    headers.append('Authorization', `Bearer ${authToken}`);
+
+    let options = new RequestOptions({ headers: headers });
+    return this._http
+      .get('https://sergioruiz.eu.auth0.com/api/v2/users/' + userID,options)
+      .map(res => res);
+    }
 }
 
 
