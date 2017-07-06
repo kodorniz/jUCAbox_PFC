@@ -10,10 +10,10 @@ import { JucaboxService } from '../../services/jucabox.service';
 })
 export class AppFooterComponent {
 
-  //chats: FirebaseListObservable<any[]>;
+//  chats: FirebaseListObservable<any[]>;
 
     constructor(/*db: AngularFireDatabase,*/private _jucaboxService:JucaboxService,public _playerService:PlayerService) {
-    //    this.chats = db.list('/chats');
+      // this.chats = db.list('/chats');
     }
 
 

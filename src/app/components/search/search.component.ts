@@ -6,11 +6,12 @@ import { Overlay } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { LugaresService } from '../../services/lugares.service';
 import {Auth} from '../../services/auth.service';
-import {Router} from '@angular/router/src/router';
+import {Router} from '@angular/router';
 import {PlaylistService} from '../../services/playlist.service';
 import { NotificationsService } from 'angular2-notifications';
 import {LogService} from '../../services/log.service';
 declare var swal: any;
+
 
 @Component({
   selector: 'app-search',
@@ -60,7 +61,7 @@ export class SearchComponent implements OnInit {
               this.router.events.subscribe((event) => {
 
                 //console.log(event.url,'lugar');
-                if(event.url) {
+                if(event['url']) {
                     this.stopCancion();
                 }
             });
