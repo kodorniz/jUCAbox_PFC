@@ -3,7 +3,7 @@
 var express = require('express');
 
 //var spotifyToken = require('../spotify');
-var LugarMensajeController = require('../controllers/lugaresMensajes');
+var LugarMensajeController = require('../controllers/LugaresMensajes');
 
 var api = express.Router();
 var md_auth = require('../middleware/authenticate');

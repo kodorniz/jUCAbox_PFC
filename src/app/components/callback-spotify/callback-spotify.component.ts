@@ -31,7 +31,6 @@ export class CallbackSpotifyComponent implements OnInit, OnDestroy {
           private storageServ: HandyOauthStorageService
       ) {
         this.url = _globalService.getCallbackurl();
-
       }
 
       public ngOnInit() {
@@ -50,10 +49,9 @@ export class CallbackSpotifyComponent implements OnInit, OnDestroy {
       }
 
       protected callbackFlow() {
-        console.log('callback');
+
           this.oauthProvidersController.flow((res: HandyOauthMessageInterface) => {
               this.progress = res.progress;
-              console.log(res,res.response);
               if (res.hasOwnProperty('response') && res.response.hasOwnProperty('cid')) {
                 console.log('url',this.url);
                   this.router.navigate([this.url]);

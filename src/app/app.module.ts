@@ -13,8 +13,8 @@ import { Ng2HandyOauthModule } from 'ng2-handy-oauth';
 import { UiSwitchModule } from '../../node_modules/angular2-ui-switch/src';
 import "froala-editor/js/froala_editor.pkgd.min.js";
 import { FroalaEditorModule, FroalaViewModule } from 'angular2-froala-wysiwyg';
-//import { AngularFireModule } from 'angularfire2';
-//import {firebaseConfig}  from "../environments/firebase.config";
+import { AngularFireModule } from 'angularfire2';
+import {firebaseConfig}  from "../environments/firebase.config";
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
 
@@ -67,8 +67,8 @@ export function createTranslateLoader( http: Http ) {
 }
 
 let modules = [
-    AlertModule.forRoot(),
-    DatepickerModule.forRoot(),
+    //AlertModule.forRoot(),
+    //DatepickerModule.forRoot(),
     BrowserModule,
     FormsModule,
     HttpModule,
@@ -168,17 +168,17 @@ let services = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    //AngularFireModule.initializeApp(firebaseConfig),
     APP_ROUTING,
     FroalaEditorModule.forRoot(), FroalaViewModule.forRoot(),
     SimpleNotificationsModule.forRoot(),
     ModalModule.forRoot(),
     BootstrapModalModule,
     SelectModule,
+    AngularFireModule.initializeApp(firebaseConfig),
 MyDatePickerModule,
 UiSwitchModule,
     ReactiveFormsModule,
-    Ng2HandyOauthModule.forRoot({
+   Ng2HandyOauthModule.forRoot({
       providers: {
         spotify: {
           clientId: 'da017c536e314c94ab23b3505ad0fc85',

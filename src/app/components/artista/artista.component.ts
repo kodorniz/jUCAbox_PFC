@@ -10,7 +10,7 @@ import {UserService} from '../../services/user.service';
 import {ArtistasService} from '../../services/artistas.service';
 import {LogService} from '../../services/log.service';
 import { NotificationsService } from 'angular2-notifications';
-import {Router} from '@angular/router';
+import {Router} from '@angular/router/src/router';
 import {PlaylistService} from '../../services/playlist.service';
 
 @Component({
@@ -77,7 +77,7 @@ export class ArtistaComponent implements OnInit {
                   this.menuState = this.menuState === 'out' ? 'in' : 'out';
                 }
   ngOnInit() {
-
+    
     this.activatedRoute.params.map(
       parametros =>{
         return parametros['id'];

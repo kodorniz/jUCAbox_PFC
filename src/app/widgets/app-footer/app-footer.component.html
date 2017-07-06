@@ -36,14 +36,13 @@
 
 
   </div>
-</footer>-->
-
+</footer>
 <ul>
   <li class="text" *ngFor="let chat of chats | async">
     {{chat | json}}
   </li>
 </ul>
-
+-->
 <footer class="main-footer" *ngIf="this._playerService.getCancionRep().name">
   <div class="clearfix"></div>
 

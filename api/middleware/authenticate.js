@@ -15,6 +15,9 @@ exports.ensureAuth= function(req,res,next){
   var token = req.headers.authorization.replace(/['"]+/g,'');
 
   try{
+    console.log('EN AUTHENTICATE');
+    console.log(token);
+    console.log(jwt.decode(token,secret));
     var payload = jwt.decode(token,secret);
 
     if(payload.exp <= moment().unix()){
@@ -24,6 +27,7 @@ exports.ensureAuth= function(req,res,next){
     }
 
   }catch(ex){
+    console.log(ex);
     return res.status(404).send({
       message: 'el token no es válido'
     });
