@@ -1,6 +1,7 @@
 import { Component, Input,OnInit } from '@angular/core';
 import { PlayerService } from '../../services/player.service';
 import { JucaboxService } from '../../services/jucabox.service';
+//import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 
 @Component( {
     selector: 'app-footer',
@@ -9,9 +10,10 @@ import { JucaboxService } from '../../services/jucabox.service';
 })
 export class AppFooterComponent {
 
+  //chats: FirebaseListObservable<any[]>;
 
-    constructor(private _jucaboxService:JucaboxService,public _playerService:PlayerService) {
-
+    constructor(/*db: AngularFireDatabase,*/private _jucaboxService:JucaboxService,public _playerService:PlayerService) {
+    //    this.chats = db.list('/chats');
     }
 
 
@@ -48,7 +50,7 @@ export class AppFooterComponent {
 
                             if(data.device.id && !this._playerService.getDevice()){
 
-                          
+
                               this._playerService.setDevice(data.device.id);
                             }
 

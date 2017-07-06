@@ -13,6 +13,8 @@ import { Ng2HandyOauthModule } from 'ng2-handy-oauth';
 import { UiSwitchModule } from '../../node_modules/angular2-ui-switch/src';
 import "froala-editor/js/froala_editor.pkgd.min.js";
 import { FroalaEditorModule, FroalaViewModule } from 'angular2-froala-wysiwyg';
+//import { AngularFireModule } from 'angularfire2';
+import {firebaseConfig}  from "../environments/firebase.config";
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
 
@@ -166,6 +168,7 @@ let services = [
     BrowserModule,
     FormsModule,
     HttpModule,
+    //AngularFireModule.initializeApp(firebaseConfig),
     APP_ROUTING,
     FroalaEditorModule.forRoot(), FroalaViewModule.forRoot(),
     SimpleNotificationsModule.forRoot(),

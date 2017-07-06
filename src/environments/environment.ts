@@ -7,5 +7,6 @@ export const environment = {
   // THIS ARE TESTING CONFIG! DONT USE THAT IN PROD! CHANGE THAT!
 
   production: false,
-  silent: false
+  silent: false,
+
 };
