@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+/*import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FirebaseListObservable } from 'angularfire2';
 import { Client } from '../../models/client';
 import { ClientDAL } from '../../dal/client.dal';
@@ -54,4 +54,4 @@ export class ClientComponent implements OnInit, OnDestroy {
   private add = (): void => {
     this.dal.create(new Client());
   }
-}
+}*/

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+/*import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
@@ -113,4 +113,4 @@ export class RestService {
         console.error(error);
         return Observable.throw(error.json().error || 'Server error');
     }
-}
+}*/
