@@ -22,8 +22,8 @@ auth: {
                 responseType: 'token'
             },
 socialButtonStyle: "small",
-theme: {"logo":"../../assets/img/LogoLogin.PNG","primaryColor":"#3A99D8"},
-languageDictionary: {"title":""},
+theme: {"logo":"https://cdn.auth0.com/website/playground/schneider.svg","primaryColor":"#3A99D8"},
+languageDictionary: {"title":"jUCAbox"},
 language: "es"
   };
 
