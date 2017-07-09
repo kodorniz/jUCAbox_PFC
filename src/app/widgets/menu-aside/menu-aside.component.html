@@ -35,6 +35,129 @@
 				[routerLink]="['lugares']"> <i
 					class="fa fa-globe"></i> <span>Buscar lugar</span>
 			</a> </li>
+			<hr *ngIf="connected()">
+			<ul>
+			  <li class="text" *ngFor="let chat of chats | async">
+			    {{chat | json}}
+			  </li>
+			</ul>
+			<!-- ********** CHAT *********** -->
+			<div style="padding: 5px;" *ngIf="connected()"  >
+				<div class="box box-danger direct-chat direct-chat-danger collapsed-box direct-chat-contacts-open" (click)="scrollDown()" style="border: 1px solid black">
+			  <div class="box-header with-border">
+			    <h3 class="box-title">Chat</h3>
+			    <div class="box-tools pull-right">
+			      <span data-toggle="tooltip" title="3 New Messages" class="badge bg-red">3</span>
+			      <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+			      <!-- In box-tools add this button if you intend to use the contacts pane -->
+			      <button class="btn btn-box-tool" data-toggle="tooltip" title="Contacts" data-widget="chat-pane-toggle"><i class="fa fa-comments"></i></button>
+			    </div>
+			  </div>
+			  <!-- /.box-header -->
+			  <div class="box-body" style="display: none;" >
+			    <!-- Conversations are loaded here -->
+			    <div class="direct-chat-messages" id="chatMensajes" >
+						<ng-container  *ngFor="let chat of _cs.chats | async">
+
+						<div [ngClass]="{'right': !isUser(chat.idUser)}" class="direct-chat-msg">
+
+									 <div class="direct-chat-info clearfix">
+										 <span class="direct-chat-name" [ngClass]="{'pull-left': isUser(chat.idUser),'pull-right': !isUser(chat.idUser)}" >{{chat.nombre}}</span>
+
+										 <span class="direct-chat-timestamp" [ngClass]="{'pull-right': isUser(chat.idUser),'pull-left': !isUser(chat.idUser)}">{{fecha(chat.fechaMensaje) | date:'medium'}}</span>
+									 </div>
+
+									 <img class="direct-chat-img" [src]="getImageUser()" alt="message user image">
+
+									 <div class="direct-chat-text" style="white-space: normal;">
+										 {{chat.mensaje}}
+									 </div>
+
+
+					 </div>
+
+				 </ng-container>
+
+
+			      <!-- INICIO Message. Default to the left
+			      <div class="direct-chat-msg">
+			        <div class="direct-chat-info clearfix">
+			          <span class="direct-chat-name pull-left">Alexander Pierce</span>
+			          <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
+			        </div>
+
+			        <img class="direct-chat-img" src="../dist/img/user1-128x128.jpg" alt="message user image">
+
+			        <div class="direct-chat-text">
+			          Is this template really for free? That's unbelievable!
+			        </div>
+
+			      </div>
+			      FINAL Message. Default to the left -->
+
+
+			      <!-- INICIO Message to the right
+			      <div class="direct-chat-msg right">
+			        <div class="direct-chat-info clearfix">
+			          <span class="direct-chat-name pull-right">Sarah Bullock</span>
+			          <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
+			        </div>
+
+			        <img class="direct-chat-img" src="../dist/img/user3-128x128.jpg" alt="message user image">
+
+			        <div class="direct-chat-text">
+			          You better believe it!
+			        </div>
+
+			      </div>
+						   FINAL Message to the right -->
+
+			    </div>
+
+
+
+
+			    <!--/.direct-chat-messages-->
+
+			    <!-- Contacts are loaded here -->
+			    <div class="direct-chat-contacts">
+			      <ul class="contacts-list">
+			        <li *ngFor="let amigo of amigos">
+			          <div (click)="scrollDown()" style="cursor: pointer">
+			            <img class="contacts-list-img" [src]="amigo.friendID.avatarUrl" alt="Contact Avatar">
+			            <div class="contacts-list-info">
+			              <span class="contacts-list-name">
+			                {{amigo.friendID.nickName}}
+										</span>
+			               <!-- <small class="contacts-list-date pull-right">2/28/2015</small>
+			                </span>
+			              <span class="contacts-list-msg">How have you been? I was...</span>-->
+										<span *ngIf="amigo.friendID.online=='yes'" style="float: right"><i class="fa fa-circle" style="color:green"></i> Online</span>
+										<span *ngIf="amigo.friendID.online=='no'" style="float: right"><i class="fa fa-circle" style="color:red"></i>  Offline</span>
+
+			            </div>
+			            <!-- /.contacts-list-info -->
+			          </div>
+			        </li>
+			        <!-- End Contact Item -->
+			      </ul>
+			      <!-- /.contatcts-list -->
+			    </div>
+			    <!-- /.direct-chat-pane -->
+			  </div>
+			  <!-- /.box-body -->
+			  <div class="box-footer" style="display: none;">
+			    <div class="input-group">
+			      <input type="text" [(ngModel)]="mensaje" (keyup.enter)="enviar()" name="message" placeholder="mensaje ..." class="form-control">
+			      <span class="input-group-btn">
+			                <button type="button" class="btn btn-danger btn-flat" (click)="enviar()">Send</button>
+			                </span>
+			    </div>
+			  </div>
+			  <!-- /.box-footer-->
+			</div>
+			<!--/.direct-chat -->
+			</div>
 			<!--<hr>
 			<li><a
 				(click)="loginSpotify()"> <i

@@ -41,7 +41,7 @@ import { NotificationService } from './services/notification.service';
 import { BreadcrumbService } from './services/breadcrumb.service';
 import { AdminLTETranslateService } from './services/translate.service';
 import { LoggerService } from './services/logger.service';
-
+import { ChatService } from './services/chat.service'
 
 //Componentes
 import { AppComponent } from './app.component';
@@ -174,6 +174,7 @@ let services = [
     ModalModule.forRoot(),
     BootstrapModalModule,
     SelectModule,
+
     AngularFireModule.initializeApp(firebaseConfig),
 MyDatePickerModule,
 UiSwitchModule,
@@ -197,6 +198,7 @@ UiSwitchModule,
     LogService,
     ArtistasService,
     FriendsService,
+        ChatService,
     FriendDetailService,
     GlobalService,
     PlaylistService,

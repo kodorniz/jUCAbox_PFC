@@ -1,7 +1,7 @@
 import { Component, Input,OnInit } from '@angular/core';
 import { PlayerService } from '../../services/player.service';
 import { JucaboxService } from '../../services/jucabox.service';
-import {AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database';
+
 
 @Component( {
     selector: 'app-footer',
@@ -10,9 +10,9 @@ import {AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database
 })
 export class AppFooterComponent {
 
-chats: FirebaseListObservable<any[]>;
-    constructor(db: AngularFireDatabase,private _jucaboxService:JucaboxService,public _playerService:PlayerService) {
-        this.chats = db.list('/chats');
+
+    constructor(private _jucaboxService:JucaboxService,public _playerService:PlayerService) {
+
     }
 
 

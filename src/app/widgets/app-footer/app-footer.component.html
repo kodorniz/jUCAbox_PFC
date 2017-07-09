@@ -37,16 +37,18 @@
 
   </div>
 </footer>
-<ul>
-  <li class="text" *ngFor="let chat of chats | async">
-    {{chat | json}}
-  </li>
-</ul>
+
 -->
+
+
+
 <footer class="main-footer" *ngIf="this._playerService.getCancionRep().name">
+
+
+
   <div class="clearfix"></div>
 
-  <div class="player" style="color:black">
+  <div  class="player" style="color:black">
     <div class="col-xs-1 album-image">
       <img  style="    border: 1px solid #ccc!important;"  [src]="_playerService.getCancionRep().images | sinfoto">
     </div>
