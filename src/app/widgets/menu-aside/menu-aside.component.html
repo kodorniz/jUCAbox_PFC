@@ -36,38 +36,41 @@
 					class="fa fa-globe"></i> <span>Buscar lugar</span>
 			</a> </li>
 			<hr *ngIf="connected()">
-			<ul>
-			  <li class="text" *ngFor="let chat of chats | async">
-			    {{chat | json}}
-			  </li>
-			</ul>
 			<!-- ********** CHAT *********** -->
 			<div style="padding: 5px;" *ngIf="connected()"  >
-				<div class="box box-danger direct-chat direct-chat-danger collapsed-box direct-chat-contacts-open" (click)="scrollDown()" style="border: 1px solid black">
+				<div class="box box-danger direct-chat direct-chat-danger collapsed-box "  [ngClass]="{'direct-chat-contacts-open': this.open=='1'}" (click)="scrollDown()" style="border: 1px solid black">
 			  <div class="box-header with-border">
 			    <h3 class="box-title">Chat</h3>
 			    <div class="box-tools pull-right">
 			      <span data-toggle="tooltip" title="3 New Messages" class="badge bg-red">3</span>
 			      <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
 			      <!-- In box-tools add this button if you intend to use the contacts pane -->
-			      <button class="btn btn-box-tool" data-toggle="tooltip" title="Contacts" data-widget="chat-pane-toggle"><i class="fa fa-comments"></i></button>
-			    </div>
+						<button *ngIf="this.open=='0'"  (click)="verClases()" class="btn btn-box-tool" data-toggle="tooltip" title="Contacts" data-widget="chat-pane-toggle"><i class="fa fa-comments"></i></button>
+
+					 			    </div>
 			  </div>
 			  <!-- /.box-header -->
 			  <div class="box-body" style="display: none;" >
 			    <!-- Conversations are loaded here -->
 			    <div class="direct-chat-messages" id="chatMensajes" >
-						<ng-container  *ngFor="let chat of _cs.chats | async">
+						<ng-container  *ngFor="let chat of filtrarMensajes(this.idUserTo) ">
 
-						<div [ngClass]="{'right': !isUser(chat.idUser)}" class="direct-chat-msg">
-
+						<!--<div *ngIf="isUserSel(chat.idUser,chat.idUserTo,this.idUserTo)" [ngClass]="{'right': !isUser(chat.idUser)}" class="direct-chat-msg">
+-->
+					<div  [ngClass]="{'right': !isUser(chat.idUser)}" class="direct-chat-msg">
 									 <div class="direct-chat-info clearfix">
 										 <span class="direct-chat-name" [ngClass]="{'pull-left': isUser(chat.idUser),'pull-right': !isUser(chat.idUser)}" >{{chat.nombre}}</span>
 
 										 <span class="direct-chat-timestamp" [ngClass]="{'pull-right': isUser(chat.idUser),'pull-left': !isUser(chat.idUser)}">{{fecha(chat.fechaMensaje) | date:'medium'}}</span>
 									 </div>
 
+									 <ng-container *ngIf="isUser(chat.idUser)">
 									 <img class="direct-chat-img" [src]="getImageUser()" alt="message user image">
+ 							 			</ng-container>
+
+										<ng-container *ngIf="!isUser(chat.idUser)">
+ 									 <img class="direct-chat-img" [src]="getImageFriend(chat.idUser)" alt="message user image">
+  							 			</ng-container>
 
 									 <div class="direct-chat-text" style="white-space: normal;">
 										 {{chat.mensaje}}
@@ -123,10 +126,10 @@
 			    <div class="direct-chat-contacts">
 			      <ul class="contacts-list">
 			        <li *ngFor="let amigo of amigos">
-			          <div (click)="scrollDown()" style="cursor: pointer">
+								<div (click)="openChat(amigo.friendID._id)" style="cursor:pointer">
 			            <img class="contacts-list-img" [src]="amigo.friendID.avatarUrl" alt="Contact Avatar">
 			            <div class="contacts-list-info">
-			              <span class="contacts-list-name">
+			              <span  class="contacts-list-name">
 			                {{amigo.friendID.nickName}}
 										</span>
 			               <!-- <small class="contacts-list-date pull-right">2/28/2015</small>
@@ -134,10 +137,10 @@
 			              <span class="contacts-list-msg">How have you been? I was...</span>-->
 										<span *ngIf="amigo.friendID.online=='yes'" style="float: right"><i class="fa fa-circle" style="color:green"></i> Online</span>
 										<span *ngIf="amigo.friendID.online=='no'" style="float: right"><i class="fa fa-circle" style="color:red"></i>  Offline</span>
-
+										</div>
 			            </div>
 			            <!-- /.contacts-list-info -->
-			          </div>
+
 			        </li>
 			        <!-- End Contact Item -->
 			      </ul>
@@ -146,11 +149,11 @@
 			    <!-- /.direct-chat-pane -->
 			  </div>
 			  <!-- /.box-body -->
-			  <div class="box-footer" style="display: none;">
-			    <div class="input-group">
+			  <div class="box-footer" style="display: none;" >
+			    <div class="input-group" *ngIf="this.open=='0'">
 			      <input type="text" [(ngModel)]="mensaje" (keyup.enter)="enviar()" name="message" placeholder="mensaje ..." class="form-control">
 			      <span class="input-group-btn">
-			                <button type="button" class="btn btn-danger btn-flat" (click)="enviar()">Send</button>
+			                <button type="button" class="btn btn-danger btn-flat" (click)="enviar()">Enviar</button>
 			                </span>
 			    </div>
 			  </div>
