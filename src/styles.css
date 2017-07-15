@@ -17,6 +17,31 @@
     background: white;
     z-index: -1;
 }
+@-webkit-keyframes myAnimation {
+  0% {background-color:white;opacity: 0;}
+  50% {background-color:white;opacity: 1;}
+  100% {background-color:white;opacity: 0;}
+
+}
+.newMsg {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-size: 100% 100%;
+    -webkit-animation: myAnimation 1s linear infinite;
+    -moz-animation: myAnimation 1s linear infinite;
+    -o-animation: myAnimation 1s linear infinite;
+}
+@-moz-keyframes myAnimation {
+    0% { }
+   50% { }
+  100% { }
+}
+@-o-keyframes myAnimation {
+    0% { }
+   50% { }
+  100% { }
+}
 
 .img-wrapper_ {
   position: relative;

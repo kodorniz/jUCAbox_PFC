@@ -16,7 +16,7 @@ var lugares_admin_routes = require('./routes/lugaresAdmin');
 var playlistLugar_routes = require('./routes/playListLugar');
 var playlistLugarSV_routes = require('./routes/playListLugarSV');
 var playlistLugarSV_routesTOP = require('./routes/playListLugarSVTOP');
-
+var userClick_routes = require('./routes/userClick');
 
 
 
@@ -29,6 +29,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
 app.use('/api',routes);
+app.use('/api',userClick_routes);
 app.use('/api',user_routes);
 app.use('/api',lugar_routes);
 app.use('/api',friend_routes);

@@ -31,10 +31,15 @@ mensaje:string="";
 elemento:any;
 idUserTo:string="";
 open:string="1";
+lastClick:any[]=[];
+lastMsg:any[]=[];
+//haveMsg:number=0;
+//showhaveMsg:boolean = false;
   constructor(public _cs:ChatService,private userServ: UserService,private _friendsService:FriendsService, public router: Router/*,        private oauthProvidersController: HandyOauthProvidersController,
         private oauthConfigServ: HandyOauthConfigProvidersService,
         private storageServ: HandyOauthStorageService*/) {
     // getting the current url
+
     this.router.events.subscribe((evt) => this.currentUrl = evt.url);
     this.userServ.currentUser.subscribe((user) => this.currentUser = user);
     if(localStorage.getItem('userJB')){
@@ -59,6 +64,11 @@ open:string="1";
 
   public ngOnInit(){
     setInterval(() => {
+    /*  if(this.haveMsg>0)
+        this.showhaveMsg=true;
+      else
+        this.showhaveMsg=false;*/
+
       this._friendsService.getFriendsUser(localStorage.getItem('userJB')).subscribe(
        data => {
          this.amigos = data.friends;
@@ -66,6 +76,19 @@ open:string="1";
        }
 
      );
+
+    this._cs.getUltimoClickAll(localStorage.getItem('userJB')).subscribe(
+
+       data=>{ this.lastClick = data.user;}
+
+     );
+
+     this._cs.getUltimoClickAllMsg(localStorage.getItem('userJB')).subscribe(
+
+        data=>{ this.lastMsg = data.user;}
+
+      );
+
 
 
     }, 1000);
@@ -81,8 +104,9 @@ open:string="1";
     if(this.mensaje.length==0){
       return false;
     }
-
+    this._cs.addMsgUser(localStorage.getItem('userJB'),this.idUserTo).subscribe();
     let obj = JSON.parse(localStorage.getItem('profile'));
+
     this._cs.agregarMensaje(this.mensaje,obj.name,this.idUserTo)
     .then( () => console.log('OK'))
     .catch( (error) => console.error(error));
@@ -104,6 +128,8 @@ open:string="1";
     //return this.chats;
   }
 
+
+
 isUserSel(userChatFrom:string,userChatTo:string,userSel:string){
   if( (userChatFrom == userSel || userChatTo == userSel) && (userChatFrom==localStorage.getItem('userJB') || userChatTo == localStorage.getItem('userJB')))
     return true;
@@ -117,15 +143,101 @@ isUserSel(userChatFrom:string,userChatTo:string,userSel:string){
     this.elemento.scrollTop = this.elemento.scrollHeight + 20;
   }
 
+
+  /*  if(this.amigos.length>0){
+      for(let i=0;i<this.amigos.length;i++){
+        let fechaClick = this.lastClick.filter(function(el){
+            return (el._id == this.amigos[i].friendID._id);
+        });
+
+        let fechaMsg = this.lastMsg.filter(function(el){
+            return (el._id == this.amigos[i].friendID._id);
+        });
+
+        if(fechaMsg.length>0 && fechaClick.length>0)
+        if(fechaMsg[0]['maxDate'] > fechaClick[0]['maxDate'] ){
+
+          return true;
+
+        }
+      }
+    }*/
+/*
+
+*/
+
+
+
+
+
+  isNew(userID:string){
+
+
+    let fechaClick = this.lastClick.filter(function(el){
+        return (el._id == userID);
+    });
+
+    let fechaMsg = this.lastMsg.filter(function(el){
+        return (el._id == userID);
+    });
+
+    if(fechaMsg.length>0 && fechaClick.length>0)
+    if(fechaMsg[0]['maxDate'] > fechaClick[0]['maxDate'] ){
+      //this.haveMsg++;
+      return true;
+    }else{
+    /*  if(this.haveMsg>0)
+        this.haveMsg--;*/
+      return false;
+    }
+    /*this._cs.getUltimoClick(localStorage.getItem('userJB'),userID).subscribe(
+      data=>{
+        let dateReal = new Date ( Date.parse(data.fechaMax) );
+
+        this._cs.getUltimoMsg(localStorage.getItem('userJB'),userID).subscribe(
+
+          data2 => {
+            let dateReal2 = new Date ( Date.parse(data.fechaMax) );
+            if(dateReal2 > dateReal){
+              return true;
+            }else{
+              return false;
+            }
+
+          }
+
+        );
+
+
+
+      }
+    );*/
+  }
+
   openChat(userID:string){
     this.idUserTo = userID;
+      this.isNew(userID);
+
+    this._cs.addClickUser(localStorage.getItem('userJB'),this.idUserTo).subscribe();
     //filtrar usuario DESDE Y A
     this.scrollDown();
     this.verClases();
   }
 
   verClases(){
-    console.log(this.open);
+    this._cs.addClickUser(localStorage.getItem('userJB'),this.idUserTo).subscribe();
+    this._cs.getUltimoClickAll(localStorage.getItem('userJB')).subscribe(
+
+       data=>{ this.lastClick = data.user;}
+
+     );
+
+     this._cs.getUltimoClickAllMsg(localStorage.getItem('userJB')).subscribe(
+
+        data=>{ this.lastMsg = data.user;}
+
+      );
+
     if(this.open == "1")
     this.open="0";
     else
