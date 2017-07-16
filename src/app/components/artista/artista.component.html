@@ -26,8 +26,8 @@
 
       <a [routerLink]="['/buscar']" class="btn btn-primary"> Buscar otros artistas </a>
 
-      <a  *ngIf="userServ.authenticated() && !favorito" (click)="addFav(artista.id,usuarioID,artista.name)" class="btn btn-default" style="color:red;border-color:red;background-color: white;"><i class="fa fa-heart"></i> Añadir a favoritos </a>
-      <a  *ngIf="userServ.authenticated() && favorito" (click)="addFav(artista.id,usuarioID,artista.name)" class="btn btn-danger"><i class="fa fa-times"></i> Eliminar de favoritos </a>
+      <a  *ngIf="userServ.authenticated() && !favorito" (click)="addFav(artista.id,artista.name,artista.genres,usuarioID,artista.name)" class="btn btn-default" style="color:red;border-color:red;background-color: white;"><i class="fa fa-heart"></i> Añadir a favoritos </a>
+      <a  *ngIf="userServ.authenticated() && favorito" (click)="addFav(artista.id,artista.name,artista.genres,usuarioID,artista.name)" class="btn btn-danger"><i class="fa fa-times"></i> Eliminar de favoritos </a>
 
 
     </div>

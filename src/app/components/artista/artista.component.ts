@@ -77,7 +77,7 @@ export class ArtistaComponent implements OnInit {
                   this.menuState = this.menuState === 'out' ? 'in' : 'out';
                 }
   ngOnInit() {
-    
+
     this.activatedRoute.params.map(
       parametros =>{
         return parametros['id'];
@@ -161,12 +161,12 @@ buscarCanciones(){
 }
 
 
-addFav(artistaID:any,userID:string,nombreArtista:string){
+addFav(artistaID:any,artistaName:string,generos_artista:string,userID:string,nombreArtista:string){
 
   this._artistasService.getFav(artistaID,userID).subscribe(data=>{
 
     if(data.total_items==0){
-      this._artistasService.addFav(artistaID,userID).subscribe();
+      this._artistasService.addFav(artistaID,artistaName,generos_artista,userID).subscribe();
       this._notificationService.success( nombreArtista,"Añadido a favoritos correctamente");
       this._logService.addLog(localStorage.getItem('userJB'),"Artista","Artista añadido a favoritos",nombreArtista,"Se ha añadido a " + nombreArtista + " a sus artistas preferidos.","/artista/"+artistaID).subscribe();
       this.favorito = true;
@@ -198,7 +198,7 @@ addFav(artistaID:any,userID:string,nombreArtista:string){
   enviarCancion(Cancion) {
 
   this.modal
-  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService,this._logService)} );
+  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService,this._logService,this._jucaboxService)} );
 //  }
 // enviarCancion(Cancion) {
 //   console.log("click");

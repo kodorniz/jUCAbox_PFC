@@ -95,7 +95,7 @@ if(userID != undefined){
 
 }
 
-  public addFav(artistaID:string,userID:string){
+  public addFav(artistaID:string,artistaName:string,generos_artista:any,userID:string){
 
     let authToken = localStorage.getItem('tokenJB');
 
@@ -103,7 +103,7 @@ if(userID != undefined){
     headers.append('Authorization', authToken);
 
     let options = new RequestOptions({ headers: headers });
-    let objeto = {"artistaID": artistaID, "userID": userID};
+    let objeto = {"artistaID": artistaID, "userID": userID,"artistaName": artistaName,"generos_artista":generos_artista};
 
     return this.http
       .post('/api/addArtistaFav',objeto,options)
@@ -138,7 +138,7 @@ if(userID != undefined){
       }
     ).catch(this.handleError);
 
-    
+
   }
 
   private handleError (error: Response | any) {

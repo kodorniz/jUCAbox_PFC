@@ -7,7 +7,10 @@ var playListLugarSVTOP = Schema({
   cancion: Schema.Types.Mixed,
   FechaEnvio:Date,
   Estado: String,
-  cancionID: String
+  cancionID: String,
+  artistaName: String,
+  artistaID: String,
+  generos_artista: [String]
 
 });
 

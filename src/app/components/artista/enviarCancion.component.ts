@@ -11,6 +11,7 @@ import {Auth} from '../../services/auth.service';
 import {PlaylistService} from '../../services/playlist.service';
 import { NotificationsService } from 'angular2-notifications';
 import {LogService} from '../../services/log.service';
+import { JucaboxService } from '../../services/jucabox.service';
 
 export class enviarCancion extends BSModalContext {
   termino:string="";
@@ -25,7 +26,7 @@ export class enviarCancion extends BSModalContext {
 
   private Usuario:User;
 
-  constructor(public Cancion:any,public _lugaresService:LugaresService,  private userServ:Auth,public _playlistService:PlaylistService,public _notificationService?: NotificationsService,public _logService?:LogService) {
+  constructor(public Cancion:any,public _lugaresService:LugaresService,   private userServ:Auth,public _playlistService:PlaylistService,public _notificationService?: NotificationsService,public _logService?:LogService,public _jucaboxService?:JucaboxService) {
       super();
 
       this.userServ.currentUser.subscribe((user: User) => this.Usuario = user);
@@ -349,11 +350,20 @@ export class AdditionalWindow implements ModalComponent<enviarCancion> {
 
     this.setCookie("jucabox token " + lugar_,token_,6);
     //Enviar Cancion al Lugar
+    this.context._jucaboxService.getArtista(this.context.Cancion.artists[0].id).subscribe(data=>{
 
-          if(localStorage.getItem('userJB'))
-            this.context._playlistService.enviarCancion(this.context.Cancion,lugar_,localStorage.getItem('userJB')).subscribe();
-          else
-            this.context._playlistService.enviarCancion(this.context.Cancion,lugar_).subscribe();
+      console.log(data);
+      if(localStorage.getItem('userJB')){
+
+        this.context._playlistService.enviarCancion(this.context.Cancion,data.id,data.name,data.genres,lugar_,localStorage.getItem('userJB')).subscribe();
+      }
+      else{
+        this.context._playlistService.enviarCancion(this.context.Cancion,data.id,data.name,data.genres,lugar_).subscribe();
+      }
+
+
+
+    });
 
     this.dialog.close();
     this.context._notificationService.success( this.context.Cancion.name,"Enviada a validación del local");

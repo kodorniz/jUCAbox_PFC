@@ -183,7 +183,6 @@ export class JucaboxService {
 
     let query =  id;
     let url = this.urlBusquedaArtista + query;
-    console.log('token',authToken);
     return this.http.get(url,{headers})
             .map( res =>{
               //  console.log(res.json());

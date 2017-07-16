@@ -194,8 +194,7 @@
                     </td>
 
                     <td  *ngIf=" isAdmin() && isLoginSpotify()">
-
-                      <button class="btn btn-success" (click)="aceptarCancion(cancion.cancion.id,cancion.cancion)"><i class="fa fa-check" ><span class = "hide"> Aceptar</span></i></button>
+                      <button class="btn btn-success" (click)="aceptarCancion(cancion.cancion.id,cancion.artistaID,cancion.artistaName,cancion.generos_artista,cancion.cancion)"><i class="fa fa-check" ><span class = "hide"> Aceptar</span></i></button>
                     </td>
                     <td *ngIf=" isAdmin() && isLoginSpotify()">
                       <button class="btn btn-danger"    (click)="rechazarCancion(cancion.cancion.id)"><i class="fa fa-times" ><span class = "hide"> Rechazar</span></i></button>

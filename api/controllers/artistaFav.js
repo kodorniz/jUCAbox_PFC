@@ -23,6 +23,9 @@ function addArtistaFav(req,res){
 
   artistaFav.artistaID = params.artistaID;
   artistaFav.userID = params.userID;
+  artistaFav.artistaName = params.artistaName;
+  artistaFav.generos_artista = params.generos_artista;
+
   //lugar.tipoMusica = params.tipoMusica;
 
   ArtistaFav.find({artistaID:   artistaFav.artistaID,userID: artistaFav.userID},(err,ArtistaFavExist)=>{

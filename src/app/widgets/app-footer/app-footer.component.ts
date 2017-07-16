@@ -10,7 +10,7 @@ import { JucaboxService } from '../../services/jucabox.service';
 })
 export class AppFooterComponent {
 
-
+    isplaying:boolean=false;
     constructor(private _jucaboxService:JucaboxService,public _playerService:PlayerService) {
 
     }
@@ -75,8 +75,13 @@ export class AppFooterComponent {
              )
 
 
+             this._jucaboxService.getStatusPlayer().subscribe(
 
-           }, 5000);
+               data => {
+                 this.isplaying = data.is_playing;
+               }
+             );
+           }, 1000);
          }
       }
 

@@ -24,7 +24,7 @@ function addplayListLugarSV(req,res){
 
   var params = req.body;
 
-
+  console.log('parametros',params);
 
   playListLugarSV.lugarID = params.lugarID;
   playListLugarSV.userID = params.userID;
@@ -32,6 +32,9 @@ function addplayListLugarSV(req,res){
   playListLugarSV.FechaEnvio = new Date();
   playListLugarSV.Estado = params.Estado;
   playListLugarSV.cancionID = params.cancion.id;
+  playListLugarSV.artistaName = params.artistaName;
+  playListLugarSV.artistaID = params.artistaID;
+  playListLugarSV.generos_artista = params.generos_artista;
   //lugar.tipoMusica = params.tipoMusica;
 
 
@@ -77,6 +80,9 @@ var agg =
             maxDate: { $max: '$FechaEnvio'},
             cancion: {$first: '$cancion'} ,
             lugar :{$first: '$lugarID'},
+            artistaID : {$first: '$artistaID'},
+            artistaName : {$first: '$artistaName'},
+            generos_artista : {$first: '$generos_artista'},
             total_products: { $sum: 1 }
           }
 

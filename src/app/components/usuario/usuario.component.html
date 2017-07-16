@@ -236,7 +236,7 @@
               <div class="input-group" style="float:right">
                 <div *ngIf="amigo.amigo==true || amigo.amigo===undefined" class="text-center">
 
-                    <button type="button" class="btn btn-success " name="button" (click)="sendMessage(amigo.friendID._id)"><i class="fa fa-envelope"></i> Enviar Mensaje </button>
+
                     <button type="button" class="btn btn-danger " name="button" (click)="removeFriend(amigo.friendID._id,amigo.friendID.nickName)"><i class="fa fa-times"></i> Eliminar Amigo </button>
                     <br>
                     <span *ngIf="amigo.friendID.online=='yes'" style="float: right"><i class="fa fa-circle" style="color:green"></i> Online</span>
@@ -324,7 +324,7 @@
           <div  style="display: inline-block;margin-top:20px;"> -->
             <!-- <div class="button-bottom20 button-top20 " > -->
             <!-- <a href="#" [routerLink]="['/lugar',lugar.id]" class="btn btn-secondary " ><i class="fa fa-eye " aria-hidden="true"><span class = "hide">  Ver Lugar...</span></i></a> -->
-            <button  (click)="_lugaresService.removeFav(lugar.lugarID.id,Usuario._id)"  class="btn btn-danger" style="float:right;margin:5px;"><i class="fa fa-times" aria-hidden="true"></i> Eliminar</button>
+            <button  (click)="removeFavLugar(lugar.lugarID,Usuario._id,lugar.lugarID.nombre)"  class="btn btn-danger" style="float:right;margin:5px;"><i class="fa fa-times" aria-hidden="true"></i> Eliminar lugar</button>
 
             <button [routerLink]="['/lugar',lugar.lugarID._id]"  class="btn btn-info" style="float:right;margin:5px;"><i class="fa fa-search" aria-hidden="true"></i> Ver detalles</button>
             <!-- <a href="#" class="btn btn-success " ><i class="fa fa-cloud-upload" aria-hidden="true"><span class = "hide">  Enviar Cancion...</span></i></a> -->

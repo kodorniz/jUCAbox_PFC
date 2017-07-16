@@ -18,7 +18,7 @@ export class PlaylistService {
 
   constructor(private _jucaboxService:JucaboxService, private http:Http) { }
 
-  enviarCancion(cancion:any,lugarID:string,userID?:string){
+  enviarCancion(cancion:any,artistaID:string,artistaName:string,artistagenre:any,lugarID:string,userID?:string){
   /*  let today = new Date();
     let cancionEnviar = {
       lugarID: lugarID,
@@ -42,6 +42,9 @@ if(userID)
        "lugarID": lugarID,
        "userID": userID,
        "cancion" : cancion,
+       "artistaID": artistaID,
+       "artistaName": artistaName,
+       "generos_artista": artistagenre,
       // FechaEnvio:  new Date(today.getFullYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes(),today.getSeconds()),
        "estado": "Enviada"
      };
@@ -49,27 +52,25 @@ else
   objeto = {
     "lugarID": lugarID,
     "cancion" : cancion,
+    "artistaID": artistaID,
+    "artistaName": artistaName,
+    "generos_artista": artistagenre,
    // FechaEnvio:  new Date(today.getFullYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes(),today.getSeconds()),
     "estado": "Enviada"
   };
 
 
+/*console.log(cancion.artists[0].id);
+console.log(cancion.artists[0].name);
+console.log(cancion);*/
 
+      return this.http
+        .post('/api/addplayListLugarSV',objeto,options)
+        .map(res => {
 
+          return res.json();
 
-
-    return this.http
-      .post('/api/addplayListLugarSV',objeto,options)
-      .map(res => {
-
-        return res.json();
-
-      });
-
-    //this.playListLugarSV.push(cancionEnviar);
-    //this.playListLugarUser.push(cancionEnviar);
-
-
+        });
 
   }
 
@@ -208,7 +209,7 @@ else
       //TODO cambiar estado cancion playListLugarUser a todos los usuarios del lugar si estado es ENVIADA a ACEPTADA
   }
 
-  validarCancionTOP(cancion:any,lugarID:string,userID?:string){
+  validarCancionTOP(cancion:any,artistaID:string,artistaName:string,artistagenre:any,lugarID:string,userID?:string){
     let authToken = localStorage.getItem('tokenJB');
 
     let headers = new Headers({ 'Accept': 'application/json' });
@@ -217,7 +218,7 @@ else
     let options = new RequestOptions({ headers: headers });
     let objeto;
 
-  if(userID)
+  /*if(userID)
      objeto = {
        "lugarID": lugarID,
        "userID": userID,
@@ -231,7 +232,29 @@ else
     "cancion" : cancion,
    // FechaEnvio:  new Date(today.getFullYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes(),today.getSeconds()),
     "estado": "Enviada"
-  };
+  };*/
+
+  if(userID)
+       objeto = {
+         "lugarID": lugarID,
+         "userID": userID,
+         "cancion" : cancion,
+         "artistaID": artistaID,
+         "artistaName": artistaName,
+         "generos_artista": artistagenre,
+        // FechaEnvio:  new Date(today.getFullYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes(),today.getSeconds()),
+         "estado": "Enviada"
+       };
+  else
+    objeto = {
+      "lugarID": lugarID,
+      "cancion" : cancion,
+      "artistaID": artistaID,
+      "artistaName": artistaName,
+      "generos_artista": artistagenre,
+     // FechaEnvio:  new Date(today.getFullYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes(),today.getSeconds()),
+      "estado": "Enviada"
+    };
 
 
 

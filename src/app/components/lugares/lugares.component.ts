@@ -4,6 +4,7 @@ import { UserService } from '../../services/user.service';
 import { NotificationsService } from 'angular2-notifications';
 import {Auth} from '../../services/auth.service';
 import {SelectModule, IOption} from 'ng-select';
+import {LogService} from '../../services/log.service';
 
 @Component({
   selector: 'app-lugares',
@@ -47,7 +48,7 @@ export class LugaresComponent implements OnInit {
        {value: '2', label: 'Reggaeton'},
        {value: '3', label: 'Rock'}
    ];
-  constructor(private _lugaresService:LugaresService, private _notificationService: NotificationsService, private _usuarioService: UserService, private _Auth:Auth ) {
+  constructor(private logService: LogService,private _lugaresService:LugaresService, private _notificationService: NotificationsService, private _usuarioService: UserService, private _Auth:Auth ) {
     this.usuarioID = localStorage.getItem('userJB');
     this.chkAdmin = false;
     this._lugaresService.getLugaresNombre(this.termino,this.provincia,this.ciudad,String(this.tipoMusica),localStorage.getItem('userJB'),this.chkAdmin).subscribe(
@@ -143,6 +144,8 @@ export class LugaresComponent implements OnInit {
 
     if(!this.isFav(id)){
           this._lugaresService.addFav(id,userID).subscribe(data=>{
+            this.logService.addLog(localStorage.getItem('userJB'),"Lugar","Lugar añadido a favoritos",nombre,"Se ha añadido a " + nombre + " a sus lugares preferidos.","/lugar/"+id).subscribe()
+
             this._lugaresService.getLugaresFav(localStorage.getItem('userJB')).subscribe(
                 data=>{
                   this.lugaresFav=[];
@@ -157,6 +160,7 @@ export class LugaresComponent implements OnInit {
 
       }else{
         this._lugaresService.removeFav(id,userID).subscribe(data=>{
+          this.logService.addLog(localStorage.getItem('userJB'),"Lugar","Lugar eliminado de favoritos",nombre,"Se ha eliminado a " + nombre + " de sus lugares preferidos.","/lugar/"+id).subscribe()
 
           this._lugaresService.getLugaresFav(localStorage.getItem('userJB')).subscribe(
               data=>{

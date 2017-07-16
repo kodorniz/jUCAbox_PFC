@@ -33,6 +33,11 @@ function addplayListLugarSVTOP(req,res){
   playListLugarSVTOP.FechaEnvio = new Date();
   playListLugarSVTOP.Estado = params.Estado;
   playListLugarSVTOP.cancionID = params.cancion.id;
+  playListLugarSVTOP.artistaName = params.artistaName;
+  playListLugarSVTOP.artistaID = params.artistaID;
+  playListLugarSVTOP.generos_artista = params.generos_artista;  
+//  playListLugarSVTOP.cancionID = params.cancion.album.artist;
+
   //lugar.tipoMusica = params.tipoMusica;
 
 

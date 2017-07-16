@@ -317,7 +317,7 @@ removeFav(artistaID:string,userID: string,nombreArtista: string){
   enviarCancion(Cancion) {
 
   this.modal
-  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService,this.logService)} );
+  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService,this.logService,this._jucaboxService)} );
 
 }
 

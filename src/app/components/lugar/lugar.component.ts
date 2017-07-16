@@ -501,7 +501,7 @@ stopCancion(){
   this.cancion = null;
 }
 
-aceptarCancion(cancion:any,cancionCompleta:any){
+aceptarCancion(cancion:any,artistaID:string,artistaName:string,generos_artista:any,cancionCompleta:any){
 if(!this.playlistSeleccionada)
 {
   swal(
@@ -514,7 +514,7 @@ if(!this.playlistSeleccionada)
   this._jucaboxService.addTrackPlaylist(this.playlistSeleccionada,'spotify:track:' + cancion).subscribe(data=> {
     this.getplaylistSeleccionada();
 
-    this._playlistService.validarCancionTOP(cancionCompleta,this.id_,localStorage.getItem('userJB')).subscribe();
+    this._playlistService.validarCancionTOP(cancionCompleta,artistaID,artistaName,generos_artista,this.id_,localStorage.getItem('userJB')).subscribe();
 
     this._playlistService.validarCancion(cancion,this.id_).subscribe();
     this._playlistService.getCancionesSV(this.id_,this.orderOr,this.orderby).subscribe(data=>{

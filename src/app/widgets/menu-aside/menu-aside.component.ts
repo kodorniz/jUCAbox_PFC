@@ -33,8 +33,9 @@ idUserTo:string="";
 open:string="1";
 lastClick:any[]=[];
 lastMsg:any[]=[];
-//haveMsg:number=0;
-//showhaveMsg:boolean = false;
+haveMsg:number=0;
+showhaveMsg:boolean = false;
+showhaveMsg2:boolean=false;
   constructor(public _cs:ChatService,private userServ: UserService,private _friendsService:FriendsService, public router: Router/*,        private oauthProvidersController: HandyOauthProvidersController,
         private oauthConfigServ: HandyOauthConfigProvidersService,
         private storageServ: HandyOauthStorageService*/) {
@@ -45,9 +46,10 @@ lastMsg:any[]=[];
     if(localStorage.getItem('userJB')){
       this._cs.cargarMensajes().subscribe( snapshots  =>
 
-          this.conversacion = snapshots
-
-
+          {
+            this.conversacion = snapshots;
+          setTimeout( () => this.elemento.scrollTop = this.elemento.scrollHeight,100);
+          }
       );
       //setTimeout( () => this.elemento.scrollTop = this.elemento.scrollHeight,100);
 
@@ -63,11 +65,14 @@ lastMsg:any[]=[];
   }
 
   public ngOnInit(){
+
     setInterval(() => {
-    /*  if(this.haveMsg>0)
+
+if(localStorage.getItem('userJB')){
+      if(this.showhaveMsg2==true)
         this.showhaveMsg=true;
       else
-        this.showhaveMsg=false;*/
+        this.showhaveMsg=false;
 
       this._friendsService.getFriendsUser(localStorage.getItem('userJB')).subscribe(
        data => {
@@ -90,9 +95,10 @@ lastMsg:any[]=[];
       );
 
 
-
+    }
     }, 1000);
   }
+
 
   public ngAfterViewChecked() {
       this.elemento = document.getElementById("chatMensajes");
@@ -172,7 +178,7 @@ isUserSel(userChatFrom:string,userChatTo:string,userSel:string){
 
   isNew(userID:string){
 
-
+    //console.log(this.idUserTo);
     let fechaClick = this.lastClick.filter(function(el){
         return (el._id == userID);
     });
@@ -183,11 +189,19 @@ isUserSel(userChatFrom:string,userChatTo:string,userSel:string){
 
     if(fechaMsg.length>0 && fechaClick.length>0)
     if(fechaMsg[0]['maxDate'] > fechaClick[0]['maxDate'] ){
-      //this.haveMsg++;
+
+      if(this.idUserTo!=userID)
+          this.showhaveMsg2=true;
+
+
+      if(this.idUserTo==userID)
+            this.showhaveMsg2=false;
+
+
       return true;
     }else{
-    /*  if(this.haveMsg>0)
-        this.haveMsg--;*/
+      if(this.haveMsg>0)
+        this.showhaveMsg2=false;
       return false;
     }
     /*this._cs.getUltimoClick(localStorage.getItem('userJB'),userID).subscribe(
@@ -240,8 +254,11 @@ isUserSel(userChatFrom:string,userChatTo:string,userSel:string){
 
     if(this.open == "1")
     this.open="0";
-    else
+
+    else{
+    this.idUserTo='';
     this.open="1";
+  }
   }
 
   getImageUser(){

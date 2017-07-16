@@ -261,8 +261,9 @@ addFriend(friendID:string,friendNick:string,amigo:boolean){
   this._friendsService.addFriend(localStorage.getItem('userJB'),friendID).subscribe(
 
     data=>{
-      console.log('addFriend',data);
+
       this.logService.addLog(localStorage.getItem('userJB'),"Amistad","Añadido amigo nuevo",friendNick,"Se ha añadido a la lista de amigos a " + friendNick,'').subscribe();
+
       this._friendsService.getFriendsUser(this.Usuario._id).subscribe(
        data => {
 
@@ -272,6 +273,15 @@ addFriend(friendID:string,friendNick:string,amigo:boolean){
        }
 
      );
+
+    }
+  )
+
+  this._friendsService.addFriend(friendID,localStorage.getItem('userJB')).subscribe(
+
+    data=>{
+
+      this.logService.addLog(friendID,"Amistad","Añadido amigo nuevo",this.Usuario.nickName,"Le ha añadido a la lista de amigos de " + this.Usuario.nickName,'').subscribe();
 
     }
   )
@@ -300,6 +310,37 @@ removeFriend(friendID:string,friendNick:string){
 
     }
   )
+
+  this._friendsService.removeFriend(friendID,localStorage.getItem('userJB')).subscribe(
+
+    data=>{
+      this.logService.addLog(friendID,"Amistad","Eliminado amigo",this.Usuario.nickName,"Le ha eliminado de la lista de amigos de " + this.Usuario.nickName,'').subscribe();
+
+
+    }
+  )
+}
+
+removeFavLugar(lugarID:string,userID: string,nombreLugar: string){
+console.log(lugarID);
+console.log(userID);
+  this._lugaresService.removeFav(lugarID,userID).subscribe(data=>{
+
+    this._lugaresService.getLugaresFav(localStorage.getItem('userJB')).subscribe(
+        data=>{
+          this.logService.addLog(localStorage.getItem('userJB'),"Lugar","Lugar eliminado de favoritos",nombreLugar,"Se ha eliminado a " + nombreLugar + " de sus lugares preferidos.","/lugar/"+lugarID).subscribe()
+
+          this._lugaresService.getLugaresFavP(userID).subscribe(data=>{
+            this.lugares=[];
+            this.lugares = data.lugares;
+          })
+
+        }
+      );
+  });
+
+
+
 }
 
 
@@ -446,7 +487,7 @@ removeFav(artistaID:string,userID: string,nombreArtista: string){
   enviarCancion(Cancion) {
 
   this.modal
-  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService,this.logService)} );
+  .open(AdditionalWindow, {context: new enviarCancion(Cancion,this._lugaresService,this.userServ,this._playlistService,this._notificationService,this.logService,this._jucaboxService)} );
 
 }
 
