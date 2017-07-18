@@ -9,7 +9,7 @@
     <div class ="col-md-4">
         <label for="termino"> Buscador </label>
 
-        <div class="input-group">
+        <div class="input-group" (keydown)="keyDownFunction($event)">
           <input [(ngModel)]="termino"
           (keyup)="clickBoton=false"
           type="text" name="termino"

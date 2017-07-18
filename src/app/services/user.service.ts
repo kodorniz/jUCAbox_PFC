@@ -80,7 +80,7 @@ export class UserService {
 
       let options = new RequestOptions({ headers: headers });
       let objeto = {"firstname": firstname,"lastname": lastname,"nickName": nickName};
-      console.log(objeto);
+      //console.log(objeto);
       return this._http
         .post('/api/getUsersByName',objeto,options)
         .map(res => {
@@ -94,7 +94,7 @@ export class UserService {
 
     private handleError (error: Response | any) {
         // In a real world app, you might use a remote logging infrastructure
-        console.log(Response);
+        //console.log(Response);
         let errMsg: string;
         if (error instanceof Response) {
           const body = error.json() || '';
@@ -103,7 +103,7 @@ export class UserService {
         } else {
           errMsg = error.message ? error.message : error.toString();
         }
-        console.error(errMsg);
+        //console.error(errMsg);
         return Observable.throw(errMsg);
       }
 

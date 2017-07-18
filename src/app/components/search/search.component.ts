@@ -81,6 +81,12 @@ export class SearchComponent implements OnInit {
 
 
   }
+  keyDownFunction(event) {
+  if(event.keyCode == 13) {
+    this.buscarArtista();
+    // rest of your code
+  }
+}
 
   buscarArtista(){
     let tipo:string = "&type=";

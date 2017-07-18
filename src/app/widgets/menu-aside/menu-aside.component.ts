@@ -47,6 +47,7 @@ showhaveMsg2:boolean=false;
       this._cs.cargarMensajes().subscribe( snapshots  =>
 
           {
+            //console.log('mensajes cargados constructor',snapshots);
             this.conversacion = snapshots;
           setTimeout( () => this.elemento.scrollTop = this.elemento.scrollHeight,100);
           }
@@ -101,6 +102,17 @@ if(localStorage.getItem('userJB')){
 
 
   public ngAfterViewChecked() {
+    //console.log(this.conversacion.length);
+    if(localStorage.getItem('userJB') && this.conversacion.length==0){
+      this._cs.cargarMensajes().subscribe( snapshots  =>
+
+          {
+          //  console.log('mensajes caargados AfterView',snapshots);
+            this.conversacion = snapshots;
+          setTimeout( () => this.elemento.scrollTop = this.elemento.scrollHeight,100);
+          }
+      );
+    }
       this.elemento = document.getElementById("chatMensajes");
 
   }

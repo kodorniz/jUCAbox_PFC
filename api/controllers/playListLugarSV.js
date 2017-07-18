@@ -83,7 +83,8 @@ var agg =
             artistaID : {$first: '$artistaID'},
             artistaName : {$first: '$artistaName'},
             generos_artista : {$first: '$generos_artista'},
-            total_products: { $sum: 1 }
+            total_products: { $sum: 1 },
+            users: {$push: '$userID'}
           }
 
     },

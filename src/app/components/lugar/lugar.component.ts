@@ -11,6 +11,7 @@ import { Modal } from 'angular2-modal/plugins/bootstrap';
 import {Auth} from '../../services/auth.service';
 import { Observable } from 'rxjs/Observable';
 import {IMyDpOptions} from 'mydatepicker';
+import {LogService} from '../../services/log.service';
 
 declare var swal: any;
 
@@ -97,7 +98,7 @@ export class LugarComponent {
 constructor(public _playerService:PlayerService,
  overlay: Overlay, vcRef: ViewContainerRef, public modal: Modal,
   private _jucaboxService:JucaboxService,
-  public userServ:Auth,
+  public userServ:Auth,private _logService:LogService,
             private activatedRoute:ActivatedRoute,
             private _lugaresService: LugaresService,
             private router:Router,
@@ -123,6 +124,7 @@ constructor(public _playerService:PlayerService,
     });
 
     this.id_ = params['id'];
+    if(localStorage.getItem('userJB')){
       this._lugaresService.getMensajes(this.id_).subscribe(data=>{
         this.mensajes = data.lugares;
 
@@ -134,6 +136,7 @@ constructor(public _playerService:PlayerService,
 
         }
       );
+    }
     if(this.isLoginSpotify()){
       this.recargarPL();
       this.recargarDevices();
@@ -405,7 +408,35 @@ visibleUsuario(){
   this.mensajeVisible = false;
 }
 
+restaFechas(ff:any,fi:any){
+  let dias= ff.days
+}
+
 visibleCancionesTop(){
+  let fi:Date;
+  let ff:Date;
+  let dif:number;
+
+ if( this.fini  && this.ffin ){
+  fi = new Date(this.fini['date'].year,this.fini['date'].month,this.fini['date'].day) ;
+  ff = new Date(this.ffin['date'].year,this.ffin['date'].month,this.ffin['date'].day);
+
+  dif = + fi - + ff;
+}
+else{
+  dif=-1;
+}
+
+
+  if(!this.fini || !this.ffin || this.fini=='' || this.ffin=='' || dif>0 )
+  {
+    swal(
+      'Oops...',
+      'Seleccione las fechas correctamente',
+      'error'
+    )
+   //alert("no hay playlist seleccionada. 'Cambiar estilo alerta'");
+  }else{
   this._playlistService.getCancionesSVTOP(this.id_,this.fini,this.ffin).subscribe(data=>{
     this.playlistSVTOP = data.playlist;
     this.informacionVisible = false;
@@ -415,7 +446,7 @@ visibleCancionesTop(){
     this.editar = false;
     this.mensajeVisible = false;
   });
-
+}
 }
 
 visibleEditar(){
@@ -501,7 +532,7 @@ stopCancion(){
   this.cancion = null;
 }
 
-aceptarCancion(cancion:any,artistaID:string,artistaName:string,generos_artista:any,cancionCompleta:any){
+aceptarCancion(cancion:any,artistaID:string,artistaName:string,generos_artista:any,cancionCompleta:any,users:any){
 if(!this.playlistSeleccionada)
 {
   swal(
@@ -524,17 +555,28 @@ if(!this.playlistSeleccionada)
     this._playlistService.getCancionesSVTOP(this.id_,this.fini,this.ffin).subscribe(data=>{
       this.playlistSVTOP = data.playlist;
     });
+
     this._playerService.setLengthPL(this._playerService.getLengthPL()+1);
+
+    for(let i=0;i<users.length;i++){
+      this._logService.addLog(users[i],"Cancion","Canción aceptada por el lugar " + this.lugar.nombre,cancionCompleta.artists[0].name,"Canción " +  cancionCompleta.name + " aceptada","/artista/"+cancionCompleta.artists[0].id,cancionCompleta)
+      .subscribe();
+    }
   }
   );
 }
 }
 
-rechazarCancion(cancion:any){
+rechazarCancion(cancion:any,cancionCompleta:any,users:any){
   this._playlistService.validarCancion(cancion,this.id_).subscribe();
   this._playlistService.getCancionesSV(this.id_,this.orderOr,this.orderby).subscribe(data=>{
     this.playlistSV = data.playlist;
   });
+
+  for(let i=0;i<users.length;i++){
+    this._logService.addLog(users[i],"Cancion","Canción rechazada por el lugar " + this.lugar.nombre,cancionCompleta.artists[0].name,"Canción " +  cancionCompleta.name + " rechazada","/artista/"+cancionCompleta.artists[0].id,cancionCompleta)
+    .subscribe();
+  }
 }
 
 crearPlaylist() {
