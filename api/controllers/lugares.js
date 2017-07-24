@@ -22,6 +22,7 @@ function saveLugar(req,res){
   lugar.provincia = params.provincia;
   lugar.ciudad = params.ciudad;
   lugar.direccion = params.direccion;
+  lugar.token = params.token;
   //lugar.tipoMusica = params.tipoMusica;
 
   lugar.save((err,lugarStored)=>{
