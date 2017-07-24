@@ -40,11 +40,11 @@
             </a>
         </li>
 
-        <li *ngIf="auth.authenticated() && _jucaboxservice.getToken()" style="cursor: pointer;">
+      <!--  <li *ngIf="auth.authenticated() && _jucaboxservice.getToken()" style="cursor: pointer;">
             <a (click)="_jucaboxservice.loginSpotify()" [href]="" class="toggle-sidebar-right">
                   <i class="fa fa-spotify" style="    color: #00d200;"></i> Refrescar Token Spotify
             </a>
-        </li>
+        </li>-->
 
 
 				<li class="dropdown user user-menu userBox" *ngIf="auth.authenticated()"></li>
