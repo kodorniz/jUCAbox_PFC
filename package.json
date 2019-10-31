@@ -42,7 +42,7 @@
     "jwt-simple": "^0.5.1",
     "machinepack-spotify": "0.0.3",
     "moment": "^2.18.1",
-    "mongoose": "^4.9.7",
+    "mongoose": "^5.7.7",
     "mongoose-pagination": "^1.0.0",
     "mydatepicker": "^2.0.21",
     "ng-select": "^1.0.0-beta.4",
